@@ -10,6 +10,7 @@
 package me.lambdaurora.lambdabettergrass.mixin;
 
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
@@ -33,5 +34,7 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
     {
         LambdaBetterGrass.get().log("Inject generated resource packs.");
         packs.add(LambdaBetterGrass.get().resourcePack = new LBGResourcePack(this));
+
+        LBGState.reset();
     }
 }

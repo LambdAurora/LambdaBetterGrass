@@ -11,6 +11,7 @@ package me.lambdaurora.lambdabettergrass.mixin;
 
 import com.google.gson.JsonObject;
 import me.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
+import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import me.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -50,20 +51,32 @@ public class ModelLoaderMixin
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {
-                // Find and load metadata.
-                Identifier metadataId = new Identifier(modelId.getNamespace(), "bettergrass/data/" + modelId.getPath());
-                Identifier metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-                if (this.resourceManager.containsResource(metadataResourceId)) {
-                    try {
-                        JsonObject json = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream()));
-                        LBGMetadata metadata = new LBGMetadata(resourceManager, metadataId, json, modelId);
+                Identifier stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
 
+                // Get cached states metadata.
+                LBGState state = LBGState.getMetadataState(stateId);
+
+                // Find and load states metadata if not cached.
+                if (state == null) {
+                    Identifier stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
+                    if (this.resourceManager.containsResource(stateResourceId)) {
+                        try {
+                            JsonObject json = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream()));
+                            state = new LBGState(stateId, resourceManager, json);
+                        } catch (IOException e) {
+                            // Ignore.
+                        }
+                    }
+                }
+
+                // If states metadata found, search for corresponding metadata and if exists replace the model.
+                if (state != null) {
+                    LBGMetadata metadata = state.getMetadata(modelId);
+                    if (metadata != null) {
                         UnbakedModel model = new LBGUnbakedModel(unbakedModel, metadata);
                         this.unbakedModels.put(modelId, model);
                         this.modelsToBake.put(modelId, model);
                         ci.cancel();
-                    } catch (IOException e) {
-                        // Ignore.
                     }
                 }
             }

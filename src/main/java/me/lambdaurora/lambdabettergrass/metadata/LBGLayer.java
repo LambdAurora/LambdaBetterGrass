@@ -39,6 +39,7 @@ public class LBGLayer
      */
     private final LBGMetadata parentMetadata;
 
+    public final int index;
     public final int colorIndex;
 
     /* Masks */
@@ -61,6 +62,7 @@ public class LBGLayer
     public LBGLayer(@NotNull LBGMetadata metadata, @NotNull JsonObject json)
     {
         this.parentMetadata = metadata;
+        this.index = metadata.nextLayerIndex();
 
         /* JSON read */
         if (json.has("color_index")) this.colorIndex = json.get("color_index").getAsInt();
@@ -107,6 +109,13 @@ public class LBGLayer
         this.blendArchMask = blendArchMask;
     }
 
+    /**
+     * Returns the overriden texture with the specified name if it exists.
+     *
+     * @param overrides The overrides JSON object.
+     * @param name      The name of the texture.
+     * @return Null if not specified, else the identifier of the overriden texture.
+     */
     private @Nullable SpriteIdentifier getOverridenTexture(@NotNull JsonObject overrides, @NotNull String name)
     {
         if (overrides.has(name)) {
@@ -117,6 +126,11 @@ public class LBGLayer
         return null;
     }
 
+    /**
+     * Builds the non-overriden textures.
+     * <p>
+     * This will apply the specified masks with the top and side textures if no override texture was specified.
+     */
     public void buildTextures()
     {
         final NativeImage top = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, getTexturePath(this.topTexture));
@@ -133,19 +147,19 @@ public class LBGLayer
 
         if (this.connectTexture == null) {
             final NativeImage connectMask = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, this.connectMask);
-            this.parentMetadata.textures.add(this.connectTexture = genTexture(name + "_" + this.colorIndex + "_connect", side, top, connectMask));
+            this.parentMetadata.textures.add(this.connectTexture = genTexture(name + "_" + this.index + "_connect", side, top, connectMask));
             connectMask.close();
         }
 
         if (this.blendUpTexture == null || this.blendUpMirroredTexture == null) {
             final NativeImage blendUp = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, this.blendUpMask);
             if (this.blendUpTexture == null) {
-                this.parentMetadata.textures.add(this.blendUpTexture = genTexture(name + "_" + this.colorIndex + "_blend_up", side, top, blendUp));
+                this.parentMetadata.textures.add(this.blendUpTexture = genTexture(name + "_" + this.index + "_blend_up", side, top, blendUp));
             }
 
             if (this.blendUpMirroredTexture == null) {
                 final NativeImage blendUpMirrored = LBGTextureGenerator.mirrorImage(blendUp);
-                this.parentMetadata.textures.add(this.blendUpMirroredTexture = genTexture(name + "_" + this.colorIndex + "_blend_up_m", side, top, blendUpMirrored));
+                this.parentMetadata.textures.add(this.blendUpMirroredTexture = genTexture(name + "_" + this.index + "_blend_up_m", side, top, blendUpMirrored));
                 blendUpMirrored.close();
             }
             blendUp.close();
@@ -153,7 +167,7 @@ public class LBGLayer
 
         if (this.archTexture == null) {
             final NativeImage archMask = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, this.blendArchMask);
-            this.parentMetadata.textures.add(this.archTexture = genTexture(name + "_" + this.colorIndex + "_arch", side, top, archMask));
+            this.parentMetadata.textures.add(this.archTexture = genTexture(name + "_" + this.index + "_arch", side, top, archMask));
             archMask.close();
         }
 
@@ -171,7 +185,12 @@ public class LBGLayer
         return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, LBGTextureGenerator.generateTexture(name, side, top, mask));
     }
 
-    public void bakeSprites(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
+    /**
+     * Bakes the textures of this layer.
+     *
+     * @param textureGetter The texture getter.
+     */
+    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
     {
         this.tryBakeSprite("connect", this.connectTexture, textureGetter);
         this.tryBakeSprite("blend_up", this.blendUpTexture, textureGetter);
@@ -193,7 +212,13 @@ public class LBGLayer
         }
     }
 
-    public @Nullable Sprite getBakedSprite(@NotNull String name)
+    /**
+     * Return the baked texture by its name.
+     *
+     * @param name The name of the baked texture.
+     * @return The baked texture if found, else null.
+     */
+    public @Nullable Sprite getBakedTexture(@NotNull String name)
     {
         return this.bakedSprites.get(name);
     }
@@ -205,5 +230,70 @@ public class LBGLayer
                 "parentMetadata=" + parentMetadata +
                 ", colorIndex=" + colorIndex +
                 '}';
+    }
+
+    /**
+     * Merges two layers.
+     *
+     * @param parent The parent layer.
+     * @param child  The child layer.
+     * @return The merged layer.
+     */
+    public static @NotNull LBGLayer mergeLayers(@NotNull LBGLayer parent, @NotNull LBGLayer child)
+    {
+        if (parent.colorIndex != child.colorIndex)
+            return parent;
+
+        String name;
+        {
+            String[] path = parent.parentMetadata.id.getPath().split("/");
+            if (path.length == 0)
+                name = "undefined";
+            else
+                name = path[path.length - 1];
+        }
+
+        // Merge textures into parent
+        if (parent.connectTexture != null && child.connectTexture != null) {
+            final NativeImage parentConnect = LBGTextureGenerator.getNativeImage(parent.parentMetadata.resourceManager, getTexturePath(parent.connectTexture.getTextureId()));
+            final NativeImage childConnect = LBGTextureGenerator.getNativeImage(child.parentMetadata.resourceManager, getTexturePath(child.connectTexture.getTextureId()));
+
+            parent.parentMetadata.textures.remove(parent.connectTexture);
+            parent.parentMetadata.textures.add(parent.connectTexture = genTexture(name + "_" + parent.index + "_connect", parentConnect, childConnect, childConnect));
+            parentConnect.close();
+            childConnect.close();
+        }
+
+        if (parent.blendUpTexture != null && child.blendUpTexture != null) {
+            final NativeImage parentBlendUp = LBGTextureGenerator.getNativeImage(parent.parentMetadata.resourceManager, getTexturePath(parent.blendUpTexture.getTextureId()));
+            final NativeImage childBlendUp = LBGTextureGenerator.getNativeImage(child.parentMetadata.resourceManager, getTexturePath(child.blendUpTexture.getTextureId()));
+
+            parent.parentMetadata.textures.remove(parent.blendUpTexture);
+            parent.parentMetadata.textures.add(parent.blendUpTexture = genTexture(name + "_" + parent.index + "_blend_up", parentBlendUp, childBlendUp, childBlendUp));
+            parentBlendUp.close();
+            childBlendUp.close();
+        }
+
+        if (parent.blendUpMirroredTexture != null && child.blendUpMirroredTexture != null) {
+            final NativeImage parentBlendUp = LBGTextureGenerator.getNativeImage(parent.parentMetadata.resourceManager, getTexturePath(parent.blendUpMirroredTexture.getTextureId()));
+            final NativeImage childBlendUp = LBGTextureGenerator.getNativeImage(child.parentMetadata.resourceManager, getTexturePath(child.blendUpMirroredTexture.getTextureId()));
+
+            parent.parentMetadata.textures.remove(parent.blendUpMirroredTexture);
+            parent.parentMetadata.textures.add(parent.blendUpMirroredTexture = genTexture(name + "_" + parent.index + "_blend_up_m", parentBlendUp, childBlendUp, childBlendUp));
+            parentBlendUp.close();
+            childBlendUp.close();
+        }
+
+        if (parent.archTexture != null && child.archTexture != null) {
+            final NativeImage parentArch = LBGTextureGenerator.getNativeImage(parent.parentMetadata.resourceManager, getTexturePath(parent.archTexture.getTextureId()));
+            final NativeImage childArch = LBGTextureGenerator.getNativeImage(child.parentMetadata.resourceManager, getTexturePath(child.archTexture.getTextureId()));
+
+            parent.parentMetadata.textures.remove(parent.archTexture);
+            parent.parentMetadata.textures.add(parent.archTexture = genTexture(name + "_" + parent.index + "_arch", parentArch, childArch, childArch));
+            parentArch.close();
+            childArch.close();
+        }
+
+        return parent;
     }
 }

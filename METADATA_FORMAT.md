@@ -6,7 +6,9 @@ LambdaBetterGrass metadata files tells the mod how to handle a grass-like connec
 
 The root contains an array of JSON objects named `layers`.
 
-Each layer can affect a `tint index`, but there is only one layer for each `tint index`.
+Each layer can affect a `tint index`.
+
+There can be multiple layers for the same `tint index` but they will be merged together, the first defined will be the background one.
 
 ### Layer object
 

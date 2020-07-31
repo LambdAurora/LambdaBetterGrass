@@ -10,6 +10,8 @@
 package me.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.ResourceManager;
@@ -31,6 +33,9 @@ import java.util.function.Function;
  */
 public class LBGMetadata
 {
+    /**
+     * Represents the identifier of the metadata.
+     */
     public final Identifier id;
 
     protected final @NotNull ResourceManager        resourceManager;
@@ -38,7 +43,9 @@ public class LBGMetadata
 
     private final List<LBGLayer> layers = new ArrayList<>();
 
-    public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json, @NotNull Identifier modelId)
+    private int lastLayerIndex = 0;
+
+    public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json)
     {
         this.id = id;
         this.resourceManager = resourceManager;
@@ -49,6 +56,30 @@ public class LBGMetadata
         }
 
         this.buildTextures();
+
+        /* Merge layers */
+        Int2ObjectMap<LBGLayer> parentLayers = new Int2ObjectArrayMap<>();
+        for (LBGLayer layer : this.layers) {
+            if (!parentLayers.containsKey(layer.colorIndex)) {
+                parentLayers.put(layer.colorIndex, layer);
+            } else {
+                // Merge layer
+                LBGLayer.mergeLayers(parentLayers.get(layer.colorIndex), layer);
+            }
+        }
+
+        this.layers.clear();
+        this.layers.addAll(parentLayers.values());
+    }
+
+    /**
+     * Returns the next layer index to assign and increments the internal layer index counter.
+     *
+     * @return The next layer index.
+     */
+    protected int nextLayerIndex()
+    {
+        return this.lastLayerIndex++;
     }
 
     private void buildTextures()
@@ -57,10 +88,15 @@ public class LBGMetadata
             layer.buildTextures();
     }
 
-    public void bakeSprites(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
+    /**
+     * Bakes the textures.
+     *
+     * @param textureGetter The texture getter.
+     */
+    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
     {
         for (LBGLayer layer : this.layers) {
-            layer.bakeSprites(textureGetter);
+            layer.bakeTextures(textureGetter);
         }
     }
 

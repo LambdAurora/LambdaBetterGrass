@@ -61,7 +61,7 @@ public class LBGUnbakedModel implements UnbakedModel
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
-        this.metadata.bakeSprites(textureGetter);
+        this.metadata.bakeTextures(textureGetter);
 
         return new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
     }

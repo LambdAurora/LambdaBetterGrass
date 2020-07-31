@@ -73,15 +73,12 @@ public class LBGBakedModel extends ForwardingBakedModel
                     boolean leftMatch = canConnect(world, state, pos.down(), left)
                             || (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.offset(left), face));
 
-                    if (rightMatch && leftMatch) {
+                    if (rightMatch && leftMatch)
                         spriteBake(quad, layer, "arch");
-                    } else {
-                        if (rightMatch) {
-                            spriteBake(quad, layer, "blend_up_m");
-                        } else if (leftMatch) {
-                            spriteBake(quad, layer, "blend_up");
-                        }
-                    }
+                    else if (rightMatch)
+                        spriteBake(quad, layer, "blend_up_m");
+                    else if (leftMatch)
+                        spriteBake(quad, layer, "blend_up");
                 });
             }
             return true;
@@ -107,12 +104,12 @@ public class LBGBakedModel extends ForwardingBakedModel
 
     private static boolean canConnect(@NotNull BlockState self, @NotNull BlockState adjacent)
     {
-        return self.getBlock() == adjacent.getBlock();
+        return self == adjacent;
     }
 
     private static boolean spriteBake(@NotNull MutableQuadView quad, @NotNull LBGLayer layer, @NotNull String texture)
     {
-        Sprite sprite = layer.getBakedSprite(texture);
+        Sprite sprite = layer.getBakedTexture(texture);
         if (sprite != null)
             quad.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
         return sprite != null;
