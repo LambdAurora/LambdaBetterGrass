@@ -1,0 +1,10 @@
+{
+  "layers": [
+    {
+      "textures": {
+        "top": "minecraft:block/crimson_nylium",
+        "side": "minecraft:block/crimson_nylium_side"
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+import net.fabricmc.loom.task.RemapJarTask
+
+plugins {
+    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = project.maven_group
+version = "${project.mod_version}+${project.minecraft_version}"
+archivesBaseName = project.archives_base_name + "-fabric"
+
+minecraft {
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name = "AperLambda"
+        url = 'https://aperlambda.github.io/maven'
+    }
+    maven { url = "https://jitpack.io" }
+    flatDir {
+        dirs "lib"
+    }
+}
+
+configurations {
+    shadow
+    api.extendsFrom shadow
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+    include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+
+    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+
+    modRuntime ("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
+        transitive = false
+    }
+
+    shadow "com.electronwill.night-config:core:3.6.3"
+    shadow "com.electronwill.night-config:toml:3.6.3"
+
+    shadow("org.aperlambda:lambdajcommon:1.8.0") {
+        // Minecraft already has all that google crap.
+        exclude group: 'com.google.code.gson'
+        exclude group: 'com.google.guava'
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    withSourcesJar()
+}
+
+jar {
+    from "../LICENSE"
+}
+
+task shadowJar(type: Jar) {
+    archiveClassifier.set("dev")
+
+    from sourceSets.main.output
+
+    from {
+        configurations.shadow.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task shadowRemapJar(type: RemapJarTask) {
+    dependsOn shadowJar
+
+    input = file("${project.buildDir}/libs/$archivesBaseName-$version-dev.jar")
+    archiveName = "${archivesBaseName}-${version}.jar"
+    addNestedDependencies = true
+}
+
+// Configure the maven publication.
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+
+            pom {
+                name = "LambdaBetterGrass"
+                description = "Adds actual better grass to the game."
+            }
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                configurations.shadow.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                    dependencyNode.appendNode('scope', 'compile')
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            name = "BuildDirLocal"
+            url = "$buildDir/repo"
+        }
+        maven {
+            name = "GithubPackages"
+            url = uri("https://maven.pkg.github.com/LambdAurora/LambdaBetterGrass")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+}

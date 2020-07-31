@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "lambdabettergrass",
+  "name": "LambdaBetterGrass",
+  "version": "${version}",
+  "description": "Adds actual better grass.",
+  "authors": [
+    "LambdAurora"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass",
+    "sources": "https://github.com/LambdAurora/LambdaBetterGrass.git",
+    "issues": "https://github.com/LambdAurora/LambdaBetterGrass/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/lambdabettergrass/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.lambdaurora.lambdabettergrass.LambdaBetterGrass"
+    ],
+    "modmenu": [
+      "me.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu"
+    ]
+  },
+  "mixins": [
+    "lambdabettergrass.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.0",
+    "fabric": ">=0.14.0",
+    "minecraft": ">=1.16"
+  },
+  "recommends": {
+    "modmenu": ">=1.12.2"
+  },
+  "suggests": {
+    "flamingo": "*"
+  },
+  "breaks": {
+    "modmenu": "<1.12.2",
+    "optifabric": "*"
+  },
+  "custom": {
+    "modupdater": {
+      "strategy": "curseforge",
+      "projectID": -1
+    }
+  }
+}

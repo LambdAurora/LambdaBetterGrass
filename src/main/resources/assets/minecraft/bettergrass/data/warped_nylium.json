@@ -1,0 +1,10 @@
+{
+  "layers": [
+    {
+      "textures": {
+        "top": "minecraft:block/warped_nylium",
+        "side": "minecraft:block/warped_nylium_side"
+      }
+    }
+  ]
+}

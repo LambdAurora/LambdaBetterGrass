@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.lambdaurora.lambdabettergrass.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "ModelLoaderMixin",
+    "NativeImageAccessor",
+    "ReloadableResourceManagerImplMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
