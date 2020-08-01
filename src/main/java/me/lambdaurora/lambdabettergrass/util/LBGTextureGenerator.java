@@ -65,7 +65,7 @@ public enum LBGTextureGenerator
         try {
             return NativeImage.read(resourceManager.getResource(path).getInputStream());
         } catch (IOException e) {
-            LambdaBetterGrass.get().warn("Could not load texture " + path.toString() + "! Loading fallback texture instead.");
+            LambdaBetterGrass.get().warn("Could not load texture " + path.toString() + "! Exception: " + e.getMessage() + ". Loading fallback texture instead.");
             return getFallbackNativeImage(resourceManager);
         }
     }

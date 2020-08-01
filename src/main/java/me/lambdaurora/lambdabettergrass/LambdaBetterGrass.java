@@ -27,7 +27,7 @@ public class LambdaBetterGrass implements ClientModInitializer
 {
     public static final String            MODID                             = "lambdabettergrass";
     /* Default masks */
-    public static final Identifier        BETTER_GRASS_SIDE_CONNECT_MASK    = mc("bettergrass/mask/grass_block_side_connect.png");
+    public static final Identifier        BETTER_GRASS_SIDE_CONNECT_MASK    = mc("bettergrass/mask/standard_block_side_connect.png");
     public static final Identifier        BETTER_GRASS_SIDE_BLEND_UP_MASK   = mc("bettergrass/mask/grass_block_side_blend_up.png");
     public static final Identifier        BETTER_GRASS_SIDE_ARCH_BLEND_MASK = mc("bettergrass/mask/grass_block_side_arch_blend.png");
     private static      LambdaBetterGrass INSTANCE;
