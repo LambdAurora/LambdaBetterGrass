@@ -40,9 +40,6 @@ public class LBGBakedModel extends ForwardingBakedModel
 
     public LBGBakedModel(@NotNull BakedModel baseModel, @NotNull LBGMetadata metadata)
     {
-        if (!((FabricBakedModel) baseModel).isVanillaAdapter()) {
-            throw new IllegalArgumentException("LambdaBetterGrass does not support non-vanilla models! This may be caused by having multiple resource packs affecting the same block.");
-        }
         this.wrapped = baseModel;
         this.metadata = metadata;
     }
