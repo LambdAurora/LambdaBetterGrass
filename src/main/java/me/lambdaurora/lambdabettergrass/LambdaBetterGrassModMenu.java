@@ -9,7 +9,9 @@
 
 package me.lambdaurora.lambdabettergrass;
 
+import io.github.prospector.modmenu.api.ConfigScreenFactory;
 import io.github.prospector.modmenu.api.ModMenuApi;
+import me.lambdaurora.lambdabettergrass.gui.SettingsScreen;
 
 /**
  * Represents LambdaBetterGrass ModMenu integration.
@@ -20,5 +22,9 @@ import io.github.prospector.modmenu.api.ModMenuApi;
  */
 public class LambdaBetterGrassModMenu implements ModMenuApi
 {
-    // @TODO handle config screen
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory()
+    {
+        return SettingsScreen::new;
+    }
 }

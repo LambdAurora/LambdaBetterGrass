@@ -36,10 +36,12 @@ public class LBGResourcePack implements ResourcePack
 
     private final Map<String, byte[]> resources = new HashMap<>();
     private final ResourceManager     resourceManager;
+    private final LambdaBetterGrass   mod;
 
-    public LBGResourcePack(@NotNull ResourceManager resourceManager)
+    public LBGResourcePack(@NotNull ResourceManager resourceManager, @NotNull LambdaBetterGrass mod)
     {
         this.resourceManager = resourceManager;
+        this.mod = mod;
     }
 
     public void putResource(String resource, byte[] data)
@@ -54,23 +56,25 @@ public class LBGResourcePack implements ResourcePack
         // Please forgive me
         ((NativeImageAccessor) (Object) image).lbg_write(out);
 
-        // debug
-        File file = new File("debug/lbg_out/" + location);
-        file.getParentFile().mkdirs();
+        // Debug
+        if (this.mod.config.isDebug()) {
+            File file = new File("debug/lbg_out/" + location);
+            file.getParentFile().mkdirs();
 
-        try {
-            WritableByteChannel outF = FileChannel.open(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-            ((NativeImageAccessor) (Object) image).lbg_write(outF);
-            outF.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                WritableByteChannel outF = FileChannel.open(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                ((NativeImageAccessor) (Object) image).lbg_write(outF);
+                outF.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         putResource(location, byteOut.toByteArray());
         try {
             out.close();
         } catch (IOException e) {
-            LambdaBetterGrass.get().warn("Could not close output channel for texture " + location + ". Exception: " + e.getMessage());
+            this.mod.warn("Could not close output channel for texture " + location + ". Exception: " + e.getMessage());
         }
     }
 

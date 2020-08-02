@@ -9,10 +9,11 @@
 
 package me.lambdaurora.lambdabettergrass.model;
 
+import me.lambdaurora.lambdabettergrass.LBGMode;
+import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.metadata.LBGLayer;
 import me.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
@@ -53,9 +54,22 @@ public class LBGBakedModel extends ForwardingBakedModel
     @Override
     public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
+        LBGMode mode = LambdaBetterGrass.get().config.getMode();
+
+        if (mode == LBGMode.OFF) {
+            // Don't touch the model.
+            super.emitBlockQuads(world, state, pos, randomSupplier, context);
+            return;
+        }
+
         context.pushTransform(quad -> {
             if (quad.nominalFace().getAxis() != Direction.Axis.Y) {
                 this.metadata.getLayer(quad.colorIndex()).ifPresent(layer -> {
+                    if (mode == LBGMode.FASTEST) {
+                        spriteBake(quad, layer, "connect");
+                        return;
+                    }
+
                     Direction face = quad.nominalFace();
                     Direction right = face.rotateYClockwise();
                     Direction left = face.rotateYCounterclockwise();
@@ -64,6 +78,9 @@ public class LBGBakedModel extends ForwardingBakedModel
                         if (spriteBake(quad, layer, "connect"))
                             return;
                     }
+
+                    if (mode != LBGMode.FANCY)
+                        return;
 
                     boolean rightMatch = canConnect(world, state, pos.down(), right)
                             || (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.offset(right), face));

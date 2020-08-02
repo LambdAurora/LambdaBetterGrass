@@ -1,0 +1,10 @@
+{
+  "lambdabettergrass.menu.info.1": "The mod uses resource pack files to determine which blocks are affected.",
+  "lambdabettergrass.menu.info.2": "This means to enable or disable the Better Grass feature on blocks",
+  "lambdabettergrass.menu.info.3": "it has to be modified with resource packs.",
+  "lambdabettergrass.menu.info.read_more": "Read more at: %s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass configuration",
+  "lambdabettergrass.menu.title.info": "How does the mod work?",
+  "lambdabettergrass.option.mode": "Better Grass",
+  "lambdabettergrass.tooltip.mode": "Enables the better grass feature.\n - %s disables the better grass feature entirely.\n - %s will copy the top texture on every side of the grass block. Similar to OptiFine's Fast option.\n - %s will connect the grass block textures like OptiFine's Fancy option.\n - %s will connect the grass block textures and smoothen the side textures of nearby grass blocks."
+}

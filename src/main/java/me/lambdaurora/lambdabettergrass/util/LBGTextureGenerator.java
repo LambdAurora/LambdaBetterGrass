@@ -10,6 +10,8 @@
 package me.lambdaurora.lambdabettergrass.util;
 
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+@Environment(EnvType.CLIENT)
 public enum LBGTextureGenerator
 {
     ; // No instantiation possible <3

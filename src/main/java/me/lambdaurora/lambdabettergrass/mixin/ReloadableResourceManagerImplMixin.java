@@ -32,8 +32,9 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
     @Inject(method = "beginMonitoredReload", at = @At("HEAD"))
     private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir)
     {
-        LambdaBetterGrass.get().log("Inject generated resource packs.");
-        packs.add(LambdaBetterGrass.get().resourcePack = new LBGResourcePack(this));
+        LambdaBetterGrass mod = LambdaBetterGrass.get();
+        mod.log("Inject generated resource packs.");
+        packs.add(mod.resourcePack = new LBGResourcePack(this, mod));
 
         LBGState.reset();
     }

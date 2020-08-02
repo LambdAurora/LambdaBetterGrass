@@ -1,0 +1,10 @@
+{
+  "lambdabettergrass.menu.info.1": "Le mod utilise des fichiers de packs de ressources pour déterminer quels blocs sont affectés.",
+  "lambdabettergrass.menu.info.2": "Cela veut dire que pour activer ou désactiver la fonctionnalités sur certains blocs",
+  "lambdabettergrass.menu.info.3": "il faut un pack de ressources.",
+  "lambdabettergrass.menu.info.read_more": "En savoir plus: %s",
+  "lambdabettergrass.menu.title": "Paramètres de LambdaBetterGrass",
+  "lambdabettergrass.menu.title.info": "Comment le mod fonctionne?",
+  "lambdabettergrass.option.mode": "Meilleurs blocs d'herbe",
+  "lambdabettergrass.tooltip.mode": "Meilleurs blocs d'herbe.\n - %s désactive la fonctionnalité entièrement.\n - %s va copier la texture du haut et l'appliquer sur tous les côtés. Similaire à l'option Rapides d'OptiFine.\n - %s va connect les textures des blocs d'herbe comme l'option Détaillés d'OptiFine.\n - %s va connecter les textures des blocs d'herbe et va adoucire les textures des blocs d'herbe aux alentours.\nNote: cette fonctionnalité s'applique à tous blocs définit via resource pack comme le mycélium, le podzol, etc."
+}

@@ -11,6 +11,8 @@ package me.lambdaurora.lambdabettergrass;
 
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +34,7 @@ public class LambdaBetterGrass implements ClientModInitializer
     public static final Identifier        BETTER_GRASS_SIDE_ARCH_BLEND_MASK = mc("bettergrass/mask/grass_block_side_arch_blend.png");
     private static      LambdaBetterGrass INSTANCE;
     public final        Logger            logger                            = LogManager.getLogger("lambdabettergrass");
-    //public final   BetterGrassConfig                        config = new BetterGrassConfig(this);
+    public final        LBGConfig         config                            = new LBGConfig(this);
     public              LBGResourcePack   resourcePack;
 
     @Override
@@ -40,6 +42,7 @@ public class LambdaBetterGrass implements ClientModInitializer
     {
         INSTANCE = this;
         this.log("Initializing LambdaBetterGrass...");
+        this.config.load();
     }
 
     /**
