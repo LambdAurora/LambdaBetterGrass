@@ -1,0 +1,14 @@
+{
+  "layers": [
+    {
+      "color_index": 0,
+      "textures": {
+        "top": "minecraft:block/dirt",
+        "side": "minecraft:block/dirt",
+        "overrides": {
+          "connect": "minecraft:block/grass_block_top"
+        }
+      }
+    }
+  ]
+}

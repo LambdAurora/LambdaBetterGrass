@@ -31,8 +31,7 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 @Mixin(ModelLoader.class)
-public class ModelLoaderMixin
-{
+public class ModelLoaderMixin {
     @Shadow
     @Final
     private Map<Identifier, UnbakedModel> unbakedModels;
@@ -46,8 +45,7 @@ public class ModelLoaderMixin
     private ResourceManager resourceManager;
 
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
-    private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci)
-    {
+    private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci) {
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {

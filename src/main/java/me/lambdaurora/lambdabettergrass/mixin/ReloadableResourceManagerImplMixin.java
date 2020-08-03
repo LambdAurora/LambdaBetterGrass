@@ -27,11 +27,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 @Mixin(ReloadableResourceManagerImpl.class)
-public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager
-{
+public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager {
     @Inject(method = "beginMonitoredReload", at = @At("HEAD"))
-    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir)
-    {
+    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
         LambdaBetterGrass mod = LambdaBetterGrass.get();
         mod.log("Inject generated resource packs.");
         packs.add(mod.resourcePack = new LBGResourcePack(this, mod));

@@ -22,19 +22,17 @@ import java.nio.file.Paths;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGConfig
-{
-    private static final LBGMode DEFAULT_MODE  = LBGMode.FANCY;
+public class LBGConfig {
+    private static final LBGMode DEFAULT_MODE = LBGMode.FANCY;
     private static final boolean DEFAULT_DEBUG = false;
 
     public static final Path CONFIG_FILE_PATH = Paths.get("config/lambdabettergrass.toml");
 
-    protected final FileConfig        config;
-    private final   LambdaBetterGrass mod;
-    private         LBGMode           mode;
+    protected final FileConfig config;
+    private final LambdaBetterGrass mod;
+    private LBGMode mode;
 
-    public LBGConfig(@NotNull LambdaBetterGrass mod)
-    {
+    public LBGConfig(@NotNull LambdaBetterGrass mod) {
         this.mod = mod;
         this.config = FileConfig.builder(CONFIG_FILE_PATH)
                 .concurrent()
@@ -47,8 +45,7 @@ public class LBGConfig
     /**
      * Loads the configuration.
      */
-    public void load()
-    {
+    public void load() {
         this.config.load();
 
         this.mode = LBGMode.byId(this.config.getOrElse("mode", DEFAULT_MODE.getName())).orElse(DEFAULT_MODE);
@@ -59,8 +56,7 @@ public class LBGConfig
     /**
      * Resets the configuration.
      */
-    public void reset()
-    {
+    public void reset() {
         this.setMode(DEFAULT_MODE);
         this.setDebug(DEFAULT_DEBUG);
     }
@@ -70,8 +66,7 @@ public class LBGConfig
      *
      * @return The better grass mode.
      */
-    public LBGMode getMode()
-    {
+    public LBGMode getMode() {
         return this.mode;
     }
 
@@ -80,8 +75,7 @@ public class LBGConfig
      *
      * @param mode The better grass mode.
      */
-    public void setMode(@NotNull LBGMode mode)
-    {
+    public void setMode(@NotNull LBGMode mode) {
         this.mode = mode;
         this.config.set("mode", mode.getName());
     }
@@ -91,8 +85,7 @@ public class LBGConfig
      *
      * @return True if this mod is in debug mode, else false.
      */
-    public boolean isDebug()
-    {
+    public boolean isDebug() {
         return this.config.getOrElse("debug", DEFAULT_DEBUG);
     }
 
@@ -101,8 +94,7 @@ public class LBGConfig
      *
      * @param debug True if this mod is in debug mode, else false.
      */
-    public void setDebug(boolean debug)
-    {
+    public void setDebug(boolean debug) {
         this.config.set("debig", debug);
     }
 }

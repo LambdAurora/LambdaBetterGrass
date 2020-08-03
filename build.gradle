@@ -44,7 +44,7 @@ dependencies {
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 
-    modRuntime ("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
+    modRuntime("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
         transitive = false
     }
 

@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import static me.lambdaurora.lambdabettergrass.util.HypixusUtil.grassyDirt;
+
 /**
  * Represents the LambdaBetterGrass baked model.
  *
@@ -35,25 +38,21 @@ import java.util.function.Supplier;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGBakedModel extends ForwardingBakedModel
-{
+public class LBGBakedModel extends ForwardingBakedModel {
     private final LBGMetadata metadata;
 
-    public LBGBakedModel(@NotNull BakedModel baseModel, @NotNull LBGMetadata metadata)
-    {
+    public LBGBakedModel(@NotNull BakedModel baseModel, @NotNull LBGMetadata metadata) {
         this.wrapped = baseModel;
         this.metadata = metadata;
     }
 
     @Override
-    public boolean isVanillaAdapter()
-    {
+    public boolean isVanillaAdapter() {
         return false;
     }
 
     @Override
-    public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
-    {
+    public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         LBGMode mode = LambdaBetterGrass.get().config.getMode();
 
         if (mode == LBGMode.OFF) {
@@ -74,25 +73,34 @@ public class LBGBakedModel extends ForwardingBakedModel
                     Direction right = face.rotateYClockwise();
                     Direction left = face.rotateYCounterclockwise();
 
-                    if (canFullyConnect(world, state, pos, face)) {
-                        if (spriteBake(quad, layer, "connect"))
+                    if (state == Blocks.DIRT.getDefaultState()) {
+                        if (grassyDirt(world, pos, state)) {
+                            spriteBake(quad, layer, "connect");
+                        }
+                    } else if (state == Blocks.GRASS_BLOCK.getDefaultState()) {
+                        spriteBake(quad, layer, "connect");
+                    } else {
+                        if (canFullyConnect(world, state, pos, face)) {
+                            if (spriteBake(quad, layer, "connect"))
+                                return;
+                        }
+
+                        if (mode != LBGMode.FANCY)
                             return;
+
+                        boolean rightMatch = canConnect(world, state, pos.down(), right)
+                                || (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.offset(right), face));
+                        boolean leftMatch = canConnect(world, state, pos.down(), left)
+                                || (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.offset(left), face));
+
+                        if (rightMatch && leftMatch)
+                            spriteBake(quad, layer, "arch");
+                        else if (rightMatch)
+                            spriteBake(quad, layer, "blend_up_m");
+                        else if (leftMatch)
+                            spriteBake(quad, layer, "blend_up");
                     }
 
-                    if (mode != LBGMode.FANCY)
-                        return;
-
-                    boolean rightMatch = canConnect(world, state, pos.down(), right)
-                            || (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.offset(right), face));
-                    boolean leftMatch = canConnect(world, state, pos.down(), left)
-                            || (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.offset(left), face));
-
-                    if (rightMatch && leftMatch)
-                        spriteBake(quad, layer, "arch");
-                    else if (rightMatch)
-                        spriteBake(quad, layer, "blend_up_m");
-                    else if (leftMatch)
-                        spriteBake(quad, layer, "blend_up");
                 });
             }
             return true;
@@ -101,28 +109,23 @@ public class LBGBakedModel extends ForwardingBakedModel
         context.popTransform();
     }
 
-    private static boolean canFullyConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos selfPos, @NotNull Direction direction)
-    {
+    private static boolean canFullyConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos selfPos, @NotNull Direction direction) {
         return canConnect(world, self, selfPos.offset(direction).down());
     }
 
-    private static boolean canConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos start, @NotNull Direction direction)
-    {
+    private static boolean canConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos start, @NotNull Direction direction) {
         return canConnect(world, self, start.offset(direction));
     }
 
-    private static boolean canConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos adjacentPos)
-    {
+    private static boolean canConnect(@NotNull BlockRenderView world, @NotNull BlockState self, @NotNull BlockPos adjacentPos) {
         return canConnect(self, world.getBlockState(adjacentPos));
     }
 
-    private static boolean canConnect(@NotNull BlockState self, @NotNull BlockState adjacent)
-    {
+    private static boolean canConnect(@NotNull BlockState self, @NotNull BlockState adjacent) {
         return self == adjacent;
     }
 
-    private static boolean spriteBake(@NotNull MutableQuadView quad, @NotNull LBGLayer layer, @NotNull String texture)
-    {
+    private static boolean spriteBake(@NotNull MutableQuadView quad, @NotNull LBGLayer layer, @NotNull String texture) {
         Sprite sprite = layer.getBakedTexture(texture);
         if (sprite != null)
             quad.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
@@ -130,8 +133,7 @@ public class LBGBakedModel extends ForwardingBakedModel
     }
 
     @Override
-    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
-    {
+    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
         throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
     }
 }

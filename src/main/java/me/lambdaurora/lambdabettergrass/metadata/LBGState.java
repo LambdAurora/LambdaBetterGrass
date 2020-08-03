@@ -32,16 +32,14 @@ import java.util.Map;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGState
-{
+public class LBGState {
     private static final Map<Identifier, LBGState> LBG_STATES = new HashMap<>();
 
-    public final  Identifier                            id;
-    private final LBGMetadata                           metadata;
+    public final Identifier id;
+    private final LBGMetadata metadata;
     private final Object2ObjectMap<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
-    public LBGState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json)
-    {
+    public LBGState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json) {
         this.id = id;
 
         // Look for variants.
@@ -72,8 +70,7 @@ public class LBGState
      * @param metadataId      The metadata identifier.
      * @return The metadata if loaded successfully, else null
      */
-    private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId)
-    {
+    private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
         Identifier metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
         if (resourceManager.containsResource(metadataResourceId)) {
             try {
@@ -95,8 +92,7 @@ public class LBGState
      * @param modelId The model identifier.
      * @return A metadata if it exists for the given model id, else null.
      */
-    public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId)
-    {
+    public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
         if (this.metadata != null)
             return this.metadata;
         for (Map.Entry<String, LBGMetadata> variant : this.metadatas.entrySet()) {
@@ -112,16 +108,14 @@ public class LBGState
      * @param id The identifier of the state.
      * @return The state if cached, else null.
      */
-    public static @Nullable LBGState getMetadataState(@NotNull Identifier id)
-    {
+    public static @Nullable LBGState getMetadataState(@NotNull Identifier id) {
         return LBG_STATES.get(id);
     }
 
     /**
      * Resets all the known states cache.
      */
-    public static void reset()
-    {
+    public static void reset() {
         LBG_STATES.clear();
     }
 }

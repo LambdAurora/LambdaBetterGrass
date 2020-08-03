@@ -16,8 +16,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.nio.channels.WritableByteChannel;
 
 @Mixin(NativeImage.class)
-public interface NativeImageAccessor
-{
+public interface NativeImageAccessor {
     @Invoker("write")
     boolean lbg_write(WritableByteChannel writableByteChannel);
 }

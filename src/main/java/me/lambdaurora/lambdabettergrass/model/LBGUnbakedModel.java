@@ -31,26 +31,22 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGUnbakedModel implements UnbakedModel
-{
+public class LBGUnbakedModel implements UnbakedModel {
     private final UnbakedModel baseModel;
-    private final LBGMetadata  metadata;
+    private final LBGMetadata metadata;
 
-    public LBGUnbakedModel(@NotNull UnbakedModel baseModel, @NotNull LBGMetadata metadata)
-    {
+    public LBGUnbakedModel(@NotNull UnbakedModel baseModel, @NotNull LBGMetadata metadata) {
         this.baseModel = baseModel;
         this.metadata = metadata;
     }
 
     @Override
-    public Collection<Identifier> getModelDependencies()
-    {
+    public Collection<Identifier> getModelDependencies() {
         return Collections.emptySet();
     }
 
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
-    {
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
         Collection<SpriteIdentifier> baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
         List<SpriteIdentifier> textures = new ArrayList<>(baseIds);
         textures.addAll(this.metadata.getTextures());
@@ -59,8 +55,7 @@ public class LBGUnbakedModel implements UnbakedModel
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
-    {
+    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
         this.metadata.bakeTextures(textureGetter);
 
         return new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
