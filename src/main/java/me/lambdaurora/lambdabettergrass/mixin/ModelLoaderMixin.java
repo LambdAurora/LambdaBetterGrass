@@ -29,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Set;
 
 @Mixin(ModelLoader.class)
 public class ModelLoaderMixin
@@ -39,7 +40,7 @@ public class ModelLoaderMixin
 
     @Shadow
     @Final
-    private Map<Identifier, UnbakedModel> modelsToBake;
+    private Set<Identifier> modelsToLoad;
 
     @Shadow
     @Final
@@ -75,7 +76,7 @@ public class ModelLoaderMixin
                     if (metadata != null) {
                         UnbakedModel model = new LBGUnbakedModel(unbakedModel, metadata);
                         this.unbakedModels.put(modelId, model);
-                        this.modelsToBake.put(modelId, model);
+                        this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
                         ci.cancel();
                     }
                 }

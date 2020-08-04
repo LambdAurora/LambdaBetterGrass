@@ -11,8 +11,6 @@ package me.lambdaurora.lambdabettergrass;
 
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
