@@ -44,7 +44,7 @@
   "custom": {
     "modupdater": {
       "strategy": "curseforge",
-      "projectID": -1
+      "projectID": 400322
     }
   }
 }
