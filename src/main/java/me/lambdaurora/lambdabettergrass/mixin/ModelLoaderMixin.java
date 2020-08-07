@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Mixin(ModelLoader.class)
-public class ModelLoaderMixin
+public abstract class ModelLoaderMixin
 {
     @Shadow
     @Final
@@ -46,9 +46,14 @@ public class ModelLoaderMixin
     @Final
     private ResourceManager resourceManager;
 
+    @Shadow
+    public abstract UnbakedModel getOrLoadModel(Identifier id);
+
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
     private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci)
     {
+        if (id.getPath().contains("snow"))
+            System.out.println(id + " ;; " + unbakedModel);
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {
@@ -63,7 +68,7 @@ public class ModelLoaderMixin
                     if (this.resourceManager.containsResource(stateResourceId)) {
                         try {
                             JsonObject json = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream()));
-                            state = new LBGState(stateId, resourceManager, json);
+                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json);
                         } catch (IOException e) {
                             // Ignore.
                         }
@@ -72,10 +77,9 @@ public class ModelLoaderMixin
 
                 // If states metadata found, search for corresponding metadata and if exists replace the model.
                 if (state != null) {
-                    LBGMetadata metadata = state.getMetadata(modelId);
-                    if (metadata != null) {
-                        UnbakedModel model = new LBGUnbakedModel(unbakedModel, metadata);
-                        this.unbakedModels.put(modelId, model);
+                    UnbakedModel newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
+                    if (newModel != null) {
+                        this.unbakedModels.put(modelId, newModel);
                         this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
                         ci.cancel();
                     }

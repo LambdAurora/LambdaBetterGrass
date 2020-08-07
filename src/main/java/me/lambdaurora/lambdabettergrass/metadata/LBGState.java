@@ -10,100 +10,43 @@
 package me.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.data.client.model.BlockStateVariantMap;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.aperlambda.lambdacommon.LambdaConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
- * Represents grass model states with its different {@link LBGMetadata}.
+ * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGState
+public abstract class LBGState
 {
-    private static final Map<Identifier, LBGState> LBG_STATES = new HashMap<>();
+    private static final Map<String, BlockStateVariantMap.TriFunction<Identifier, ResourceManager, JsonObject, LBGState>> LBG_STATES_TYPE = new HashMap<>();
+    private static final Map<Identifier, LBGState>                                                                        LBG_STATES      = new HashMap<>();
 
-    public final  Identifier                            id;
-    private final LBGMetadata                           metadata;
-    private final Object2ObjectMap<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
+    public final Identifier id;
 
-    public LBGState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json)
+    public LBGState(@NotNull Identifier id)
     {
         this.id = id;
-
-        // Look for variants.
-        if (json.has("variants")) {
-            JsonObject variants = json.getAsJsonObject("variants");
-            variants.entrySet().forEach(entry -> {
-                JsonObject variant = entry.getValue().getAsJsonObject();
-                if (variant.has("data")) {
-                    Identifier metadataId = new Identifier(variant.get("data").getAsString());
-
-                    metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
-                }
-            });
-            this.metadata = null;
-        } else if (json.has("data")) { // Look for a common metadata if no variants are specified.
-            Identifier metadataId = new Identifier(json.get("data").getAsString());
-            this.metadata = this.loadMetadata(resourceManager, metadataId);
-        } else // The state file is invalid, cannot find any metadata.
-            this.metadata = null;
-
-        LBG_STATES.put(this.id, this);
+        putState(id, this);
     }
 
-    /**
-     * Loads the metadata from the resource manager.
-     *
-     * @param resourceManager The resource manager.
-     * @param metadataId      The metadata identifier.
-     * @return The metadata if loaded successfully, else null
-     */
-    private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId)
-    {
-        Identifier metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-        if (resourceManager.containsResource(metadataResourceId)) {
-            try {
-                JsonObject metadataJson = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream()));
-                LBGMetadata metadata = new LBGMetadata(resourceManager, metadataId, metadataJson);
+    public abstract @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter);
 
-                return metadata;
-            } catch (IOException e) {
-                // Ignore.
-            }
-        }
-        LambdaBetterGrass.get().warn("Could not load metadata `" + metadataId + "`.");
-        return null;
-    }
-
-    /**
-     * Returns the metadata corresponding to the specified model identifier.
-     *
-     * @param modelId The model identifier.
-     * @return A metadata if it exists for the given model id, else null.
-     */
-    public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId)
+    protected static void putState(@NotNull Identifier id, @NotNull LBGState state)
     {
-        if (this.metadata != null)
-            return this.metadata;
-        for (Map.Entry<String, LBGMetadata> variant : this.metadatas.entrySet()) {
-            if (variant.getKey().equals(modelId.getVariant()))
-                return variant.getValue();
-        }
-        return null;
+        LBG_STATES.put(id, state);
     }
 
     /**
@@ -123,5 +66,26 @@ public class LBGState
     public static void reset()
     {
         LBG_STATES.clear();
+    }
+
+    public static void registerType(@NotNull String type, @NotNull BlockStateVariantMap.TriFunction<Identifier, ResourceManager, JsonObject, LBGState> stateGenerator)
+    {
+        LBG_STATES_TYPE.put(type, stateGenerator);
+    }
+
+    public static @Nullable LBGState getOrLoadMetadataState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json)
+    {
+        LBGState state = getMetadataState(id);
+        if (state != null)
+            return state;
+
+        String type = "grass";
+        if (json.has("type"))
+            type = json.get("type").getAsString();
+
+        if (!LBG_STATES_TYPE.containsKey(type))
+            return null;
+
+        return LBG_STATES_TYPE.get(type).apply(id, resourceManager, json);
     }
 }

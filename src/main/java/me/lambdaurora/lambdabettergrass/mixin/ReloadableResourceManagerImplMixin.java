@@ -10,6 +10,7 @@
 package me.lambdaurora.lambdabettergrass.mixin;
 
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import me.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.minecraft.resource.ReloadableResourceManager;

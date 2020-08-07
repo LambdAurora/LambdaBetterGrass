@@ -1,4 +1,5 @@
 {
+  "type": "grass",
   "variants": {
     "snowy=false": {
       "data": "minecraft:bettergrass/data/grass_block"
