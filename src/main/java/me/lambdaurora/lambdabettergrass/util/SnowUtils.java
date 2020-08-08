@@ -36,6 +36,12 @@ public class SnowUtils
         throw new UnsupportedOperationException("SnowUtils only contains static definitions.");
     }
 
+    /**
+     * Returns the unbaked model of snow layer.
+     *
+     * @param modelGetter The model getter.
+     * @return The unbaked model.
+     */
     public static @Nullable UnbakedModel getSnowLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter)
     {
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));

@@ -15,6 +15,7 @@ import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.spruceui.SpruceLabelWidget;
 import me.lambdaurora.spruceui.SpruceTexts;
 import me.lambdaurora.spruceui.Tooltip;
+import me.lambdaurora.spruceui.option.SpruceBooleanOption;
 import me.lambdaurora.spruceui.option.SpruceCyclingOption;
 import me.lambdaurora.spruceui.option.SpruceResetOption;
 import net.fabricmc.api.EnvType;
@@ -48,6 +49,7 @@ public class SettingsScreen extends Screen
     private final Screen    parent;
 
     private final Option modeOption;
+    private final Option betterSnowOption;
     private final Option resetOption;
 
     private final List<SpruceLabelWidget> labels = new ArrayList<>();
@@ -71,6 +73,15 @@ public class SettingsScreen extends Screen
                         LBGMode.FAST.getTranslatedText(),
                         LBGMode.FANCY.getTranslatedText()));
 
+        this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_snow",
+                this.config::hasBetterSnow,
+                betterSnow -> {
+                    this.config.setBetterSnow(betterSnow);
+                    if (this.client != null && this.client.worldRenderer != null)
+                        this.client.worldRenderer.reload();
+                },
+                new TranslatableText("lambdabettergrass.tooltip.better_snow"));
+
         this.resetOption = new SpruceResetOption(btn -> {
             this.config.reset();
             MinecraftClient client = MinecraftClient.getInstance();
@@ -84,7 +95,8 @@ public class SettingsScreen extends Screen
         super.init();
         int buttonHeight = 20;
 
-        this.addButton(this.modeOption.createButton(this.client.options, this.width / 2 - 75, this.height / 4 - buttonHeight, 150));
+        this.addButton(this.modeOption.createButton(this.client.options, this.width / 2 - 155, this.height / 4 - buttonHeight, 150));
+        this.addButton(this.betterSnowOption.createButton(this.client.options, this.width / 2 + 5, this.height / 4 - buttonHeight, 150));
 
         this.buildLabels();
 

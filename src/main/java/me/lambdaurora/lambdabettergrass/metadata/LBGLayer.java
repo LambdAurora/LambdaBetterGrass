@@ -227,8 +227,8 @@ public class LBGLayer
     public String toString()
     {
         return "LBGLayer{" +
-                "parentMetadata=" + parentMetadata +
-                ", colorIndex=" + colorIndex +
+                "index=" + this.index +
+                ", colorIndex=" + this.colorIndex +
                 '}';
     }
 

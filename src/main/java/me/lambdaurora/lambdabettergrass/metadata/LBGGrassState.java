@@ -51,9 +51,19 @@ public class LBGGrassState extends LBGState
                 if (variant.has("data")) {
                     Identifier metadataId = new Identifier(variant.get("data").getAsString());
 
-                    metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
+                    this.metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
                 }
             });
+
+            {
+                LBGMetadata normalMetadata = this.metadatas.get("snowy=false");
+                LBGMetadata snowyMetadata = this.metadatas.get("snowy=true");
+
+                if (normalMetadata != null && snowyMetadata != null) {
+                    snowyMetadata.snowyModelVariantProvider = bakedModel -> normalMetadata.snowyModelVariant = bakedModel;
+                }
+            }
+
             this.metadata = null;
         } else if (json.has("data")) { // Look for a common metadata if no variants are specified.
             Identifier metadataId = new Identifier(json.get("data").getAsString());
@@ -108,7 +118,13 @@ public class LBGGrassState extends LBGState
     {
         LBGMetadata metadata = this.getMetadata(modelId);
         if (metadata != null) {
-            return new LBGUnbakedModel(originalModel, metadata);
+            UnbakedModel model = new LBGUnbakedModel(originalModel, metadata);
+            /*if (this.metadata == null && modelId.getVariant().equals("snowy=true")) {
+                LBGMetadata nonSnowyMetadata = this.getMetadata(new ModelIdentifier(new Identifier(modelId.getNamespace(), modelId.getPath()), "snowy=false"));
+                if (nonSnowyMetadata != null)
+                    nonSnowyMetadata.snowyVariant = model;
+            }*/
+            return model;
         }
         return null;
     }

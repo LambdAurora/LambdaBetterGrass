@@ -13,15 +13,22 @@ import me.lambdaurora.lambdabettergrass.LBGMode;
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.metadata.LBGLayer;
 import me.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
+import me.lambdaurora.lambdabettergrass.metadata.LBGSnowyState;
+import me.lambdaurora.lambdabettergrass.metadata.LBGState;
+import me.lambdaurora.lambdabettergrass.util.SnowUtils;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,6 +67,20 @@ public class LBGBakedModel extends ForwardingBakedModel
             // Don't touch the model.
             super.emitBlockQuads(world, state, pos, randomSupplier, context);
             return;
+        }
+
+        if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().config.hasBetterSnow()
+                && state.getProperties().contains(Properties.SNOWY) && !state.get(Properties.SNOWY)) {
+            BlockPos upPos = pos.up();
+            BlockState up = world.getBlockState(upPos);
+            if (!up.isAir()) {
+                Identifier blockId = Registry.BLOCK.getId(up.getBlock());
+                Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
+                if (LBGState.getMetadataState(stateId) instanceof LBGSnowyState && SnowUtils.getNearbySnowyBlocks(world, upPos, up.getBlock()) > 1) {
+                    ((FabricBakedModel) this.metadata.getSnowyModelVariant()).emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
+                    return;
+                }
+            }
         }
 
         context.pushTransform(quad -> {

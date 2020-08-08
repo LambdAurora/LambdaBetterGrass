@@ -38,14 +38,14 @@ public enum LBGTextureGenerator
     private static @NotNull NativeImage getFallbackNativeImage(@NotNull ResourceManager resourceManager)
     {
         if (!resourceManager.containsResource(FALLBACK_TEXTURE)) {
-            LambdaBetterGrass.get().warn("Could not load fallback texture `" + FALLBACK_TEXTURE.toString() + "`!");
+            LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE.toString() + "\"!");
             return new NativeImage(16, 16, false);
         }
 
         try {
             return NativeImage.read(resourceManager.getResource(FALLBACK_TEXTURE).getInputStream());
         } catch (IOException e) {
-            LambdaBetterGrass.get().warn("Could not load fallback texture `" + FALLBACK_TEXTURE.toString() + "`!");
+            LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE.toString() + "\"!");
             return new NativeImage(16, 16, false);
         }
     }
@@ -61,14 +61,14 @@ public enum LBGTextureGenerator
     public static @NotNull NativeImage getNativeImage(@NotNull ResourceManager resourceManager, @NotNull Identifier path)
     {
         if (!resourceManager.containsResource(path)) {
-            LambdaBetterGrass.get().warn("Could not load texture " + path.toString() + "! Loading fallback texture instead.");
+            LambdaBetterGrass.get().warn("Could not load texture \"" + path.toString() + "\"! Loading fallback texture instead.");
             return getFallbackNativeImage(resourceManager);
         }
 
         try {
             return NativeImage.read(resourceManager.getResource(path).getInputStream());
         } catch (IOException e) {
-            LambdaBetterGrass.get().warn("Could not load texture " + path.toString() + "! Exception: " + e.getMessage() + ". Loading fallback texture instead.");
+            LambdaBetterGrass.get().warn("Could not load texture \"" + path.toString() + "\"! Exception: " + e.getMessage() + ". Loading fallback texture instead.");
             return getFallbackNativeImage(resourceManager);
         }
     }

@@ -52,12 +52,19 @@ public abstract class ModelLoaderMixin
     @Final
     private ModelVariantMap.DeserializationContext variantMapDeserializationContext;
 
+    private boolean lbg_firstLoad = true;
+
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
     private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci)
     {
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {
+                if (this.lbg_firstLoad) {
+                    LBGState.reset();
+                    this.lbg_firstLoad = false;
+                }
+
                 Identifier stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
 
                 // Get cached states metadata.

@@ -9,6 +9,7 @@
 
 package me.lambdaurora.lambdabettergrass.model;
 
+import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.util.SnowUtils;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
@@ -56,6 +57,12 @@ public class LBGSnowyBakedModel extends ForwardingBakedModel
     @Override
     public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
+        if (!LambdaBetterGrass.get().config.hasBetterSnow()) {
+            // Don't touch the model.
+            super.emitBlockQuads(world, state, pos, randomSupplier, context);
+            return;
+        }
+
         if (SnowUtils.getNearbySnowyBlocks(world, pos, state.getBlock()) > 1 && this.snowLayerModel != null) {
             final BlockPos downPos = pos.down();
             final BlockState downState = world.getBlockState(downPos);

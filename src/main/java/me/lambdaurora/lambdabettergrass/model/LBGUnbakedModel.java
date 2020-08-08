@@ -54,6 +54,8 @@ public class LBGUnbakedModel implements UnbakedModel
         Collection<SpriteIdentifier> baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
         List<SpriteIdentifier> textures = new ArrayList<>(baseIds);
         textures.addAll(this.metadata.getTextures());
+        if (this.metadata.getSnowyVariant() != null)
+            textures.addAll(this.metadata.getSnowyVariant().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         return textures;
     }
 
@@ -63,6 +65,10 @@ public class LBGUnbakedModel implements UnbakedModel
     {
         this.metadata.bakeTextures(textureGetter);
 
-        return new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
+        LBGBakedModel model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
+
+        this.metadata.propagate(model);
+
+        return model;
     }
 }

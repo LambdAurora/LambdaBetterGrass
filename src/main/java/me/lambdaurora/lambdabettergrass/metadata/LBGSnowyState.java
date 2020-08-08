@@ -32,7 +32,6 @@ public class LBGSnowyState extends LBGState
     private       UnbakedModel                           alternateModel;
     private final boolean                                snowyModel;
 
-
     public LBGSnowyState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext)
     {
         super(id);

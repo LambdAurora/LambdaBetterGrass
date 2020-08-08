@@ -12,16 +12,21 @@ package me.lambdaurora.lambdabettergrass.metadata;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import me.lambdaurora.lambdabettergrass.model.LBGBakedModel;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -44,6 +49,10 @@ public class LBGMetadata
     private final List<LBGLayer> layers = new ArrayList<>();
 
     private int lastLayerIndex = 0;
+
+    protected UnbakedModel         snowyVariant              = null;
+    protected Consumer<BakedModel> snowyModelVariantProvider = null;
+    protected BakedModel           snowyModelVariant         = null;
 
     public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json)
     {
@@ -120,16 +129,49 @@ public class LBGMetadata
      *
      * @return The textures.
      */
-    public Collection<SpriteIdentifier> getTextures()
+    public @NotNull Collection<SpriteIdentifier> getTextures()
     {
         return this.textures;
+    }
+
+    /**
+     * Returns the snowy variant of this.
+     *
+     * @return The snowy variant.
+     */
+    public @Nullable UnbakedModel getSnowyVariant()
+    {
+        return this.snowyVariant;
+    }
+
+    /**
+     * Returns the snowy model variant.
+     *
+     * @return The snowy model variant.
+     */
+    public @Nullable BakedModel getSnowyModelVariant()
+    {
+        return this.snowyModelVariant;
+    }
+
+    /**
+     * Propagates the baked model to other variants if applicable.
+     *
+     * @param model The model to propagate.
+     */
+    public void propagate(@NotNull LBGBakedModel model)
+    {
+        if (this.snowyModelVariantProvider != null)
+            this.snowyModelVariantProvider.accept(model);
     }
 
     @Override
     public String toString()
     {
         return "LBGMetadata{" +
-                "id=" + id +
+                "id=" + this.id +
+                ", layers=" + this.layers +
+                ", snowyVariant=" + this.snowyVariant +
                 '}';
     }
 }
