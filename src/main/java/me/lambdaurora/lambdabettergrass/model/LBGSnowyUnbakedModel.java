@@ -24,20 +24,22 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Represents the LambdaBetterGrass unbaked model for snow layer method.
+ * Represents the LambdaBetterGrass unbaked model for snowy method.
  *
  * @author LambdAurora
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGSnowLayerUnbakedModel implements UnbakedModel
+public class LBGSnowyUnbakedModel implements UnbakedModel
 {
     private final UnbakedModel baseModel;
+    private final UnbakedModel snowyModel;
     private final UnbakedModel snowLayerModel;
 
-    public LBGSnowLayerUnbakedModel(@NotNull UnbakedModel baseModel, @NotNull UnbakedModel snowLayerModel)
+    public LBGSnowyUnbakedModel(@NotNull UnbakedModel baseModel, @Nullable UnbakedModel snowyModel, @Nullable UnbakedModel snowLayerModel)
     {
         this.baseModel = baseModel;
+        this.snowyModel = snowyModel;
         this.snowLayerModel = snowLayerModel;
     }
 
@@ -50,9 +52,11 @@ public class LBGSnowLayerUnbakedModel implements UnbakedModel
     @Override
     public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
     {
-        List<SpriteIdentifier> ids = new ArrayList<>();
-        ids.addAll(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        ids.addAll(this.snowLayerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        List<SpriteIdentifier> ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        if (this.snowyModel != null)
+            ids.addAll(this.snowyModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        if (this.snowLayerModel != null)
+            ids.addAll(this.snowLayerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         return ids;
     }
 
@@ -60,6 +64,13 @@ public class LBGSnowLayerUnbakedModel implements UnbakedModel
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
-        return new LBGSnowLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), Objects.requireNonNull(this.snowLayerModel.bake(loader, textureGetter, rotationContainer, modelId)));
+        BakedModel snowyModel = null;
+        if (this.snowyModel != null)
+            snowyModel = this.snowyModel.bake(loader, textureGetter, rotationContainer, modelId);
+        BakedModel snowLayerModel = null;
+        if (this.snowLayerModel != null)
+            snowLayerModel = this.snowLayerModel.bake(loader, textureGetter, rotationContainer, modelId);
+        return new LBGSnowyBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)),
+                snowyModel, snowLayerModel);
     }
 }

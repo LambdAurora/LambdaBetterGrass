@@ -10,11 +10,10 @@
 package me.lambdaurora.lambdabettergrass.mixin;
 
 import com.google.gson.JsonObject;
-import me.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
-import me.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -49,11 +48,13 @@ public abstract class ModelLoaderMixin
     @Shadow
     public abstract UnbakedModel getOrLoadModel(Identifier id);
 
+    @Shadow
+    @Final
+    private ModelVariantMap.DeserializationContext variantMapDeserializationContext;
+
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
     private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci)
     {
-        if (id.getPath().contains("snow"))
-            System.out.println(id + " ;; " + unbakedModel);
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {
@@ -68,7 +69,7 @@ public abstract class ModelLoaderMixin
                     if (this.resourceManager.containsResource(stateResourceId)) {
                         try {
                             JsonObject json = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream()));
-                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json);
+                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
                         } catch (IOException e) {
                             // Ignore.
                         }

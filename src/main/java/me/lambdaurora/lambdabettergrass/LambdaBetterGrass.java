@@ -10,7 +10,7 @@
 package me.lambdaurora.lambdabettergrass;
 
 import me.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
-import me.lambdaurora.lambdabettergrass.metadata.LBGSnowLayerState;
+import me.lambdaurora.lambdabettergrass.metadata.LBGSnowyState;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.fabricmc.api.ClientModInitializer;
@@ -45,8 +45,8 @@ public class LambdaBetterGrass implements ClientModInitializer
         this.log("Initializing LambdaBetterGrass...");
         this.config.load();
 
-        LBGState.registerType("grass", LBGGrassState::new);
-        LBGState.registerType("snow_layer", LBGSnowLayerState::new);
+        LBGState.registerType("grass", (id, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
+        LBGState.registerType("snowy", LBGSnowyState::new);
     }
 
     /**

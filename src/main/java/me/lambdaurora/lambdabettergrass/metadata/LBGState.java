@@ -11,8 +11,8 @@ package me.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.data.client.model.BlockStateVariantMap;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +31,8 @@ import java.util.function.Function;
  */
 public abstract class LBGState
 {
-    private static final Map<String, BlockStateVariantMap.TriFunction<Identifier, ResourceManager, JsonObject, LBGState>> LBG_STATES_TYPE = new HashMap<>();
-    private static final Map<Identifier, LBGState>                                                                        LBG_STATES      = new HashMap<>();
+    private static final Map<String, LBGStateProvider> LBG_STATES_TYPE = new HashMap<>();
+    private static final Map<Identifier, LBGState>     LBG_STATES      = new HashMap<>();
 
     public final Identifier id;
 
@@ -68,12 +68,12 @@ public abstract class LBGState
         LBG_STATES.clear();
     }
 
-    public static void registerType(@NotNull String type, @NotNull BlockStateVariantMap.TriFunction<Identifier, ResourceManager, JsonObject, LBGState> stateGenerator)
+    public static void registerType(@NotNull String type, @NotNull LBGStateProvider stateProvider)
     {
-        LBG_STATES_TYPE.put(type, stateGenerator);
+        LBG_STATES_TYPE.put(type, stateProvider);
     }
 
-    public static @Nullable LBGState getOrLoadMetadataState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json)
+    public static @Nullable LBGState getOrLoadMetadataState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext)
     {
         LBGState state = getMetadataState(id);
         if (state != null)
@@ -86,6 +86,12 @@ public abstract class LBGState
         if (!LBG_STATES_TYPE.containsKey(type))
             return null;
 
-        return LBG_STATES_TYPE.get(type).apply(id, resourceManager, json);
+        return LBG_STATES_TYPE.get(type).create(id, resourceManager, json, deserializationContext);
+    }
+
+    @FunctionalInterface
+    public interface LBGStateProvider
+    {
+        @NotNull LBGState create(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext);
     }
 }
