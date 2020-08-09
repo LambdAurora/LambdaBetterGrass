@@ -10,6 +10,7 @@
 package me.lambdaurora.lambdabettergrass.mixin;
 
 import com.google.gson.JsonObject;
+import me.lambdaurora.lambdabettergrass.metadata.LBGLayerType;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,6 +64,11 @@ public abstract class ModelLoaderMixin
             if (!modelId.getVariant().equals("inventory")) {
                 if (this.lbg_firstLoad) {
                     LBGState.reset();
+                    LBGLayerType.reset();
+                    Collection<Identifier> layerTypes = this.resourceManager.findResources("bettergrass/layer_types", path -> path.endsWith(".json"));
+                    for (Identifier layerTypeId : layerTypes) {
+                        LBGLayerType.load(layerTypeId, this.resourceManager);
+                    }
                     this.lbg_firstLoad = false;
                 }
 

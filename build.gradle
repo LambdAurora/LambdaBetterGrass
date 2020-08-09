@@ -44,14 +44,15 @@ dependencies {
 
     modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 
-    modRuntime ("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
+    /*modRuntime ("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
         transitive = false
-    }
+    }*/
+    modRuntime ("com.terraformersmc:cinderscapes:1.0.7+build.46-1.16.1")
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
 
-    shadow("org.aperlambda:lambdajcommon:1.8.0") {
+    shadow("org.aperlambda:lambdajcommon:1.8.1") {
         // Minecraft already has all that google crap.
         exclude group: 'com.google.code.gson'
         exclude group: 'com.google.guava'

@@ -12,10 +12,10 @@ package me.lambdaurora.lambdabettergrass.model;
 import me.lambdaurora.lambdabettergrass.LBGMode;
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.metadata.LBGLayer;
+import me.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import me.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
-import me.lambdaurora.lambdabettergrass.metadata.LBGSnowyState;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
-import me.lambdaurora.lambdabettergrass.util.SnowUtils;
+import me.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
@@ -69,14 +69,14 @@ public class LBGBakedModel extends ForwardingBakedModel
             return;
         }
 
-        if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().config.hasBetterSnow()
+        if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().config.hasBetterLayer()
                 && state.getProperties().contains(Properties.SNOWY) && !state.get(Properties.SNOWY)) {
             BlockPos upPos = pos.up();
             BlockState up = world.getBlockState(upPos);
             if (!up.isAir()) {
                 Identifier blockId = Registry.BLOCK.getId(up.getBlock());
                 Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
-                if (LBGState.getMetadataState(stateId) instanceof LBGSnowyState && SnowUtils.getNearbySnowyBlocks(world, upPos, up.getBlock()) > 1) {
+                if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up.getBlock())) {
                     ((FabricBakedModel) this.metadata.getSnowyModelVariant()).emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
                     return;
                 }

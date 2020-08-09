@@ -2,8 +2,8 @@
 
 # The better grass mode. Values: "off", "fastest", "fast" and "fancy".
 mode = "fancy"
-# The better snow option.
-better_snow = true
+# The better layer option.
+better_layer = true
 
 # Debug mode. Debug mode allows to output the generated texture in the debug folder of your minecraft instance.
 debug = false

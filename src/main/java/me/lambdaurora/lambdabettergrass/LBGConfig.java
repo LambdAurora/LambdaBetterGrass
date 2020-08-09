@@ -24,9 +24,9 @@ import java.nio.file.Paths;
  */
 public class LBGConfig
 {
-    private static final LBGMode DEFAULT_MODE        = LBGMode.FANCY;
-    private static final boolean DEFAULT_BETTER_SNOW = true;
-    private static final boolean DEFAULT_DEBUG       = false;
+    private static final LBGMode DEFAULT_MODE         = LBGMode.FANCY;
+    private static final boolean DEFAULT_BETTER_LAYER = true;
+    private static final boolean DEFAULT_DEBUG        = false;
 
     public static final Path CONFIG_FILE_PATH = Paths.get("config/lambdabettergrass.toml");
 
@@ -63,7 +63,7 @@ public class LBGConfig
     public void reset()
     {
         this.setMode(DEFAULT_MODE);
-        this.setBetterSnow(DEFAULT_BETTER_SNOW);
+        this.setBetterLayer(DEFAULT_BETTER_LAYER);
         this.setDebug(DEFAULT_DEBUG);
     }
 
@@ -93,9 +93,9 @@ public class LBGConfig
      *
      * @return True if better snow is enabled, else false.
      */
-    public boolean hasBetterSnow()
+    public boolean hasBetterLayer()
     {
-        return this.config.getOrElse("better_snow", DEFAULT_BETTER_SNOW);
+        return this.config.getOrElse("better_layer", DEFAULT_BETTER_LAYER);
     }
 
     /**
@@ -103,9 +103,9 @@ public class LBGConfig
      *
      * @param betterSnow True if better snow is enabled, else false.
      */
-    public void setBetterSnow(boolean betterSnow)
+    public void setBetterLayer(boolean betterSnow)
     {
-        this.config.set("better_snow", betterSnow);
+        this.config.set("better_layer", betterSnow);
     }
 
     /**
@@ -125,6 +125,6 @@ public class LBGConfig
      */
     public void setDebug(boolean debug)
     {
-        this.config.set("debig", debug);
+        this.config.set("debug", debug);
     }
 }
