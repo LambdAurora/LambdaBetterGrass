@@ -57,7 +57,7 @@ public class LBGCompiledLayerMetadata
         if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock()) > 1 && this.bakedLayerModel != null) {
             final BlockPos downPos = pos.down();
             final BlockState downState = world.getBlockState(downPos);
-            if (Block.isSideSolidFullSquare(downState, world, downPos, Direction.UP)) {
+            if (downState.isSideSolidFullSquare(world, downPos, Direction.UP)) {
                 Vec3d offset = state.getModelOffset(world, pos);
                 boolean pushed = false;
                 if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {

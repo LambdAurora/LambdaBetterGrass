@@ -73,14 +73,15 @@ public class SettingsScreen extends Screen
                         LBGMode.FAST.getTranslatedText(),
                         LBGMode.FANCY.getTranslatedText()));
 
-        this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_layer",
+        this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_snow",
                 this.config::hasBetterLayer,
                 betterSnow -> {
                     this.config.setBetterLayer(betterSnow);
                     if (this.client != null && this.client.worldRenderer != null)
                         this.client.worldRenderer.reload();
                 },
-                new TranslatableText("lambdabettergrass.tooltip.better_layer"));
+                new TranslatableText("lambdabettergrass.tooltip.better_snow"),
+                true);
 
         this.resetOption = new SpruceResetOption(btn -> {
             this.config.reset();
