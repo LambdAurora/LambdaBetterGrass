@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "El mod usa archivos de paquetes de recursos para determinar qué bloques se ven afectados.",
+  "lambdabettergrass.menu.info.2": "Esto significa habilitar o deshabilitar la función Better Grass(mejor pasto) en bloques",
+  "lambdabettergrass.menu.info.3": "debe modificarse con paquetes de recursos.",
+  "lambdabettergrass.menu.info.read_more": "Leer más en: %s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass - Configuraciones",
+  "lambdabettergrass.menu.title.info": "¿Cómo funciona el mod?",
+  "lambdabettergrass.option.better_snow": "Better Snow(mejor nieve)",
+  "lambdabettergrass.option.mode": "Better Grass(mejor pasto)",
+  "lambdabettergrass.tooltip.better_snow": "Habilita la función de nieve mejorada. \nSi está habilitada, algunos bloques pueden tener una variación nevada y/o una capa de nieve agregada cuando hay nieve cerca. \nNota: Esto también funciona para otros bloques similares a la nieve que tienen capas si los archivos correctos están presentes.",
+  "lambdabettergrass.tooltip.mode": "Habilita la función de mejor césped. \n%s - Desactiva completamente la función de mejor césped. \n%s - Copiará la textura superior en cada lado del bloque de césped esto es similar a la opción Rápida de OptiFine. \n%s - Conectará las texturas del bloque de césped como la opción Fancy de OptiFine. \n%s - Conectará las texturas del bloque de césped y suavizará las texturas laterales de los bloques de césped cercanos."
+}
