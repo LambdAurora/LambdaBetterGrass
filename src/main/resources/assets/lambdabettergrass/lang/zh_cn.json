@@ -1,12 +1,12 @@
 {
   "lambdabettergrass.menu.info.1": "本模组通过资源包来决定哪些方块可以应用这些效果。",
-  "lambdabettergrass.menu.info.2": "也就是说想在哪些方块上启用或者关闭这些功能，",
-  "lambdabettergrass.menu.info.3": "得在资源包中添加修改对应方块的相关文件才能实现。",
-  "lambdabettergrass.menu.info.read_more": "欲知详情请访问: %s",
-  "lambdabettergrass.menu.title": "LambdaBetterGrass配置",
+  "lambdabettergrass.menu.info.2": "也就是说，想在哪些方块上启用或者关闭这些功能，",
+  "lambdabettergrass.menu.info.3": "得在资源包中添加，修改或者删除对应方块的相关文件才行。",
+  "lambdabettergrass.menu.info.read_more": "欲知详情请访问：%s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass 配置",
   "lambdabettergrass.menu.title.info": "本模组功能的实现方式",
   "lambdabettergrass.option.better_snow": "更好的雪地",
   "lambdabettergrass.option.mode": "更好的草地",
-  "lambdabettergrass.tooltip.better_snow": "启用“更好的雪地”。\n若启用该功能，某些与雪接壤的方块（如栅栏、花）会显示被雪覆盖的外观，或者在方块的底部显示雪层，亦或者两种效果皆有。\n注：本功能同样适用于其他类似雪的方块（如“Cinderscapes”模组中的“灰烬”），即分层的覆盖性方块，前提是提供对应方块的相关文件。",
-  "lambdabettergrass.tooltip.mode": "启用“更好的草地”。\n - %s 关闭“更好的草地”。\n - %s 方块的各个面都会应用其顶部材质。效果与OptiFine中“更好的草地”的“流畅”选项类似。\n - %s 同类方块连接处的面会应用其顶部材质。效果与OptiFine中“更好的草地”的“高品质”选项类似。\n - %s 同类方块连接处的面会应用其顶部材质，并且相邻的同类方块的侧面，会根据方块的所在位置应用额外的材质，实现顶部材质和侧面材质的过渡。"
+  "lambdabettergrass.tooltip.better_snow": "启用“更好的雪地”。\n若启用该功能，某些与雪接壤的方块会显示被雪覆盖的外观，或者在方块的底部显示雪层，亦或者两种效果皆有。比如栅栏和花。\n注：本功能同样适用于其他类似雪的方块，即分层的覆盖性方块，比如 Cinderscapes 模组中的“灰烬”，前提是提供对应方块的相关文件。",
+  "lambdabettergrass.tooltip.mode": "启用“更好的草地”。\n— %s 关闭“更好的草地”。\n— %s 方块的各个面都会应用其顶部材质。效果与 OptiFine 中“更好的草地”的“流畅”选项类似。\n— %s 同一种方块连接处的面会应用其顶部材质。效果与 OptiFine 中“更好的草地”的“高品质”选项类似。\n— %s 同一种方块连接处的面会应用其顶部材质，并且相邻的同一种方块的侧面，会根据方块的所在位置应用额外的材质，实现顶部材质和侧面材质的过渡。"
 }
