@@ -43,7 +43,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends Screen
 {
-    private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/API.md";
+    private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/API.md";
 
     private final LBGConfig config;
     private final Screen    parent;
@@ -117,7 +117,7 @@ public class SettingsScreen extends Screen
         this.labels.add(new SpruceLabelWidget(this.width / 2, y += 5 + this.textRenderer.fontHeight, new TranslatableText("lambdabettergrass.menu.info.2"), this.width, true));
         this.labels.add(new SpruceLabelWidget(this.width / 2, y += 5 + this.textRenderer.fontHeight, new TranslatableText("lambdabettergrass.menu.info.3"), this.width, true));
         SpruceLabelWidget readMore = new SpruceLabelWidget(this.width / 2, y + 5 + this.textRenderer.fontHeight,
-                new TranslatableText("lambdabettergrass.menu.info.read_more", API_URL).formatted(Formatting.GREEN),
+                new TranslatableText("lambdabettergrass.menu.info.read_more", "[GitHub]").formatted(Formatting.GREEN),
                 this.width,
                 label -> Util.getOperatingSystem().open(API_URL), true);
         readMore.setTooltip(new TranslatableText("chat.link.open"));

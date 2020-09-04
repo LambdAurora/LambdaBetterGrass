@@ -13,7 +13,6 @@ import com.mojang.datafixers.util.Pair;
 import me.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
@@ -36,6 +35,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Represents a compiled layer metadata.
+ * <p>
+ * This holds the custom models to use when the layer variation should be used.
+ *
+ * @author LambdAurora
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class LBGCompiledLayerMetadata
 {
     public final LBGLayerType layerType;
@@ -51,7 +59,60 @@ public class LBGCompiledLayerMetadata
         this.alternateModel = alternateModel;
     }
 
-    public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
+    public void fetchModelDependencies(@NotNull Collection<Identifier> ids)
+    {
+        if (this.layerModel != null) {
+            ids.addAll(this.layerModel.getModelDependencies());
+        }
+
+        if (this.alternateModel != null) {
+            ids.addAll(this.alternateModel.getModelDependencies());
+        }
+    }
+
+    public void fetchTextureDependencies(@NotNull Collection<SpriteIdentifier> ids, @NotNull Function<Identifier, UnbakedModel> unbakedModelGetter,
+                                         @NotNull Set<Pair<String, String>> unresolvedTextureReferences)
+    {
+        if (this.layerModel != null) {
+            ids.addAll(this.layerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        }
+
+        if (this.alternateModel != null) {
+            ids.addAll(this.alternateModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        }
+    }
+
+    /**
+     * Bakes the hold unbaked models.
+     *
+     * @param loader            The model loader.
+     * @param textureGetter     The texture getter.
+     * @param rotationContainer The rotation container.
+     * @param modelId           The model identifier.
+     */
+    public void bake(@NotNull ModelLoader loader, @NotNull Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, @NotNull Identifier modelId)
+    {
+        if (this.layerModel != null) {
+            this.bakedLayerModel = this.layerModel.bake(loader, textureGetter, rotationContainer, modelId);
+        }
+
+        if (this.alternateModel != null) {
+            this.bakedAlternateModel = this.alternateModel.bake(loader, textureGetter, rotationContainer, modelId);
+        }
+    }
+
+    /**
+     * Emits the block quads.
+     *
+     * @param world          The world.
+     * @param state          The block state.
+     * @param pos            The block position.
+     * @param randomSupplier The random supplier.
+     * @param context        The render context.
+     * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads, or 2 if the custom alternative model has emitted quads.
+     */
+    public int emitBlockQuads(@NotNull BlockRenderView world, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Supplier<Random> randomSupplier,
+                              @NotNull RenderContext context)
     {
         int success = 0;
         if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock()) > 1 && this.bakedLayerModel != null) {
@@ -84,28 +145,7 @@ public class LBGCompiledLayerMetadata
             ((FabricBakedModel) this.bakedAlternateModel).emitBlockQuads(world, state, pos, randomSupplier, context);
             success = 2;
         }
+
         return success;
-    }
-
-    public void getTextureDependencies(@NotNull Collection<SpriteIdentifier> ids, Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
-    {
-        if (this.layerModel != null) {
-            ids.addAll(this.layerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        }
-
-        if (this.alternateModel != null) {
-            ids.addAll(this.alternateModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        }
-    }
-
-    public void bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
-    {
-        if (this.layerModel != null) {
-            this.bakedLayerModel = this.layerModel.bake(loader, textureGetter, rotationContainer, modelId);
-        }
-
-        if (this.alternateModel != null) {
-            this.bakedAlternateModel = this.alternateModel.bake(loader, textureGetter, rotationContainer, modelId);
-        }
     }
 }

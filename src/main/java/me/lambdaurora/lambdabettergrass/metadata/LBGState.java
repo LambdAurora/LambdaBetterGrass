@@ -10,6 +10,8 @@
 package me.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
@@ -18,8 +20,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -31,8 +31,8 @@ import java.util.function.Function;
  */
 public abstract class LBGState
 {
-    private static final Map<String, LBGStateProvider> LBG_STATES_TYPE = new HashMap<>();
-    private static final Map<Identifier, LBGState>     LBG_STATES      = new HashMap<>();
+    private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
+    private static final Object2ObjectMap<Identifier, LBGState>     LBG_STATES      = new Object2ObjectOpenHashMap<>();
 
     public final Identifier id;
 

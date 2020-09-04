@@ -31,11 +31,11 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LayeredBlockUtils
+public final class LayeredBlockUtils
 {
     private LayeredBlockUtils()
     {
-        throw new UnsupportedOperationException("SnowUtils only contains static definitions.");
+        throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");
     }
 
     /**
@@ -49,12 +49,13 @@ public class LayeredBlockUtils
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));
     }
 
-    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock) {
+    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock)
+    {
         LBGState state = LBGState.getMetadataState(stateId);
         if (!(state instanceof LBGLayerState))
             return false;
 
-        boolean[] shouldTry = { false };
+        boolean[] shouldTry = {false};
         ((LBGLayerState) state).forEach(metadata -> {
             if (metadata.layerType.getName().equals("snow")) {
                 shouldTry[0] = true;

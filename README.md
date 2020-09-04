@@ -7,7 +7,7 @@
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/LambdaBetterGrass?label=version&style=flat-square)
 [![CurseForge](http://cf.way2muchnoise.eu/title/400322.svg)](https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass)
 
-An actual better grass mod for Fabric.
+An actual better grass and snow mod for Fabric.
 
 ## What's this mod?
 
@@ -15,7 +15,7 @@ This mod adds *actual* better grass to Minecraft. Grass will not connect to adja
 
 Better grass is present as an option in OptiFine in a less evolved way.
 
-**WARNING: THIS MOD IS HIGHLY WORK IN PROGRESS**
+This mod also adds better snow.
 
 ## Build
 
@@ -23,4 +23,4 @@ Just do `./gradlew shadowRemapJar` and everything should build just fine!
 
 ## For resource packs creators and developers
 
-Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/API.md).
+Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/API.md).

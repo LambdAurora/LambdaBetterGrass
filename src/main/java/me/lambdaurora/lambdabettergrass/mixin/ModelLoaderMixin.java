@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 @Mixin(ModelLoader.class)
 public abstract class ModelLoaderMixin
@@ -38,10 +37,6 @@ public abstract class ModelLoaderMixin
     @Shadow
     @Final
     private Map<Identifier, UnbakedModel> unbakedModels;
-
-    @Shadow
-    @Final
-    private Set<Identifier> modelsToLoad;
 
     @Shadow
     @Final
@@ -95,7 +90,6 @@ public abstract class ModelLoaderMixin
                     UnbakedModel newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
                     if (newModel != null) {
                         this.unbakedModels.put(modelId, newModel);
-                        this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
                         ci.cancel();
                     }
                 }

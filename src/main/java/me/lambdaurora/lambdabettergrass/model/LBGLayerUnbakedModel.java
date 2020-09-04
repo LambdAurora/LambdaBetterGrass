@@ -45,14 +45,16 @@ public class LBGLayerUnbakedModel implements UnbakedModel
     @Override
     public Collection<Identifier> getModelDependencies()
     {
-        return Collections.emptyList();
+        Set<Identifier> ids = new HashSet<>(this.baseModel.getModelDependencies());
+        this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
+        return ids;
     }
 
     @Override
     public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
     {
         List<SpriteIdentifier> ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        this.metadatas.forEach(metadata -> metadata.getTextureDependencies(ids, unbakedModelGetter, unresolvedTextureReferences));
+        this.metadatas.forEach(metadata -> metadata.fetchTextureDependencies(ids, unbakedModelGetter, unresolvedTextureReferences));
         return ids;
     }
 

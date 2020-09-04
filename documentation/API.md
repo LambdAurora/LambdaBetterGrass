@@ -15,21 +15,21 @@ Override textures are textures which can entirely replace the generated texture 
 ### Metadata files
 
 A metadata file defines what texture to use, which mask to use, the different layers.
-To learn about the format: [metadata format documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/METADATA_FORMAT.md).
+To learn about the format: [metadata format documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/METADATA_FORMAT.md).
 
 ### Metadata states
 
-[A metadata states](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/METADATA_STATES_FORMAT.md) file defines which metadata file affects which variants of a block model.
+[A metadata states](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/METADATA_STATES_FORMAT.md) file defines how is a block handled in LambdaBetterGrass.
 
 ## Resource pack folders
 
 ### `assets/<namespace>/bettergrass/data` folder
 
-This folder is where the [metadata files](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/METADATA_FORMAT.md) are stored.
+This folder is where the [metadata files](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/METADATA_FORMAT.md) are stored.
 
 ### `assets/<namespace>/bettergrass/states` folder
 
-This folder is where the [metadata states files](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/METADATA_STATES_FORMAT.md) are stored.
+This folder is where the [metadata states files](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/METADATA_STATES_FORMAT.md) are stored.
 
 They must have the same name as the model which it affects and be in the same namespace.
 

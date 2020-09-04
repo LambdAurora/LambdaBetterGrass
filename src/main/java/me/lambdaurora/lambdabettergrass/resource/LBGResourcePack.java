@@ -10,10 +10,11 @@
 package me.lambdaurora.lambdabettergrass.resource;
 
 import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.mixin.NativeImageAccessor;
 import net.minecraft.client.texture.NativeImage;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
@@ -26,7 +27,9 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -34,13 +37,11 @@ public class LBGResourcePack implements ResourcePack
 {
     private static final Set<String> NAMESPACES = Sets.newHashSet(LambdaBetterGrass.MODID);
 
-    private final Map<String, byte[]> resources = new HashMap<>();
-    private final ResourceManager     resourceManager;
-    private final LambdaBetterGrass   mod;
+    private final Object2ObjectMap<String, byte[]> resources = new Object2ObjectOpenHashMap<>();
+    private final LambdaBetterGrass                mod;
 
-    public LBGResourcePack(@NotNull ResourceManager resourceManager, @NotNull LambdaBetterGrass mod)
+    public LBGResourcePack(@NotNull LambdaBetterGrass mod)
     {
-        this.resourceManager = resourceManager;
         this.mod = mod;
     }
 
@@ -70,7 +71,7 @@ public class LBGResourcePack implements ResourcePack
             }
         }
 
-        putResource(location, byteOut.toByteArray());
+        this.putResource(location, byteOut.toByteArray());
         try {
             out.close();
         } catch (IOException e) {
@@ -80,7 +81,7 @@ public class LBGResourcePack implements ResourcePack
 
     public @NotNull Identifier dynamicallyPutImage(String name, NativeImage image)
     {
-        putImage("assets/" + LambdaBetterGrass.MODID + "/textures/bettergrass/" + name + ".png", image);
+        this.putImage("assets/" + LambdaBetterGrass.MODID + "/textures/bettergrass/" + name + ".png", image);
         return new Identifier(LambdaBetterGrass.MODID, "bettergrass/" + name);
     }
 
@@ -98,7 +99,7 @@ public class LBGResourcePack implements ResourcePack
     public InputStream open(ResourceType type, Identifier id) throws IOException
     {
         if (type == ResourceType.SERVER_DATA) throw new IOException("Reading server data from LambdaBetterGrass client resource pack");
-        return openRoot(type.getDirectory() + "/" + id.getNamespace() + "/" + id.getPath());
+        return this.openRoot(type.getDirectory() + "/" + id.getNamespace() + "/" + id.getPath());
     }
 
     @Override
@@ -106,7 +107,7 @@ public class LBGResourcePack implements ResourcePack
     {
         if (type == ResourceType.SERVER_DATA) return Collections.emptyList();
         String start = "assets/" + namespace + "/" + prefix;
-        return resources.keySet().stream()
+        return this.resources.keySet().stream()
                 .filter(s -> s.startsWith(start) && pathFilter.test(s))
                 .map(LBGResourcePack::fromPath)
                 .collect(Collectors.toList());
@@ -116,7 +117,7 @@ public class LBGResourcePack implements ResourcePack
     public boolean contains(ResourceType type, Identifier id)
     {
         String path = type.getDirectory() + "/" + id.getNamespace() + "/" + id.getPath();
-        return resources.containsKey(path);
+        return this.resources.containsKey(path);
     }
 
     @Override

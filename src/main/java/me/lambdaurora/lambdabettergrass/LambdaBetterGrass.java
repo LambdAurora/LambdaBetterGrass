@@ -14,6 +14,8 @@ import me.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import me.lambdaurora.lambdabettergrass.metadata.LBGState;
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,6 +46,11 @@ public class LambdaBetterGrass implements ClientModInitializer
         INSTANCE = this;
         this.log("Initializing LambdaBetterGrass...");
         this.config.load();
+
+        FabricLoader.getInstance().getModContainer(MODID).ifPresent(modContainer -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(mc("default"), "resourcepacks/lbg_default", modContainer, false);
+            ResourceManagerHelper.registerBuiltinResourcePack(mc("32x"), "resourcepacks/lbg_32x", modContainer, false);
+        });
 
         LBGState.registerType("grass", (id, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
         LBGState.registerType("layer", LBGLayerState::new);

@@ -17,6 +17,7 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceReloadMonitor;
 import net.minecraft.util.Unit;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,11 +29,14 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager
 {
-    @Inject(method = "beginMonitoredReload", at = @At("HEAD"))
+    @Shadow
+    public abstract void addPack(ResourcePack resourcePack);
+
+    @Inject(method = "beginMonitoredReload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
     private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir)
     {
         LambdaBetterGrass mod = LambdaBetterGrass.get();
         mod.log("Inject generated resource packs.");
-        packs.add(mod.resourcePack = new LBGResourcePack(this, mod));
+        this.addPack(mod.resourcePack = new LBGResourcePack(mod));
     }
 }

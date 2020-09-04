@@ -45,7 +45,7 @@ public class LBGUnbakedModel implements UnbakedModel
     @Override
     public Collection<Identifier> getModelDependencies()
     {
-        return Collections.emptySet();
+        return this.baseModel.getModelDependencies();
     }
 
     @Override
