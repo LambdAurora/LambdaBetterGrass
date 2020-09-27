@@ -78,7 +78,6 @@ public class LBGLayerMetadata
             } else {
                 UnbakedModel alternateVariantModel = this.variantModels.get(modelId.getVariant());
                 if (alternateVariantModel != null) {
-                    alternateVariantModel.getModelDependencies().forEach(modelGetter::apply);
                     alternateModel = alternateVariantModel;
                 }
             }

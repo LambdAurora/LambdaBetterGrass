@@ -11,11 +11,9 @@ package me.lambdaurora.lambdabettergrass.mixin;
 
 import me.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import me.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
-import net.minecraft.resource.ReloadableResourceManager;
-import net.minecraft.resource.ReloadableResourceManagerImpl;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ResourceReloadMonitor;
+import net.minecraft.resource.*;
 import net.minecraft.util.Unit;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,11 +28,18 @@ import java.util.concurrent.Executor;
 public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager
 {
     @Shadow
+    @Final
+    private ResourceType type;
+
+    @Shadow
     public abstract void addPack(ResourcePack resourcePack);
 
     @Inject(method = "beginMonitoredReload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
     private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir)
     {
+        if (this.type != ResourceType.CLIENT_RESOURCES)
+            return;
+
         LambdaBetterGrass mod = LambdaBetterGrass.get();
         mod.log("Inject generated resource packs.");
         this.addPack(mod.resourcePack = new LBGResourcePack(mod));
