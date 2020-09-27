@@ -20,3 +20,9 @@ The first release of LambdaBetterGrass!
    - Polish ([#7](https://github.com/LambdAurora/LambdaBetterGrass/pull/7))
    - Mexican Spanish ([#5](https://github.com/LambdAurora/LambdaBetterGrass/pull/5))
  - And more!
+ 
+### v1.0.1
+
+ - Fix incompatibility with [Connected Block Textures].
+
+[Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
