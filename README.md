@@ -23,4 +23,4 @@ Just do `./gradlew shadowRemapJar` and everything should build just fine!
 
 ## For resource packs creators and developers
 
-Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/API.md).
+Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/API.md).

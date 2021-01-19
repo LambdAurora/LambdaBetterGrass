@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -37,12 +37,10 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGLayerState extends LBGState
-{
+public class LBGLayerState extends LBGState {
     private final List<LBGLayerMetadata> metadatas = new ArrayList<>();
 
-    public LBGLayerState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext)
-    {
+    public LBGLayerState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext) {
         super(id);
 
         LBGLayerType.forEach(layerType -> {
@@ -67,14 +65,12 @@ public class LBGLayerState extends LBGState
         });
     }
 
-    public void forEach(@NotNull Consumer<LBGLayerMetadata> consumer)
-    {
+    public void forEach(@NotNull Consumer<LBGLayerMetadata> consumer) {
         this.metadatas.forEach(consumer);
     }
 
     @Override
-    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter)
-    {
+    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
         List<LBGCompiledLayerMetadata> metadatas = new ArrayList<>();
         this.forEach(metadata -> {
             Pair<UnbakedModel, UnbakedModel> models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);

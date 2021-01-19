@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -33,25 +33,21 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class LBGResourcePack implements ResourcePack
-{
+public class LBGResourcePack implements ResourcePack {
     private static final Set<String> NAMESPACES = Sets.newHashSet(LambdaBetterGrass.MODID);
 
     private final Object2ObjectMap<String, byte[]> resources = new Object2ObjectOpenHashMap<>();
-    private final LambdaBetterGrass                mod;
+    private final LambdaBetterGrass mod;
 
-    public LBGResourcePack(@NotNull LambdaBetterGrass mod)
-    {
+    public LBGResourcePack(@NotNull LambdaBetterGrass mod) {
         this.mod = mod;
     }
 
-    public void putResource(String resource, byte[] data)
-    {
+    public void putResource(String resource, byte[] data) {
         this.resources.put(resource, data);
     }
 
-    public void putImage(String location, NativeImage image)
-    {
+    public void putImage(String location, NativeImage image) {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         WritableByteChannel out = Channels.newChannel(byteOut);
         // Please forgive me
@@ -79,15 +75,13 @@ public class LBGResourcePack implements ResourcePack
         }
     }
 
-    public @NotNull Identifier dynamicallyPutImage(String name, NativeImage image)
-    {
+    public @NotNull Identifier dynamicallyPutImage(String name, NativeImage image) {
         this.putImage("assets/" + LambdaBetterGrass.MODID + "/textures/bettergrass/" + name + ".png", image);
         return new Identifier(LambdaBetterGrass.MODID, "bettergrass/" + name);
     }
 
     @Override
-    public InputStream openRoot(String fileName) throws IOException
-    {
+    public InputStream openRoot(String fileName) throws IOException {
         byte[] data;
         if ((data = this.resources.get(fileName)) != null) {
             return new ByteArrayInputStream(data);
@@ -96,15 +90,13 @@ public class LBGResourcePack implements ResourcePack
     }
 
     @Override
-    public InputStream open(ResourceType type, Identifier id) throws IOException
-    {
+    public InputStream open(ResourceType type, Identifier id) throws IOException {
         if (type == ResourceType.SERVER_DATA) throw new IOException("Reading server data from LambdaBetterGrass client resource pack");
         return this.openRoot(type.getDirectory() + "/" + id.getNamespace() + "/" + id.getPath());
     }
 
     @Override
-    public Collection<Identifier> findResources(ResourceType type, String namespace, String prefix, int maxDepth, Predicate<String> pathFilter)
-    {
+    public Collection<Identifier> findResources(ResourceType type, String namespace, String prefix, int maxDepth, Predicate<String> pathFilter) {
         if (type == ResourceType.SERVER_DATA) return Collections.emptyList();
         String start = "assets/" + namespace + "/" + prefix;
         return this.resources.keySet().stream()
@@ -114,38 +106,32 @@ public class LBGResourcePack implements ResourcePack
     }
 
     @Override
-    public boolean contains(ResourceType type, Identifier id)
-    {
+    public boolean contains(ResourceType type, Identifier id) {
         String path = type.getDirectory() + "/" + id.getNamespace() + "/" + id.getPath();
         return this.resources.containsKey(path);
     }
 
     @Override
-    public Set<String> getNamespaces(ResourceType type)
-    {
+    public Set<String> getNamespaces(ResourceType type) {
         return NAMESPACES;
     }
 
     @Nullable
     @Override
-    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException
-    {
+    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
         return null;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "LambdaBetterGrass generated resources";
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
     }
 
-    private static Identifier fromPath(String path)
-    {
+    private static Identifier fromPath(String path) {
         String[] split = path.split("/", 2);
         return new Identifier(split[0], split[1]);
     }

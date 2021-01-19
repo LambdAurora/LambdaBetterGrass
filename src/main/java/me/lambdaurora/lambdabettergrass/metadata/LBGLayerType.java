@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -37,17 +37,15 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGLayerType implements Nameable
-{
+public class LBGLayerType implements Nameable {
     private static List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
 
-    public final  Identifier id;
-    public final  Block      block;
-    public final  Identifier modelId;
-    private final String     name;
+    public final Identifier id;
+    public final Block block;
+    public final Identifier modelId;
+    private final String name;
 
-    public LBGLayerType(@NotNull Identifier id, @NotNull Block block, @NotNull Identifier modelId)
-    {
+    public LBGLayerType(@NotNull Identifier id, @NotNull Block block, @NotNull Identifier modelId) {
         this.id = id;
         this.block = block;
         this.modelId = modelId;
@@ -61,32 +59,27 @@ public class LBGLayerType implements Nameable
      * @param modelGetter The model getter.
      * @return The unbaked model.
      */
-    public @NotNull UnbakedModel getLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter)
-    {
+    public @NotNull UnbakedModel getLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter) {
         return modelGetter.apply(this.modelId);
     }
 
     @Override
-    public @NotNull String getName()
-    {
+    public @NotNull String getName() {
         return this.name;
     }
 
     /**
      * Resets the registered layer types.
      */
-    public static void reset()
-    {
+    public static void reset() {
         LAYER_TYPES.clear();
     }
 
-    public static void forEach(Consumer<LBGLayerType> consumer)
-    {
+    public static void forEach(Consumer<LBGLayerType> consumer) {
         LAYER_TYPES.forEach(consumer);
     }
 
-    public static void load(@NotNull Identifier resourceId, @NotNull ResourceManager resourceManager)
-    {
+    public static void load(@NotNull Identifier resourceId, @NotNull ResourceManager resourceManager) {
         Identifier id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
         try {
             InputStream stream = resourceManager.getResource(resourceId).getInputStream();
@@ -114,8 +107,7 @@ public class LBGLayerType implements Nameable
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "LBGLayerType{" +
                 "id=" + id +
                 ", block=" + block +

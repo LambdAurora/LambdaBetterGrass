@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -20,8 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
-public enum LBGTextureGenerator
-{
+public enum LBGTextureGenerator {
     ; // No instantiation possible <3
 
     /**
@@ -35,8 +34,7 @@ public enum LBGTextureGenerator
      * @param resourceManager The resource manager.
      * @return The fallback {@link NativeImage} instance if possible, else a new instance with non-cleared buffer.
      */
-    private static @NotNull NativeImage getFallbackNativeImage(@NotNull ResourceManager resourceManager)
-    {
+    private static @NotNull NativeImage getFallbackNativeImage(@NotNull ResourceManager resourceManager) {
         if (!resourceManager.containsResource(FALLBACK_TEXTURE)) {
             LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE.toString() + "\"!");
             return new NativeImage(16, 16, false);
@@ -54,12 +52,11 @@ public enum LBGTextureGenerator
      * Returns the {@link NativeImage} instance from the texture at the specified path.
      *
      * @param resourceManager The resource manager.
-     * @param path            The texture path.
+     * @param path The texture path.
      * @return The {@link NativeImage} instance if possible, else the fallback texture.
      * @see #getFallbackNativeImage(ResourceManager)
      */
-    public static @NotNull NativeImage getNativeImage(@NotNull ResourceManager resourceManager, @NotNull Identifier path)
-    {
+    public static @NotNull NativeImage getNativeImage(@NotNull ResourceManager resourceManager, @NotNull Identifier path) {
         if (!resourceManager.containsResource(path)) {
             LambdaBetterGrass.get().warn("Could not load texture \"" + path.toString() + "\"! Loading fallback texture instead.");
             return getFallbackNativeImage(resourceManager);
@@ -79,8 +76,7 @@ public enum LBGTextureGenerator
      * @param source The source texture.
      * @return The mirrored texture.
      */
-    public static @NotNull NativeImage mirrorImage(@NotNull NativeImage source)
-    {
+    public static @NotNull NativeImage mirrorImage(@NotNull NativeImage source) {
         NativeImage result = new NativeImage(source.getWidth(), source.getHeight(), false);
 
         for (int y = 0; y < result.getHeight(); y++) {
@@ -96,13 +92,12 @@ public enum LBGTextureGenerator
      * Generates the side texture using the original side texture, the top texture and the mask texture.
      *
      * @param target The texture name.
-     * @param side   The original side texture.
-     * @param top    The top texture.
-     * @param mask   The mask texture.
+     * @param side The original side texture.
+     * @param top The top texture.
+     * @param mask The mask texture.
      * @return The generated texture identifier.
      */
-    public static Identifier generateTexture(@NotNull String target, @NotNull NativeImage side, @NotNull NativeImage top, @NotNull NativeImage mask)
-    {
+    public static Identifier generateTexture(@NotNull String target, @NotNull NativeImage side, @NotNull NativeImage top, @NotNull NativeImage mask) {
         NativeImage image = applyMask(side, top, mask);
 
         return LambdaBetterGrass.get().resourcePack.dynamicallyPutImage(target, image);
@@ -114,12 +109,11 @@ public enum LBGTextureGenerator
      * If a pixel is alpha 255 in the mask texture, then the pixel will be from the top texture, else it will be from the source texture.
      *
      * @param source The source texture.
-     * @param top    The top texture.
-     * @param mask   The mask texture.
+     * @param top The top texture.
+     * @param mask The mask texture.
      * @return The generated texture.
      */
-    public static @NotNull NativeImage applyMask(@NotNull NativeImage source, @NotNull NativeImage top, @NotNull NativeImage mask)
-    {
+    public static @NotNull NativeImage applyMask(@NotNull NativeImage source, @NotNull NativeImage top, @NotNull NativeImage mask) {
         // Determine the highest resolution from the images.
         final int width = Math.max(Math.max(source.getWidth(), top.getWidth()), mask.getWidth());
         final int height = Math.max(Math.max(source.getHeight(), top.getHeight()), mask.getHeight());
@@ -142,8 +136,7 @@ public enum LBGTextureGenerator
         return output;
     }
 
-    private static int getTrueCoordinate(int resolution, int targetResolution, int coordinate)
-    {
+    private static int getTrueCoordinate(int resolution, int targetResolution, int coordinate) {
         if (resolution == targetResolution)
             return coordinate;
         return (int) ((coordinate / (double) resolution) * targetResolution);

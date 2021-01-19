@@ -33,7 +33,7 @@ The layer format only requires:
 }
 ```
 
-To learn more about how to use the `layer` method, please go [here](https://github.com/LambdAurora/LambdaBetterGrass/blob/mc1.16/documentation/LAYER_METHOD.md).
+To learn more about how to use the `layer` method, please go [here](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/LAYER_METHOD.md).
 
 ## Examples
 

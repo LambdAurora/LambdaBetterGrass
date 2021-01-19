@@ -1,14 +1,24 @@
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
-    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'java-library'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'net.minecrell.licenser' version '0.4.1'
 }
 
 group = project.maven_group
-version = "${project.mod_version}+${project.minecraft_version}"
+version = "${project.mod_version}+${getMCVersionString()}"
 archivesBaseName = project.archives_base_name + "-fabric"
+
+def getMCVersionString() {
+    if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
+        return project.minecraft_version
+    }
+    int lastDot = project.minecraft_version.lastIndexOf('.')
+    return project.minecraft_version.substring(0, lastDot)
+}
 
 minecraft {
 }
@@ -17,7 +27,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name = "AperLambda"
+        name = 'AperLambda'
         url = 'https://aperlambda.github.io/maven'
     }
     maven { url = "https://jitpack.io" }
@@ -37,25 +47,19 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation(fabricApi.module('fabric-renderer-api-v1', project.fabric_api_version))
+    modImplementation(fabricApi.module('fabric-renderer-indigo', project.fabric_api_version))
+    modImplementation(fabricApi.module('fabric-resource-loader-v0', project.fabric_api_version))
 
     modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
-    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-
-    /*modRuntime ("com.github.SuperCoder7979:databreaker:${project.databreaker_version}") {
+    modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
         transitive = false
-    }*/
+    }
 
     shadow "com.electronwill.night-config:core:3.6.3"
     shadow "com.electronwill.night-config:toml:3.6.3"
-
-    shadow("org.aperlambda:lambdajcommon:1.8.1") {
-        // Minecraft already has all that google crap.
-        exclude group: 'com.google.code.gson'
-        exclude group: 'com.google.guava'
-    }
 }
 
 tasks.withType(JavaCompile) {
@@ -86,16 +90,17 @@ jar {
     from "../LICENSE"
 }
 
-task shadowJar(type: Jar) {
-    archiveClassifier.set("dev")
+license {
+    header file('HEADER')
+    include '**/*.java'
+}
 
-    from sourceSets.main.output
+shadowJar {
+    dependsOn jar
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set('dev')
 
-    from {
-        configurations.shadow.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+    relocate 'com.electronwill.nightconfig', 'me.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
 
 task shadowRemapJar(type: RemapJarTask) {
@@ -105,6 +110,7 @@ task shadowRemapJar(type: RemapJarTask) {
     archiveName = "${archivesBaseName}-${version}.jar"
     addNestedDependencies = true
 }
+build.dependsOn(shadowRemapJar)
 
 // Configure the maven publication.
 publishing {

@@ -1,0 +1,10 @@
+{
+  "defaultMap": {
+    "spriteMap": [
+      {
+        "sprite": "minecraft:bamboo_stage0",
+        "material": "canvas:low_foliage"
+      }
+    ]
+  }
+}

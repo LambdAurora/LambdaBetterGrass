@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -34,13 +34,11 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGGrassState extends LBGState
-{
-    private final LBGMetadata                           metadata;
+public class LBGGrassState extends LBGState {
+    private final LBGMetadata metadata;
     private final Object2ObjectMap<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
-    public LBGGrassState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json)
-    {
+    public LBGGrassState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json) {
         super(id);
 
         // Look for variants.
@@ -76,11 +74,10 @@ public class LBGGrassState extends LBGState
      * Loads the metadata from the resource manager.
      *
      * @param resourceManager The resource manager.
-     * @param metadataId      The metadata identifier.
+     * @param metadataId The metadata identifier.
      * @return The metadata if loaded successfully, else null
      */
-    private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId)
-    {
+    private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
         Identifier metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
         if (resourceManager.containsResource(metadataResourceId)) {
             try {
@@ -102,8 +99,7 @@ public class LBGGrassState extends LBGState
      * @param modelId The model identifier.
      * @return A metadata if it exists for the given model id, else null.
      */
-    public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId)
-    {
+    public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
         if (this.metadata != null)
             return this.metadata;
         for (Map.Entry<String, LBGMetadata> variant : this.metadatas.entrySet()) {
@@ -114,8 +110,7 @@ public class LBGGrassState extends LBGState
     }
 
     @Override
-    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter)
-    {
+    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
         LBGMetadata metadata = this.getMetadata(modelId);
         if (metadata != null) {
             UnbakedModel model = new LBGUnbakedModel(originalModel, metadata);

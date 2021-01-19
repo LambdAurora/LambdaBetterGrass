@@ -27,9 +27,10 @@
     "lambdabettergrass.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.0",
-    "fabric": ">=0.20.1",
-    "minecraft": ">=1.16"
+    "fabricloader": ">=0.11.1",
+    "minecraft": "~1.16.2",
+    "fabric-renderer-api-v1": "*",
+    "fabric-resource-loader-v0": ">=0.4.1"
   },
   "recommends": {
     "modmenu": ">=1.12.2"

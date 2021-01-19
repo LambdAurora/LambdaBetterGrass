@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -36,26 +36,24 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGMetadata
-{
+public class LBGMetadata {
     /**
      * Represents the identifier of the metadata.
      */
     public final Identifier id;
 
-    protected final @NotNull ResourceManager        resourceManager;
-    protected final          List<SpriteIdentifier> textures = new ArrayList<>();
+    protected final @NotNull ResourceManager resourceManager;
+    protected final List<SpriteIdentifier> textures = new ArrayList<>();
 
     private final List<LBGLayer> layers = new ArrayList<>();
 
     private int lastLayerIndex = 0;
 
-    protected UnbakedModel         snowyVariant              = null;
+    protected UnbakedModel snowyVariant = null;
     protected Consumer<BakedModel> snowyModelVariantProvider = null;
-    protected BakedModel           snowyModelVariant         = null;
+    protected BakedModel snowyModelVariant = null;
 
-    public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json)
-    {
+    public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json) {
         this.id = id;
         this.resourceManager = resourceManager;
 
@@ -86,13 +84,11 @@ public class LBGMetadata
      *
      * @return The next layer index.
      */
-    protected int nextLayerIndex()
-    {
+    protected int nextLayerIndex() {
         return this.lastLayerIndex++;
     }
 
-    private void buildTextures()
-    {
+    private void buildTextures() {
         for (LBGLayer layer : this.layers)
             layer.buildTextures();
     }
@@ -102,8 +98,7 @@ public class LBGMetadata
      *
      * @param textureGetter The texture getter.
      */
-    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
-    {
+    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter) {
         for (LBGLayer layer : this.layers) {
             layer.bakeTextures(textureGetter);
         }
@@ -115,8 +110,7 @@ public class LBGMetadata
      * @param colorIndex The color index.
      * @return The optional layer.
      */
-    public @NotNull Optional<LBGLayer> getLayer(int colorIndex)
-    {
+    public @NotNull Optional<LBGLayer> getLayer(int colorIndex) {
         for (LBGLayer layer : this.layers) {
             if (layer.colorIndex == colorIndex)
                 return Optional.of(layer);
@@ -129,8 +123,7 @@ public class LBGMetadata
      *
      * @return The textures.
      */
-    public @NotNull Collection<SpriteIdentifier> getTextures()
-    {
+    public @NotNull Collection<SpriteIdentifier> getTextures() {
         return this.textures;
     }
 
@@ -139,8 +132,7 @@ public class LBGMetadata
      *
      * @return The snowy variant.
      */
-    public @Nullable UnbakedModel getSnowyVariant()
-    {
+    public @Nullable UnbakedModel getSnowyVariant() {
         return this.snowyVariant;
     }
 
@@ -149,8 +141,7 @@ public class LBGMetadata
      *
      * @return The snowy model variant.
      */
-    public @Nullable BakedModel getSnowyModelVariant()
-    {
+    public @Nullable BakedModel getSnowyModelVariant() {
         return this.snowyModelVariant;
     }
 
@@ -159,15 +150,13 @@ public class LBGMetadata
      *
      * @param model The model to propagate.
      */
-    public void propagate(@NotNull LBGBakedModel model)
-    {
+    public void propagate(@NotNull LBGBakedModel model) {
         if (this.snowyModelVariantProvider != null)
             this.snowyModelVariantProvider.accept(model);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "LBGMetadata{" +
                 "id=" + this.id +
                 ", layers=" + this.layers +

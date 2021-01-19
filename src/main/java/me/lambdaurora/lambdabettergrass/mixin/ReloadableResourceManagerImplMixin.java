@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -25,8 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 @Mixin(ReloadableResourceManagerImpl.class)
-public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager
-{
+public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager {
     @Shadow
     @Final
     private ResourceType type;
@@ -35,8 +34,7 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
     public abstract void addPack(ResourcePack resourcePack);
 
     @Inject(method = "beginMonitoredReload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
-    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir)
-    {
+    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
         if (this.type != ResourceType.CLIENT_RESOURCES)
             return;
 

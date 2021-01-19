@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -16,8 +16,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.nio.channels.WritableByteChannel;
 
 @Mixin(NativeImage.class)
-public interface NativeImageAccessor
-{
+public interface NativeImageAccessor {
     @Invoker("write")
     boolean lbg_write(WritableByteChannel writableByteChannel);
 }

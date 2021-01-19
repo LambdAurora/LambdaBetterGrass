@@ -1,6 +1,6 @@
 # LambdaBetterGrass Changelog
 
-## v1.0.0 - :tada: Initial release! :tada:
+## 1.0.0 - :tada: Initial release! :tada:
 
 The first release of LambdaBetterGrass!
 
@@ -21,8 +21,15 @@ The first release of LambdaBetterGrass!
    - Mexican Spanish ([#5](https://github.com/LambdAurora/LambdaBetterGrass/pull/5))
  - And more!
  
-### v1.0.1
+### 1.0.1
 
- - Fix incompatibility with [Connected Block Textures].
+ - Fixed incompatibility with [Connected Block Textures].
 
+### 1.0.2
+
+ - Tweaked better grass connection of snowy blocks with better snow.
+ - Fixed some lighting issues with better grass. 
+ - Updated [SpruceUI].
+
+[SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -32,8 +32,7 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGLayer
-{
+public class LBGLayer {
     /**
      * Parent metadata.
      */
@@ -59,8 +58,7 @@ public class LBGLayer
 
     private final Object2ObjectMap<String, Sprite> bakedSprites = new Object2ObjectOpenHashMap<>();
 
-    public LBGLayer(@NotNull LBGMetadata metadata, @NotNull JsonObject json)
-    {
+    public LBGLayer(@NotNull LBGMetadata metadata, @NotNull JsonObject json) {
         this.parentMetadata = metadata;
         this.index = metadata.nextLayerIndex();
 
@@ -113,11 +111,10 @@ public class LBGLayer
      * Returns the overriden texture with the specified name if it exists.
      *
      * @param overrides The overrides JSON object.
-     * @param name      The name of the texture.
+     * @param name The name of the texture.
      * @return Null if not specified, else the identifier of the overriden texture.
      */
-    private @Nullable SpriteIdentifier getOverridenTexture(@NotNull JsonObject overrides, @NotNull String name)
-    {
+    private @Nullable SpriteIdentifier getOverridenTexture(@NotNull JsonObject overrides, @NotNull String name) {
         if (overrides.has(name)) {
             SpriteIdentifier id = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(overrides.get(name).getAsString()));
             this.parentMetadata.textures.add(id);
@@ -131,8 +128,7 @@ public class LBGLayer
      * <p>
      * This will apply the specified masks with the top and side textures if no override texture was specified.
      */
-    public void buildTextures()
-    {
+    public void buildTextures() {
         final NativeImage top = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, getTexturePath(this.topTexture));
         final NativeImage side = LBGTextureGenerator.getNativeImage(this.parentMetadata.resourceManager, getTexturePath(this.sideTexture));
 
@@ -175,13 +171,11 @@ public class LBGLayer
         side.close();
     }
 
-    private static @NotNull Identifier getTexturePath(@NotNull Identifier id)
-    {
+    private static @NotNull Identifier getTexturePath(@NotNull Identifier id) {
         return new Identifier(id.getNamespace(), "textures/" + id.getPath() + ".png");
     }
 
-    private static @NotNull SpriteIdentifier genTexture(@NotNull String name, @NotNull NativeImage side, @NotNull NativeImage top, @NotNull NativeImage mask)
-    {
+    private static @NotNull SpriteIdentifier genTexture(@NotNull String name, @NotNull NativeImage side, @NotNull NativeImage top, @NotNull NativeImage mask) {
         return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, LBGTextureGenerator.generateTexture(name, side, top, mask));
     }
 
@@ -190,16 +184,14 @@ public class LBGLayer
      *
      * @param textureGetter The texture getter.
      */
-    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter)
-    {
+    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter) {
         this.tryBakeSprite("connect", this.connectTexture, textureGetter);
         this.tryBakeSprite("blend_up", this.blendUpTexture, textureGetter);
         this.tryBakeSprite("blend_up_m", this.blendUpMirroredTexture, textureGetter);
         this.tryBakeSprite("arch", this.archTexture, textureGetter);
     }
 
-    private void tryBakeSprite(@NotNull String name, @Nullable SpriteIdentifier id, @NotNull Function<SpriteIdentifier, Sprite> textureGetter)
-    {
+    private void tryBakeSprite(@NotNull String name, @Nullable SpriteIdentifier id, @NotNull Function<SpriteIdentifier, Sprite> textureGetter) {
         if (id == null)
             id = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, ModelLoader.MISSING);
 
@@ -218,14 +210,12 @@ public class LBGLayer
      * @param name The name of the baked texture.
      * @return The baked texture if found, else null.
      */
-    public @Nullable Sprite getBakedTexture(@NotNull String name)
-    {
+    public @Nullable Sprite getBakedTexture(@NotNull String name) {
         return this.bakedSprites.get(name);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "LBGLayer{" +
                 "index=" + this.index +
                 ", colorIndex=" + this.colorIndex +
@@ -236,11 +226,10 @@ public class LBGLayer
      * Merges two layers.
      *
      * @param parent The parent layer.
-     * @param child  The child layer.
+     * @param child The child layer.
      * @return The merged layer.
      */
-    public static @NotNull LBGLayer mergeLayers(@NotNull LBGLayer parent, @NotNull LBGLayer child)
-    {
+    public static @NotNull LBGLayer mergeLayers(@NotNull LBGLayer parent, @NotNull LBGLayer child) {
         if (parent.colorIndex != child.colorIndex)
             return parent;
 

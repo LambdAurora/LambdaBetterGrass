@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -31,25 +31,21 @@ import java.util.function.Supplier;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGLayerBakedModel extends ForwardingBakedModel
-{
+public class LBGLayerBakedModel extends ForwardingBakedModel {
     private final List<LBGCompiledLayerMetadata> metadatas;
 
-    public LBGLayerBakedModel(@NotNull BakedModel baseModel, @NotNull List<LBGCompiledLayerMetadata> metadatas)
-    {
+    public LBGLayerBakedModel(@NotNull BakedModel baseModel, @NotNull List<LBGCompiledLayerMetadata> metadatas) {
         this.wrapped = baseModel;
         this.metadatas = metadatas;
     }
 
     @Override
-    public boolean isVanillaAdapter()
-    {
+    public boolean isVanillaAdapter() {
         return false;
     }
 
     @Override
-    public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
-    {
+    public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         if (!LambdaBetterGrass.get().config.hasBetterLayer()) {
             // Don't touch the model.
             super.emitBlockQuads(world, state, pos, randomSupplier, context);
@@ -69,8 +65,7 @@ public class LBGLayerBakedModel extends ForwardingBakedModel
     }
 
     @Override
-    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
-    {
+    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
         throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
     }
 }

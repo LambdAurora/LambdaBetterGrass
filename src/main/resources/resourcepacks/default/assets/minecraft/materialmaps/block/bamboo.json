@@ -1,0 +1,22 @@
+{
+  "defaultMap": {
+    "spriteMap": [
+      {
+        "sprite": "minecraft:bamboo_stalk",
+        "material": "canvas:bamboo"
+      },
+      {
+        "sprite": "minecraft:bamboo_singleleaf",
+        "material": "canvas:bamboo"
+      },
+      {
+        "sprite": "minecraft:bamboo_small_leaves",
+        "material": "canvas:bamboo"
+      },
+      {
+        "sprite": "minecraft:bamboo_large_leaves",
+        "material": "canvas:bamboo"
+      }
+    ]
+  }
+}

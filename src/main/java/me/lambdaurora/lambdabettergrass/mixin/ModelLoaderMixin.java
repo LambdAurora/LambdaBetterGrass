@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -33,8 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Mixin(ModelLoader.class)
-public abstract class ModelLoaderMixin
-{
+public abstract class ModelLoaderMixin {
     @Shadow
     @Final
     private Map<Identifier, UnbakedModel> unbakedModels;
@@ -57,8 +56,7 @@ public abstract class ModelLoaderMixin
     private boolean lbg_firstLoad = true;
 
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
-    private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci)
-    {
+    private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci) {
         if (id instanceof ModelIdentifier) {
             ModelIdentifier modelId = (ModelIdentifier) id;
             if (!modelId.getVariant().equals("inventory")) {

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -31,10 +31,8 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class LayeredBlockUtils
-{
-    private LayeredBlockUtils()
-    {
+public final class LayeredBlockUtils {
+    private LayeredBlockUtils() {
         throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");
     }
 
@@ -44,13 +42,11 @@ public final class LayeredBlockUtils
      * @param modelGetter The model getter.
      * @return The unbaked model.
      */
-    public static @Nullable UnbakedModel getSnowLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter)
-    {
+    public static @Nullable UnbakedModel getSnowLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter) {
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));
     }
 
-    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock)
-    {
+    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock) {
         LBGState state = LBGState.getMetadataState(stateId);
         if (!(state instanceof LBGLayerState))
             return false;
@@ -65,13 +61,11 @@ public final class LayeredBlockUtils
         return shouldTry[0] && getNearbySnowyBlocks(world, pos.up(), upBlock) > 1;
     }
 
-    public static int getNearbySnowyBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block type)
-    {
+    public static int getNearbySnowyBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block type) {
         return getNearbyLayeredBlocks(world, pos, Blocks.SNOW, type);
     }
 
-    public static int getNearbyLayeredBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock, @NotNull Block type)
-    {
+    public static int getNearbyLayeredBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock, @NotNull Block type) {
         int nearbySnow = 0;
         for (Direction direction : Direction.values()) {
             if (direction.getAxis().isHorizontal()) {
@@ -88,13 +82,11 @@ public final class LayeredBlockUtils
         return nearbySnow;
     }
 
-    public static int getNearbySnowLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos)
-    {
+    public static int getNearbySnowLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos) {
         return getNearbyBlockLayers(world, pos, Blocks.SNOW);
     }
 
-    public static int getNearbyBlockLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock)
-    {
+    public static int getNearbyBlockLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock) {
         int nearbySnow = 0;
         for (Direction direction : Direction.values()) {
             if (direction.getAxis().isHorizontal()) {

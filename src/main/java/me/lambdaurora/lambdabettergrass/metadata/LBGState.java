@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -29,23 +29,20 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public abstract class LBGState
-{
+public abstract class LBGState {
     private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
-    private static final Object2ObjectMap<Identifier, LBGState>     LBG_STATES      = new Object2ObjectOpenHashMap<>();
+    private static final Object2ObjectMap<Identifier, LBGState> LBG_STATES = new Object2ObjectOpenHashMap<>();
 
     public final Identifier id;
 
-    public LBGState(@NotNull Identifier id)
-    {
+    public LBGState(@NotNull Identifier id) {
         this.id = id;
         putState(id, this);
     }
 
     public abstract @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter);
 
-    protected static void putState(@NotNull Identifier id, @NotNull LBGState state)
-    {
+    protected static void putState(@NotNull Identifier id, @NotNull LBGState state) {
         LBG_STATES.put(id, state);
     }
 
@@ -55,26 +52,22 @@ public abstract class LBGState
      * @param id The identifier of the state.
      * @return The state if cached, else null.
      */
-    public static @Nullable LBGState getMetadataState(@NotNull Identifier id)
-    {
+    public static @Nullable LBGState getMetadataState(@NotNull Identifier id) {
         return LBG_STATES.get(id);
     }
 
     /**
      * Resets all the known states cache.
      */
-    public static void reset()
-    {
+    public static void reset() {
         LBG_STATES.clear();
     }
 
-    public static void registerType(@NotNull String type, @NotNull LBGStateProvider stateProvider)
-    {
+    public static void registerType(@NotNull String type, @NotNull LBGStateProvider stateProvider) {
         LBG_STATES_TYPE.put(type, stateProvider);
     }
 
-    public static @Nullable LBGState getOrLoadMetadataState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext)
-    {
+    public static @Nullable LBGState getOrLoadMetadataState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext) {
         LBGState state = getMetadataState(id);
         if (state != null)
             return state;
@@ -90,8 +83,7 @@ public abstract class LBGState
     }
 
     @FunctionalInterface
-    public interface LBGStateProvider
-    {
+    public interface LBGStateProvider {
         @NotNull LBGState create(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext);
     }
 }

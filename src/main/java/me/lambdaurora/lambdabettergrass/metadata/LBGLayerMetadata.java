@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 LambdAurora <aurora42lambda@gmail.com>
+ * Copyright © 2021 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -29,17 +29,15 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LBGLayerMetadata
-{
-    public final  Identifier                             id;
-    public final  LBGLayerType                           layerType;
-    private final boolean                                layerModel;
+public class LBGLayerMetadata {
+    public final Identifier id;
+    public final LBGLayerType layerType;
+    private final boolean layerModel;
     private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
-    private       UnbakedModel                           alternateModel;
-    private final boolean                                hasAlternateModel;
+    private UnbakedModel alternateModel;
+    private final boolean hasAlternateModel;
 
-    public LBGLayerMetadata(@NotNull Identifier id, LBGLayerType layerType, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext)
-    {
+    public LBGLayerMetadata(@NotNull Identifier id, LBGLayerType layerType, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext) {
         this.id = id;
         this.layerType = layerType;
 
@@ -64,8 +62,7 @@ public class LBGLayerMetadata
         this.hasAlternateModel = true;
     }
 
-    public @NotNull Pair<UnbakedModel, UnbakedModel> getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter)
-    {
+    public @NotNull Pair<UnbakedModel, UnbakedModel> getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
         UnbakedModel layerModel = null;
         if (this.layerModel) {
             layerModel = this.layerType.getLayerModel(modelGetter);
@@ -87,8 +84,7 @@ public class LBGLayerMetadata
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "LBGLayerMetadata{" +
                 "id=" + id +
                 ", layerType=" + layerType +
