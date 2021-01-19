@@ -21,11 +21,11 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -117,9 +117,9 @@ public class LBGCompiledLayerMetadata {
                 Vec3d offset = state.getModelOffset(world, pos);
                 boolean pushed = false;
                 if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {
-                    Vector3f offsetVec = new Vector3f((float) offset.x, (float) offset.y, (float) offset.z);
+                    Vec3f offsetVec = new Vec3f((float) offset.x, (float) offset.y, (float) offset.z);
                     context.pushTransform(quad -> {
-                        Vector3f vec = null;
+                        Vec3f vec = null;
                         for (int i = 0; i < 4; i++) {
                             vec = quad.copyPos(i, vec);
                             vec.subtract(offsetVec);

@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
-    private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/API.md";
+    private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/API.md";
 
     private final LBGConfig config;
     private final Screen parent;
