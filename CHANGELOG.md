@@ -31,5 +31,9 @@ The first release of LambdaBetterGrass!
  - Fixed some lighting issues with better grass. 
  - Updated [SpruceUI].
 
+### 1.0.3
+
+ - Tweaked better grass logic to be more thread-safe.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
