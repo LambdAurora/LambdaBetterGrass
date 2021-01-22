@@ -28,7 +28,7 @@ import java.util.function.Function;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.3
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -46,7 +46,7 @@ public final class LayeredBlockUtils {
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));
     }
 
-    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock) {
+    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull Block upBlock, boolean onlyPureSnow) {
         LBGState state = LBGState.getMetadataState(stateId);
         if (!(state instanceof LBGLayerState))
             return false;
@@ -58,20 +58,20 @@ public final class LayeredBlockUtils {
             }
         });
 
-        return shouldTry[0] && getNearbySnowyBlocks(world, pos.up(), upBlock) > 1;
+        return shouldTry[0] && getNearbySnowyBlocks(world, pos.up(), upBlock, onlyPureSnow) > 1;
     }
 
-    public static int getNearbySnowyBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block type) {
-        return getNearbyLayeredBlocks(world, pos, Blocks.SNOW, type);
+    public static int getNearbySnowyBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block type, boolean onlyPureSnow) {
+        return getNearbyLayeredBlocks(world, pos, Blocks.SNOW, type, onlyPureSnow);
     }
 
-    public static int getNearbyLayeredBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock, @NotNull Block type) {
+    public static int getNearbyLayeredBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock, @NotNull Block type, boolean onlySourceBlock) {
         int nearbySnow = 0;
         for (Direction direction : Direction.values()) {
             if (direction.getAxis().isHorizontal()) {
                 BlockPos offsetPos = pos.offset(direction);
                 Block block = world.getBlockState(offsetPos).getBlock();
-                if (block == type) {
+                if (block == type && !onlySourceBlock) {
                     if (getNearbySnowLayers(world, offsetPos) > 1)
                         nearbySnow++;
                 } else if (block == layerBlock) {
