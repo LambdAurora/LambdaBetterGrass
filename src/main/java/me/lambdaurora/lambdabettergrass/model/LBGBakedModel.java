@@ -21,7 +21,6 @@ import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowyBlock;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
@@ -31,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -41,7 +39,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.0.2
+ * @version 1.0.3
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -74,14 +72,12 @@ public class LBGBakedModel extends ForwardingBakedModel {
             if (!up.isAir()) {
                 Identifier blockId = Registry.BLOCK.getId(up.getBlock());
                 Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
-                if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up.getBlock())) {
+                if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up.getBlock(), false)) {
                     ((FabricBakedModel) this.metadata.getSnowyModelVariant()).emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
                     return;
                 }
             }
         }
-
-        World clientWorld = MinecraftClient.getInstance().world;
 
         context.pushTransform(quad -> {
             if (quad.nominalFace().getAxis() != Direction.Axis.Y) {
@@ -95,7 +91,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
                     Direction right = face.rotateYClockwise();
                     Direction left = face.rotateYCounterclockwise();
 
-                    if (canFullyConnect(clientWorld, state, pos, face)) {
+                    if (canFullyConnect(world, state, pos, face)) {
                         if (spriteBake(quad, layer, "connect"))
                             return;
                     }
@@ -103,10 +99,10 @@ public class LBGBakedModel extends ForwardingBakedModel {
                     if (mode != LBGMode.FANCY)
                         return;
 
-                    boolean rightMatch = canConnect(clientWorld, state, pos.down(), right)
-                            || (canConnect(clientWorld, state, pos, right) && canFullyConnect(clientWorld, state, pos.offset(right), face));
-                    boolean leftMatch = canConnect(clientWorld, state, pos.down(), left)
-                            || (canConnect(clientWorld, state, pos, left) && canFullyConnect(clientWorld, state, pos.offset(left), face));
+                    boolean rightMatch = canConnect(world, state, pos.down(), right)
+                            || (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.offset(right), face));
+                    boolean leftMatch = canConnect(world, state, pos.down(), left)
+                            || (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.offset(left), face));
 
                     if (rightMatch && leftMatch)
                         spriteBake(quad, layer, "arch");
@@ -144,7 +140,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
                     else if (adjacent.getBlock() instanceof SnowyBlock) {
                         Identifier blockId = Registry.BLOCK.getId(up.getBlock());
                         Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
-                        if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up.getBlock()))
+                        if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up.getBlock(), true))
                             return true;
                     }
                 }

@@ -110,7 +110,7 @@ public class LBGCompiledLayerMetadata {
     public int emitBlockQuads(@NotNull BlockRenderView world, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Supplier<Random> randomSupplier,
                               @NotNull RenderContext context) {
         int success = 0;
-        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock()) > 1 && this.bakedLayerModel != null) {
+        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1 && this.bakedLayerModel != null) {
             final BlockPos downPos = pos.down();
             final BlockState downState = world.getBlockState(downPos);
             if (downState.isSideSolidFullSquare(world, downPos, Direction.UP)) {
@@ -137,7 +137,7 @@ public class LBGCompiledLayerMetadata {
             }
         }
 
-        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock()) > 1 && this.bakedAlternateModel != null) {
+        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1 && this.bakedAlternateModel != null) {
             ((FabricBakedModel) this.bakedAlternateModel).emitBlockQuads(world, state, pos, randomSupplier, context);
             success = 2;
         }
