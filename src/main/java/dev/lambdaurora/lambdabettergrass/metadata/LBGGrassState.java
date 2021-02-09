@@ -10,10 +10,9 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
@@ -31,12 +30,12 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
     private final LBGMetadata metadata;
-    private final Object2ObjectMap<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
+    private final Map<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
     public LBGGrassState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json) {
         super(id);
@@ -102,8 +101,9 @@ public class LBGGrassState extends LBGState {
     public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
         if (this.metadata != null)
             return this.metadata;
+        String[] modelVariant = modelId.getVariant().split(",");
         for (Map.Entry<String, LBGMetadata> variant : this.metadatas.entrySet()) {
-            if (variant.getKey().equals(modelId.getVariant()))
+            if (this.matchVariant(modelVariant, variant.getKey().split(",")))
                 return variant.getValue();
         }
         return null;

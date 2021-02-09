@@ -27,16 +27,25 @@ From `assets/lambdabettergrass/bettergrass/layer_types/snow.json`
 
 ## Metadata state
 
-When a block uses the `layer` method, for each layer type there is an optional metadata state file.
-
-The metadata state files are located in `assets/<namespace>/bettergrass/states/<layer_type>/<name>.json`
-
-The name part must be the same as the name of the metadata state file that specify that a block uses the layer method.
+When a block uses the `layer` method, it uses the metadata file determine by the rules provided by the [metadata state file][metadata_state]
 
 ### Format
 
+The root object will contain fields for each layer type to override.
+
+Each layer type object contain:
  - `layer` - True if the mod should add the layer model.
- - `block_state` - A custom block state to provide a custom model of the block state, useful to provide snowy variations for example.
+ - `block_state` (optional) - A custom block state to provide a custom model of the block state, useful to provide snowy variations for example.
+
+Layer metadata files from different resource packs are merged.
+
+#### Resource Pack Merging Example
+
+We have two resource packs, A and B, A as a higher priority over B.
+
+If resource pack A defines the metadata file for "snow" and "ash", and resource pack B defines the metadata file for "snow" and "moss".
+
+LambdaBetterGrass will use the rules of resource pack A for "snow" and "ash", and will use the rules of resource pack B for "moss".
 
 ### Examples
 
@@ -45,14 +54,23 @@ The name part must be the same as the name of the metadata state file that speci
 In `assets/minecraft/bettergrass/states/lilac.json`:
 ```json
 {
-  "type": "layer"
+  "type": "layer",
+  "data": "minecraft:bettergrass/data/lilac"
 }
 ```
 
-In `assets/minecraft/bettergrass/states/snow/lilac.json`:
+In `assets/minecraft/bettergrass/data/lilac.json`:
 ```json
 {
-  "layer": true
+  "snow": {
+    "layer": true
+  },
+  "moss": {
+    "layer": true
+  },
+  "ash": {
+    "layer": true
+  }
 }
 ```
 
@@ -61,57 +79,113 @@ In `assets/minecraft/bettergrass/states/snow/lilac.json`:
 In `assets/minecraft/bettergrass/states/oak_fence.json`:
 ```json
 {
-  "type": "layer"
-}
-```
-
-In `assets/minecraft/bettergrass/states/snow/oak_fence.json` from the default extension resource pack:
-```json
-{
-  "layer": true,
-  "block_state": {
-    "multipart": [
-      {
-        "apply": {
-          "model": "lambdabettergrass:block/fence/snowy_oak_fence_post"
-        }
-      },
-      {
-        "when": {
-          "north": "true"
-        },
-        "apply": {
-          "model": "lambdabettergrass:block/fence/snowy_oak_fence_side"
-        }
-      },
-      {
-        "when": {
-          "east": "true"
-        },
-        "apply": {
-          "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-          "y": 90
-        }
-      },
-      {
-        "when": {
-          "south": "true"
-        },
-        "apply": {
-          "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-          "y": 180
-        }
-      },
-      {
-        "when": {
-          "west": "true"
-        },
-        "apply": {
-          "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-          "y": 270
-        }
-      }
-    ]
+  "type": "layer",
+  "variants": {
+    "waterlogged=false": {
+      "data": "minecraft:bettergrass/data/oak_fence"
+    }
   }
 }
 ```
+
+In `assets/minecraft/bettergrass/data/oak_fence.json` from the default extension resource pack (only overrides snow and moss layers):
+```json
+{
+  "snow": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_oak_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
+  },
+  "moss": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_oak_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+[metadata_state]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md "Metadata State Documentation"

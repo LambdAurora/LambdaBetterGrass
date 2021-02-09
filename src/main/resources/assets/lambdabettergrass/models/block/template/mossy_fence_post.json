@@ -1,0 +1,21 @@
+{
+  "textures": {
+    "particle": "#texture",
+    "top": "minecraft:block/moss_block"
+  },
+  "elements": [
+    {
+      "__comment": "center_post",
+      "from": [ 6, 0, 6 ],
+      "to": [ 10, 16, 10 ],
+      "faces": {
+        "north": { "uv": [ 6, 0, 10, 16 ], "texture": "#texture" },
+        "south": { "uv": [ 6, 0, 10, 16 ], "texture": "#texture" },
+        "west":  { "uv": [ 6, 0, 10, 16 ], "texture": "#texture" },
+        "east":  { "uv": [ 6, 0, 10, 16 ], "texture": "#texture" },
+        "up":    { "uv": [ 0, 0,  4,  4 ], "texture": "#top", "cullface": "up" },
+        "down":  { "uv": [ 0, 0,  4,  4 ], "texture": "#texture", "cullface": "down" }
+      }
+    }
+  ]
+}

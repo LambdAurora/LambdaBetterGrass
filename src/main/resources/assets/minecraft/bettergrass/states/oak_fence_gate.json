@@ -1,3 +1,4 @@
 {
-  "type": "layer"
+  "type": "layer",
+  "data": "minecraft:bettergrass/data/oak_fence_gate"
 }

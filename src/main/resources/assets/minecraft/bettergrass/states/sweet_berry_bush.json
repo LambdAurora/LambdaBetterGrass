@@ -1,3 +1,4 @@
 {
-  "type": "layer"
+  "type": "layer",
+  "data": "minecraft:bettergrass/data/sweet_berry_bush"
 }

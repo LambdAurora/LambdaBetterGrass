@@ -35,5 +35,16 @@ The first release of LambdaBetterGrass!
 
  - Tweaked better grass logic to be more thread-safe.
 
+### 1.1.0
+
+ - Added "moss" layer for 1.17.
+   - (Resource Pack Extension) Added mossy fences.
+ - Added more layer definitions for non-full block.
+ - Changed "layer" format to reduce file count.
+   - [Updated documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/LAYER_METHOD.md).
+ - Updated [SpruceUI].
+ - \[Internal] Changed package name.
+ - \[Internal] Rewrote data-gen (changed from shell script to JS script).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

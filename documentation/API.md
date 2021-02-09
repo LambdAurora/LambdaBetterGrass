@@ -14,22 +14,21 @@ Override textures are textures which can entirely replace the generated texture 
 
 ### Metadata files
 
-A metadata file defines what texture to use, which mask to use, the different layers.
-To learn about the format: [metadata format documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/METADATA_FORMAT.md).
+A metadata file defines rules and data depending on the [type][different types].
 
 ### Metadata states
 
-[A metadata states](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/METADATA_STATES_FORMAT.md) file defines how is a block handled in LambdaBetterGrass.
+[A metadata states][metadata_state] file defines how is a block handled in LambdaBetterGrass.
 
 ## Resource pack folders
 
 ### `assets/<namespace>/bettergrass/data` folder
 
-This folder is where the [metadata files](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/METADATA_FORMAT.md) are stored.
+This folder is where the metadata files for [different types] are stored.
 
 ### `assets/<namespace>/bettergrass/states` folder
 
-This folder is where the [metadata states files](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.16/documentation/METADATA_STATES_FORMAT.md) are stored.
+This folder is where the [metadata states files][metadata_state] are stored.
 
 They must have the same name as the model which it affects and be in the same namespace.
 
@@ -40,3 +39,6 @@ This folder stores the default mask texture.
 A mask texture tells which texture should be copied using its alpha channel.
 
 If at the specified pixel the alpha channel is equal to 255, then it uses the top texture, else it uses the side texture.
+
+[metadata_state]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md "Metadata State Documentation"
+[different types]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md#types "Metadata Types Documentation"

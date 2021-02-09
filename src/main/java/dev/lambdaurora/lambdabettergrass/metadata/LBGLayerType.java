@@ -15,12 +15,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.aperlambda.lambdacommon.LambdaConstants;
 import org.aperlambda.lambdacommon.utils.Nameable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +34,7 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
@@ -79,7 +79,15 @@ public class LBGLayerType implements Nameable {
         LAYER_TYPES.forEach(consumer);
     }
 
-    public static void load(@NotNull Identifier resourceId, @NotNull ResourceManager resourceManager) {
+    public static @Nullable LBGLayerType fromName(String name) {
+        for (LBGLayerType type : LAYER_TYPES) {
+            if (type.getName().equals(name))
+                return type;
+        }
+        return null;
+    }
+
+    public static void load(Identifier resourceId, ResourceManager resourceManager) {
         Identifier id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
         try {
             InputStream stream = resourceManager.getResource(resourceId).getInputStream();
@@ -90,11 +98,6 @@ public class LBGLayerType implements Nameable {
 
             if (block == Blocks.AIR)
                 return;
-
-            if (!block.getDefaultState().getProperties().contains(Properties.LAYERS)) {
-                LambdaBetterGrass.get().warn("Failed to load layer type \"" + id + "\", block does not have layer property.");
-                return;
-            }
 
             Identifier modelId = new Identifier(json.get("model").getAsString());
 

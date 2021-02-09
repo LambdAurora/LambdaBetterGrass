@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.0.3
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -72,7 +72,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
             if (!up.isAir()) {
                 Identifier blockId = Registry.BLOCK.getId(up.getBlock());
                 Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
-                if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up.getBlock(), false)) {
+                if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
                     ((FabricBakedModel) this.metadata.getSnowyModelVariant()).emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
                     return;
                 }
@@ -140,7 +140,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
                     else if (adjacent.getBlock() instanceof SnowyBlock) {
                         Identifier blockId = Registry.BLOCK.getId(up.getBlock());
                         Identifier stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
-                        if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up.getBlock(), true))
+                        if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
                             return true;
                     }
                 }

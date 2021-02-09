@@ -26,7 +26,7 @@ import java.util.function.Function;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public abstract class LBGState {
@@ -38,6 +38,34 @@ public abstract class LBGState {
     public LBGState(@NotNull Identifier id) {
         this.id = id;
         putState(id, this);
+    }
+
+    protected boolean matchVariant(String modelVariant, String dataVariant) {
+        return matchVariant(modelVariant.split(","), dataVariant.split(","));
+    }
+
+    /**
+     * Returns whether the data variant can be applied to the model variant.
+     *
+     * @param modelVariant the model variant
+     * @param dataVariant the data variant
+     * @return {@code true} if the data variant can be applied to the model variant, else {@code false}
+     */
+    protected boolean matchVariant(String[] modelVariant, String[] dataVariant) {
+        for (String dataProperty : dataVariant) {
+            boolean matched = false;
+            for (String modelProperty : modelVariant) {
+                if (modelProperty.equals(dataProperty)) {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched)
+                return false;
+        }
+
+        return true;
     }
 
     public abstract @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter);

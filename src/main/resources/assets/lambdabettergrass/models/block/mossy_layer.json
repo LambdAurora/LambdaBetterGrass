@@ -1,0 +1,21 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "particle": "block/moss_block",
+    "texture": "block/moss_block"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 1, 16 ],
+      "faces": {
+        "north": { "uv": [ 0, 15, 16, 16 ], "texture": "#texture" },
+        "south": { "uv": [ 0, 15, 16, 16 ], "texture": "#texture" },
+        "west":  { "uv": [ 0, 15, 16, 16 ], "texture": "#texture" },
+        "east":  { "uv": [ 0, 15, 16, 16 ], "texture": "#texture" },
+        "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#texture" },
+        "down":  { "uv": [ 0,  0, 16, 16 ], "texture": "#texture", "cullface": "down" }
+      }
+    }
+  ]
+}

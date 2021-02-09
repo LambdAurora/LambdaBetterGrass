@@ -1,3 +1,8 @@
 {
-  "type": "layer"
+  "type": "layer",
+  "variants": {
+    "waterlogged=false": {
+      "data": "minecraft:bettergrass/data/horn_coral_fan"
+    }
+  }
 }

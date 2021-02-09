@@ -1,11 +1,4 @@
 {
-  "type": "grass",
-  "variants": {
-    "snowy=false": {
-      "data": "minecraft:bettergrass/data/podzol"
-    },
-    "snowy=true": {
-      "data": "minecraft:bettergrass/data/snowy_grass_block"
-    }
-  }
+  "type": "layer",
+  "data": "minecraft:bettergrass/data/podzol"
 }
