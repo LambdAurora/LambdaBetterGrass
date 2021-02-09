@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "me.lambdaurora.lambdabettergrass.mixin",
+  "package": "dev.lambdaurora.lambdabettergrass.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "ModelLoaderMixin",

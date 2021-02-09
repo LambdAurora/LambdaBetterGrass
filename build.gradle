@@ -1,5 +1,3 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
     id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'java-library'
@@ -8,9 +6,16 @@ plugins {
     id 'net.minecrell.licenser' version '0.4.1'
 }
 
+import net.fabricmc.loom.task.RemapJarTask
+
 group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
 archivesBaseName = project.archives_base_name + "-fabric"
+Set<String> modules = [
+        'fabric-renderer-api-v1',
+        'fabric-renderer-indigo',
+        'fabric-resource-loader-v0'
+]
 
 def getMCVersionString() {
     if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
@@ -53,9 +58,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation(fabricApi.module('fabric-renderer-api-v1', project.fabric_api_version))
-    modImplementation(fabricApi.module('fabric-renderer-indigo', project.fabric_api_version))
-    modImplementation(fabricApi.module('fabric-resource-loader-v0', project.fabric_api_version))
+    modules.stream().map { fabricApi.module(it, project.fabric_api_version) }.forEach {
+        modImplementation it
+    }
 
     modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
@@ -106,7 +111,7 @@ shadowJar {
     configurations = [project.configurations.shadow]
     archiveClassifier.set('dev')
 
-    relocate 'com.electronwill.nightconfig', 'me.lambdaurora.lambdabettergrass.shadow.nightconfig'
+    relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
 
 task shadowRemapJar(type: RemapJarTask) {
