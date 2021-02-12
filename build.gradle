@@ -73,6 +73,14 @@ dependencies {
     shadow "com.electronwill.night-config:toml:3.6.3"
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+
+    withSourcesJar()
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
@@ -80,25 +88,15 @@ tasks.withType(JavaCompile) {
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    withSourcesJar()
 }
 
 jar {
-    from "../LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
 }
 
 license {
