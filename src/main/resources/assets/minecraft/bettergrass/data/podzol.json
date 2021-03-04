@@ -1,11 +1,10 @@
 {
-  "snow": {
-    "layer": true
-  },
-  "moss": {
-    "layer": true
-  },
-  "ash": {
-    "layer": true
-  }
+  "layers": [
+    {
+      "textures": {
+        "top": "minecraft:block/podzol_top",
+        "side": "minecraft:block/podzol_side"
+      }
+    }
+  ]
 }
