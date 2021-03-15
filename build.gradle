@@ -1,3 +1,16 @@
+buildscript {
+    dependencies {
+        constraints {
+            ["asm", "asm-util", "asm-tree", "asm-analysis"].each {
+                classpath("org.ow2.asm:$it") {
+                    version { require("9.1") }
+                    because("Fabric's TinyRemapper requires ASM 9")
+                }
+            }
+        }
+    }
+}
+
 plugins {
     id 'fabric-loom' version '0.6-SNAPSHOT'
     id 'java-library'
