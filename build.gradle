@@ -1,4 +1,5 @@
 buildscript {
+    // Fix a bug with shadow plugin having an outdated dependency.
     dependencies {
         constraints {
             ["asm", "asm-util", "asm-tree", "asm-analysis"].each {
