@@ -18,7 +18,7 @@ const ARCHIVES_BASE_NAME_REGEX = /archives_base_name=([a-z_-]+)/g;
 function parse_readme() {
   let readme = fs.readFileSync('README.md', {encoding: 'utf8'});
   readme = readme.replace(EXCLUDE_REGEX, '');
-  readme = readme.replace(LINK_REGEX, '![$1](https://raw.githubusercontent.com/Queerbric/Inspecio/1.17/$2)');
+  readme = readme.replace(LINK_REGEX, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.17/$2)');
   return readme;
 }
 
@@ -64,7 +64,7 @@ let full_mod_version = `${mod_version}+${file_mc_version}`;
 let file = `${archives_base_name}-${full_mod_version}.jar`;
 
 function try_publish() {
-  fetch('https://api.github.com/repos/Queerbric/Inspecio/releases/tags/' + CURRENT_TAG, {
+  fetch('https://api.github.com/repos/LambdAurora/LambdaBetterGrass/releases/tags/' + CURRENT_TAG, {
     method: 'GET',
     headers: {
       Accept: 'application/vnd.github.v3+json'
