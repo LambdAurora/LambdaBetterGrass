@@ -54,6 +54,10 @@ repositories {
         url 'https://aperlambda.github.io/maven'
     }
     maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/releases'
+    }
+    maven {
         name 'Jitpack'
         url 'https://jitpack.io'
         content {
@@ -83,7 +87,7 @@ dependencies {
     modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
     include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
 
-    modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false
     }
 
@@ -102,9 +106,7 @@ tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
 
     if (JavaVersion.current().isJava9Compatible()) {
-        if (JavaVersion.current().isJava9Compatible()) {
-            it.options.release.set(targetJavaVersion)
-        }
+        it.options.release.set(targetJavaVersion)
     }
 }
 
@@ -118,7 +120,7 @@ processResources {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 

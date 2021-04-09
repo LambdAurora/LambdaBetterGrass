@@ -46,5 +46,10 @@ The first release of LambdaBetterGrass!
  - \[Internal] Changed package name.
  - \[Internal] Rewrote data-gen (changed from shell script to JS script).
 
+### 1.1.1
+
+ - Fix podzol better grass.
+ - Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -28,19 +28,19 @@
   ],
   "depends": {
     "fabricloader": ">=0.11.1",
-    "minecraft": ">=1.17-alpha.21.3.a",
+    "minecraft": ">=1.17-alpha.21.14.a",
     "fabric-renderer-api-v1": "*",
     "fabric-resource-loader-v0": ">=0.4.1",
-    "spruceui": ">=3.0.0"
+    "spruceui": ">=3.0.4"
   },
   "recommends": {
-    "modmenu": ">=1.12.2"
+    "modmenu": ">=2.0.0-beta.3"
   },
   "suggests": {
     "flamingo": "*"
   },
   "breaks": {
-    "modmenu": "<1.12.2",
+    "modmenu": "<2.0.0-beta.3",
     "optifabric": "*"
   },
   "custom": {

@@ -9,9 +9,9 @@
 
 package dev.lambdaurora.lambdabettergrass;
 
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.lambdaurora.lambdabettergrass.gui.SettingsScreen;
-import io.github.prospector.modmenu.api.ConfigScreenFactory;
-import io.github.prospector.modmenu.api.ModMenuApi;
 
 /**
  * Represents LambdaBetterGrass ModMenu integration.

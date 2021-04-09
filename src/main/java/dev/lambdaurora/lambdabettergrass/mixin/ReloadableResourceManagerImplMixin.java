@@ -33,8 +33,9 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
     @Shadow
     public abstract void addPack(ResourcePack resourcePack);
 
-    @Inject(method = "beginMonitoredReload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
-    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
+    @Inject(method = "reload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs,
+                          CallbackInfoReturnable<ResourceReload> cir) {
         if (this.type != ResourceType.CLIENT_RESOURCES)
             return;
 

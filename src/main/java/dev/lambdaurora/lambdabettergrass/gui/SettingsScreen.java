@@ -116,9 +116,9 @@ public class SettingsScreen extends SpruceScreen {
         text.append(new TranslatableText("lambdabettergrass.menu.info.1")).append("\n");
         text.append(new TranslatableText("lambdabettergrass.menu.info.2")).append(" ");
         text.append(new TranslatableText("lambdabettergrass.menu.info.3")).append("\n");
-        SpruceLabelWidget widget = this.addChild(new SpruceLabelWidget(Position.of(this, this.width / 2, y),
+        SpruceLabelWidget widget = this.addChild(new SpruceLabelWidget(Position.of(this, 0, y),
                 text, this.width, true));
-        SpruceLabelWidget readMore = new SpruceLabelWidget(Position.of(this, this.width / 2, y + 5 + widget.getHeight()),
+        SpruceLabelWidget readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
                 new TranslatableText("lambdabettergrass.menu.info.read_more", "[GitHub]").formatted(Formatting.GREEN),
                 this.width,
                 label -> Util.getOperatingSystem().open(API_URL), true);
