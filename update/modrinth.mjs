@@ -10,7 +10,7 @@ const MOD_ID = '2Uev7LdA';
 const CURRENT_TAG = process.env.GITHUB_REF;
 
 const EXCLUDE_REGEX = /<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/gm;
-const LINK_REGEX = /!\[([A-z_ ]+)]\((images\/[A-z./_]+)\)/g;
+const LINK_REGEX = /!\[([A-z._ ]+)]\((images\/[A-z./_]+)\)/g;
 const MINECRAFT_VERSION_REGEX = /minecraft_version=(.+)/g;
 const MOD_VERSION_REGEX = /mod_version=(.+)/g;
 const ARCHIVES_BASE_NAME_REGEX = /archives_base_name=([a-z_-]+)/g;
@@ -91,7 +91,9 @@ function try_publish() {
     }));
     form.append(file, fs.createReadStream('build/libs/' + file), file);
 
-    modrinth_fetch('version', 'POST', form).then(response => response.json()).then(response => console.log(response));
+    modrinth_fetch('version', 'POST', form)
+        .then(response => response.json())
+        .then(response => console.log(response))
   });
 }
 

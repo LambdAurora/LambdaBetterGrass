@@ -24,7 +24,7 @@ import net.fabricmc.loom.task.RemapJarTask
 
 group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
-archivesBaseName = project.archives_base_name + "-fabric"
+archivesBaseName = project.archives_base_name
 Set<String> modules = [
         'fabric-renderer-api-v1',
         'fabric-renderer-indigo',
