@@ -17,7 +17,7 @@ import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.util.Identifier;
 import org.aperlambda.lambdacommon.utils.Pair;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.StringReader;
 import java.util.function.Function;
@@ -26,7 +26,7 @@ import java.util.function.Function;
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
@@ -37,7 +37,8 @@ public class LBGLayerMetadata {
     private UnbakedModel alternateModel;
     private final boolean hasAlternateModel;
 
-    public LBGLayerMetadata(@NotNull Identifier id, LBGLayerType layerType, @NotNull JsonObject json, @NotNull ModelVariantMap.DeserializationContext deserializationContext) {
+    public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
+                            ModelVariantMap.DeserializationContext deserializationContext) {
         this.id = id;
         this.layerType = layerType;
 
@@ -53,7 +54,7 @@ public class LBGLayerMetadata {
             return;
         }
 
-        ModelVariantMap map = ModelVariantMap.deserialize(deserializationContext, new StringReader(json.get("block_state").toString()));
+        var map = ModelVariantMap.fromJson(deserializationContext, new StringReader(json.get("block_state").toString()));
         if (map.hasMultipartModel())
             this.alternateModel = map.getMultipartModel();
         else
@@ -62,7 +63,8 @@ public class LBGLayerMetadata {
         this.hasAlternateModel = true;
     }
 
-    public @NotNull Pair<UnbakedModel, UnbakedModel> getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
+    public Pair<UnbakedModel, UnbakedModel> getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
+                                                                  Function<Identifier, UnbakedModel> modelGetter) {
         UnbakedModel layerModel = null;
         if (this.layerModel) {
             layerModel = this.layerType.getLayerModel(modelGetter);

@@ -13,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
@@ -32,8 +32,7 @@ Set<String> modules = [
 ]
 
 // This field defines the Java version your mod target.
-// The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too.
-def targetJavaVersion = 8
+def targetJavaVersion = 16
 
 def getMCVersionString() {
     if (project.minecraft_version.matches("\\d\\dw\\d\\d[a-z]")) {
@@ -58,11 +57,8 @@ repositories {
         url = 'https://maven.terraformersmc.com/releases'
     }
     maven {
-        name 'Jitpack'
-        url 'https://jitpack.io'
-        content {
-            excludeGroupByRegex('io\\.github.*')
-        }
+        name 'Gegy'
+        url 'https://maven.gegy.dev'
     }
     flatDir {
         dirs "lib"
@@ -84,8 +80,8 @@ dependencies {
         modImplementation it
     }
 
-    modImplementation "com.github.lambdaurora:spruceui:${project.spruceui_version}"
-    include "com.github.lambdaurora:spruceui:${project.spruceui_version}"
+    modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
+    include "dev.lambdaurora:spruceui:${project.spruceui_version}"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         transitive = false

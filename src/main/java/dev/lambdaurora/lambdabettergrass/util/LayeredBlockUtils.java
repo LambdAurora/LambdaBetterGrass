@@ -21,20 +21,20 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.function.Function;
 
 /**
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
+    private static final Direction[] DIRECTIONS = Direction.values();
+
     private LayeredBlockUtils() {
         throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");
     }
@@ -45,29 +45,29 @@ public final class LayeredBlockUtils {
      * @param modelGetter The model getter.
      * @return The unbaked model.
      */
-    public static @Nullable UnbakedModel getSnowLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter) {
+    public static @Nullable UnbakedModel getSnowLayerModel(Function<Identifier, UnbakedModel> modelGetter) {
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));
     }
 
-    public static boolean shouldGrassBeSnowy(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Identifier stateId, @NotNull BlockState upState, boolean onlyPureSnow) {
-        LBGState state = LBGState.getMetadataState(stateId);
-        if (!(state instanceof LBGLayerState))
+    public static boolean shouldGrassBeSnowy(BlockRenderView world, BlockPos pos, Identifier stateId, BlockState upState, boolean onlyPureSnow) {
+        var state = LBGState.getMetadataState(stateId);
+        if (!(state instanceof LBGLayerState layerState))
             return false;
 
-        Collection<Property<?>> properties = upState.getProperties();
-        String[] modelVariant = new String[properties.size()];
+        var properties = upState.getProperties();
+        var modelVariant = new String[properties.size()];
 
         int i = 0;
-        for (Property<?> property : properties) {
-            String end = ",";
-            if (modelVariant.length == i +1)
+        for (var property : properties) {
+            var end = ",";
+            if (modelVariant.length == i + 1)
                 end = "";
             modelVariant[i] = property.getName() + '=' + nameValue(property, upState.get(property)) + end;
             i++;
         }
 
         boolean[] shouldTry = {false};
-        ((LBGLayerState) state).forEach(modelVariant, metadata -> {
+        layerState.forEach(modelVariant, metadata -> {
             if (metadata.layerType.getName().equals("snow")) {
                 shouldTry[0] = true;
             }
@@ -81,16 +81,16 @@ public final class LayeredBlockUtils {
         return property.name((T) value);
     }
 
-    public static int getNearbySnowyBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block type, boolean onlyPureSnow) {
+    public static int getNearbySnowyBlocks(BlockRenderView world, BlockPos pos, Block type, boolean onlyPureSnow) {
         return getNearbyLayeredBlocks(world, pos, Blocks.SNOW, type, onlyPureSnow);
     }
 
-    public static int getNearbyLayeredBlocks(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock, @NotNull Block type, boolean onlySourceBlock) {
+    public static int getNearbyLayeredBlocks(BlockRenderView world, BlockPos pos, Block layerBlock, Block type, boolean onlySourceBlock) {
         int nearbySnow = 0;
-        for (Direction direction : Direction.values()) {
+        for (var direction : DIRECTIONS) {
             if (direction.getAxis().isHorizontal()) {
-                BlockPos offsetPos = pos.offset(direction);
-                Block block = world.getBlockState(offsetPos).getBlock();
+                var offsetPos = pos.offset(direction);
+                var block = world.getBlockState(offsetPos).getBlock();
                 if (block == type && !onlySourceBlock) {
                     if (getNearbySnowLayers(world, offsetPos) > 1)
                         nearbySnow++;
@@ -102,13 +102,13 @@ public final class LayeredBlockUtils {
         return nearbySnow;
     }
 
-    public static int getNearbySnowLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos) {
+    public static int getNearbySnowLayers(BlockRenderView world, BlockPos pos) {
         return getNearbyBlockLayers(world, pos, Blocks.SNOW);
     }
 
-    public static int getNearbyBlockLayers(@NotNull BlockRenderView world, @NotNull BlockPos pos, @NotNull Block layerBlock) {
+    public static int getNearbyBlockLayers(BlockRenderView world, BlockPos pos, Block layerBlock) {
         int nearbySnow = 0;
-        for (Direction direction : Direction.values()) {
+        for (var direction : DIRECTIONS) {
             if (direction.getAxis().isHorizontal()) {
                 if (world.getBlockState(pos.offset(direction)).getBlock() == layerBlock)
                     nearbySnow++;

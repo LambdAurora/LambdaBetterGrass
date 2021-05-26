@@ -39,7 +39,7 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
         if (this.type != ResourceType.CLIENT_RESOURCES)
             return;
 
-        LambdaBetterGrass mod = LambdaBetterGrass.get();
+        var mod = LambdaBetterGrass.get();
         mod.log("Inject generated resource packs.");
         this.addPack(mod.resourcePack = new LBGResourcePack(mod));
     }

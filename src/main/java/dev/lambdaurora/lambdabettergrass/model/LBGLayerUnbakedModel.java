@@ -18,7 +18,6 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -28,14 +27,14 @@ import java.util.function.Function;
  * Represents the LambdaBetterGrass unbaked model for layer method.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGLayerUnbakedModel implements UnbakedModel {
     private final UnbakedModel baseModel;
     private final List<LBGCompiledLayerMetadata> metadatas;
 
-    public LBGLayerUnbakedModel(@NotNull UnbakedModel baseModel, @NotNull List<LBGCompiledLayerMetadata> metadatas) {
+    public LBGLayerUnbakedModel(UnbakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
         this.baseModel = baseModel;
         this.metadatas = metadatas;
     }
@@ -48,15 +47,17 @@ public class LBGLayerUnbakedModel implements UnbakedModel {
     }
 
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
-        List<SpriteIdentifier> ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
+                                                               Set<Pair<String, String>> unresolvedTextureReferences) {
+        var ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         this.metadatas.forEach(metadata -> metadata.fetchTextureDependencies(ids, unbakedModelGetter, unresolvedTextureReferences));
         return ids;
     }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
+                           Identifier modelId) {
         this.metadatas.forEach(metadata -> metadata.bake(loader, textureGetter, rotationContainer, modelId));
         return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadatas);
     }

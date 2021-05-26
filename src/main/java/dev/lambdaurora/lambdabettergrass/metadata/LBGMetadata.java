@@ -10,16 +10,14 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ import java.util.function.Function;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -42,7 +40,7 @@ public class LBGMetadata {
      */
     public final Identifier id;
 
-    protected final @NotNull ResourceManager resourceManager;
+    protected final ResourceManager resourceManager;
     protected final List<SpriteIdentifier> textures = new ArrayList<>();
 
     private final List<LBGLayer> layers = new ArrayList<>();
@@ -53,7 +51,7 @@ public class LBGMetadata {
     protected Consumer<BakedModel> snowyModelVariantProvider = null;
     protected BakedModel snowyModelVariant = null;
 
-    public LBGMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier id, @NotNull JsonObject json) {
+    public LBGMetadata(ResourceManager resourceManager, Identifier id, JsonObject json) {
         this.id = id;
         this.resourceManager = resourceManager;
 
@@ -65,8 +63,8 @@ public class LBGMetadata {
         this.buildTextures();
 
         /* Merge layers */
-        Int2ObjectMap<LBGLayer> parentLayers = new Int2ObjectArrayMap<>();
-        for (LBGLayer layer : this.layers) {
+        var parentLayers = new Int2ObjectArrayMap<LBGLayer>();
+        for (var layer : this.layers) {
             if (!parentLayers.containsKey(layer.colorIndex)) {
                 parentLayers.put(layer.colorIndex, layer);
             } else {
@@ -89,7 +87,7 @@ public class LBGMetadata {
     }
 
     private void buildTextures() {
-        for (LBGLayer layer : this.layers)
+        for (var layer : this.layers)
             layer.buildTextures();
     }
 
@@ -98,8 +96,8 @@ public class LBGMetadata {
      *
      * @param textureGetter The texture getter.
      */
-    public void bakeTextures(@NotNull Function<SpriteIdentifier, Sprite> textureGetter) {
-        for (LBGLayer layer : this.layers) {
+    public void bakeTextures(Function<SpriteIdentifier, Sprite> textureGetter) {
+        for (var layer : this.layers) {
             layer.bakeTextures(textureGetter);
         }
     }
@@ -110,8 +108,8 @@ public class LBGMetadata {
      * @param colorIndex The color index.
      * @return The optional layer.
      */
-    public @NotNull Optional<LBGLayer> getLayer(int colorIndex) {
-        for (LBGLayer layer : this.layers) {
+    public Optional<LBGLayer> getLayer(int colorIndex) {
+        for (var layer : this.layers) {
             if (layer.colorIndex == colorIndex)
                 return Optional.of(layer);
         }
@@ -123,7 +121,7 @@ public class LBGMetadata {
      *
      * @return The textures.
      */
-    public @NotNull Collection<SpriteIdentifier> getTextures() {
+    public Collection<SpriteIdentifier> getTextures() {
         return this.textures;
     }
 
@@ -150,7 +148,7 @@ public class LBGMetadata {
      *
      * @param model The model to propagate.
      */
-    public void propagate(@NotNull LBGBakedModel model) {
+    public void propagate(LBGBakedModel model) {
         if (this.snowyModelVariantProvider != null)
             this.snowyModelVariantProvider.accept(model);
     }

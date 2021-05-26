@@ -52,7 +52,7 @@ public enum LBGMode implements Nameable {
      * @return The next available better grass mode.
      */
     public LBGMode next() {
-        LBGMode[] v = values();
+        var v = values();
         if (v.length == this.ordinal() + 1)
             return v[0];
         return v[this.ordinal() + 1];

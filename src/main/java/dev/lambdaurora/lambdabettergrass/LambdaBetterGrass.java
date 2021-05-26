@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.0.2
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
-    public static final String MODID = "lambdabettergrass";
+    public static final String NAMESPACE = "lambdabettergrass";
     /* Default masks */
     public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = mc("bettergrass/mask/standard_block_side_connect.png");
     public static final Identifier BETTER_GRASS_SIDE_BLEND_UP_MASK = mc("bettergrass/mask/grass_block_side_blend_up.png");
@@ -46,7 +46,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
         this.log("Initializing LambdaBetterGrass...");
         this.config.load();
 
-        FabricLoader.getInstance().getModContainer(MODID).ifPresent(modContainer -> {
+        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> {
             ResourceManagerHelper.registerBuiltinResourcePack(mc("default"), modContainer, ResourcePackActivationType.DEFAULT_ENABLED);
             ResourceManagerHelper.registerBuiltinResourcePack(mc("32x"), modContainer, ResourcePackActivationType.NORMAL);
         });
@@ -80,7 +80,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
      * @return The identifier.
      */
     public static net.minecraft.util.Identifier mc(@NotNull String path) {
-        return new net.minecraft.util.Identifier(MODID, path);
+        return new net.minecraft.util.Identifier(NAMESPACE, path);
     }
 
     /**

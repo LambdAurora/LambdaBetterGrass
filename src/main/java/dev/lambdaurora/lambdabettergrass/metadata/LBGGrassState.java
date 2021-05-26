@@ -30,7 +30,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -42,11 +42,11 @@ public class LBGGrassState extends LBGState {
 
         // Look for variants.
         if (json.has("variants")) {
-            JsonObject variants = json.getAsJsonObject("variants");
+            var variants = json.getAsJsonObject("variants");
             variants.entrySet().forEach(entry -> {
-                JsonObject variant = entry.getValue().getAsJsonObject();
+                var variant = entry.getValue().getAsJsonObject();
                 if (variant.has("data")) {
-                    Identifier metadataId = new Identifier(variant.get("data").getAsString());
+                    var metadataId = new Identifier(variant.get("data").getAsString());
 
                     this.metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
                 }
@@ -63,7 +63,7 @@ public class LBGGrassState extends LBGState {
 
             this.metadata = null;
         } else if (json.has("data")) { // Look for a common metadata if no variants are specified.
-            Identifier metadataId = new Identifier(json.get("data").getAsString());
+            var metadataId = new Identifier(json.get("data").getAsString());
             this.metadata = this.loadMetadata(resourceManager, metadataId);
         } else // The state file is invalid, cannot find any metadata.
             this.metadata = null;
@@ -77,13 +77,14 @@ public class LBGGrassState extends LBGState {
      * @return The metadata if loaded successfully, else null
      */
     private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
-        Identifier metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
+        var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
         if (resourceManager.containsResource(metadataResourceId)) {
             try {
-                JsonObject metadataJson = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream()));
-                LBGMetadata metadata = new LBGMetadata(resourceManager, metadataId, metadataJson);
+                var metadataJson = (JsonObject) LambdaConstants.JSON_PARSER.parse(
+                        new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream())
+                );
 
-                return metadata;
+                return new LBGMetadata(resourceManager, metadataId, metadataJson);
             } catch (IOException e) {
                 // Ignore.
             }
@@ -102,7 +103,7 @@ public class LBGGrassState extends LBGState {
         if (this.metadata != null)
             return this.metadata;
         String[] modelVariant = modelId.getVariant().split(",");
-        for (Map.Entry<String, LBGMetadata> variant : this.metadatas.entrySet()) {
+        for (var variant : this.metadatas.entrySet()) {
             if (this.matchVariant(modelVariant, variant.getKey().split(",")))
                 return variant.getValue();
         }
@@ -110,12 +111,14 @@ public class LBGGrassState extends LBGState {
     }
 
     @Override
-    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
-        LBGMetadata metadata = this.getMetadata(modelId);
+    public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
+                                                        Function<Identifier, UnbakedModel> modelGetter) {
+        var metadata = this.getMetadata(modelId);
         if (metadata != null) {
-            UnbakedModel model = new LBGUnbakedModel(originalModel, metadata);
+            var model = new LBGUnbakedModel(originalModel, metadata);
             /*if (this.metadata == null && modelId.getVariant().equals("snowy=true")) {
-                LBGMetadata nonSnowyMetadata = this.getMetadata(new ModelIdentifier(new Identifier(modelId.getNamespace(), modelId.getPath()), "snowy=false"));
+                LBGMetadata nonSnowyMetadata = this.getMetadata(
+                new ModelIdentifier(new Identifier(modelId.getNamespace(), modelId.getPath()), "snowy=false"));
                 if (nonSnowyMetadata != null)
                     nonSnowyMetadata.snowyVariant = model;
             }*/

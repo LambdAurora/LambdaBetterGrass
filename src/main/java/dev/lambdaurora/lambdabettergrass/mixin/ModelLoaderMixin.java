@@ -28,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,30 +56,32 @@ public abstract class ModelLoaderMixin {
 
     @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
     private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci) {
-        if (id instanceof ModelIdentifier) {
-            ModelIdentifier modelId = (ModelIdentifier) id;
+        if (id instanceof ModelIdentifier modelId) {
             if (!modelId.getVariant().equals("inventory")) {
                 if (this.lbg_firstLoad) {
                     LBGState.reset();
                     LBGLayerType.reset();
-                    Collection<Identifier> layerTypes = this.resourceManager.findResources("bettergrass/layer_types", path -> path.endsWith(".json"));
-                    for (Identifier layerTypeId : layerTypes) {
+                    var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
+                            path -> path.endsWith(".json"));
+                    for (var layerTypeId : layerTypes) {
                         LBGLayerType.load(layerTypeId, this.resourceManager);
                     }
                     this.lbg_firstLoad = false;
                 }
 
-                Identifier stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
+                var stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
 
                 // Get cached states metadata.
-                LBGState state = LBGState.getMetadataState(stateId);
+                var state = LBGState.getMetadataState(stateId);
 
                 // Find and load states metadata if not cached.
                 if (state == null) {
-                    Identifier stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
+                    var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
                     if (this.resourceManager.containsResource(stateResourceId)) {
                         try {
-                            JsonObject json = (JsonObject) LambdaConstants.JSON_PARSER.parse(new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream()));
+                            var json = (JsonObject) LambdaConstants.JSON_PARSER.parse(
+                                    new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream())
+                            );
                             state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
                         } catch (IOException e) {
                             // Ignore.
@@ -90,7 +91,7 @@ public abstract class ModelLoaderMixin {
 
                 // If states metadata found, search for corresponding metadata and if exists replace the model.
                 if (state != null) {
-                    UnbakedModel newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
+                    var newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
                     if (newModel != null) {
                         this.unbakedModels.put(modelId, newModel);
                         this.modelsToLoad.addAll(newModel.getModelDependencies());

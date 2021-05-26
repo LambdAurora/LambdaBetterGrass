@@ -9,27 +9,22 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aperlambda.lambdacommon.LambdaConstants;
-import org.aperlambda.lambdacommon.utils.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -39,7 +34,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -47,34 +42,36 @@ public class LBGLayerState extends LBGState {
 
     private final Map<String, List<LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
 
-    public LBGLayerState(Identifier id, ResourceManager resourceManager, JsonObject json, ModelVariantMap.DeserializationContext deserializationContext) {
+    public LBGLayerState(Identifier id, ResourceManager resourceManager, JsonObject json,
+                         ModelVariantMap.DeserializationContext deserializationContext) {
         super(id);
 
         if (json.has("variants")) {
-            JsonObject variants = json.getAsJsonObject("variants");
+            var variants = json.getAsJsonObject("variants");
             variants.entrySet().forEach(entry -> {
-                JsonObject variant = entry.getValue().getAsJsonObject();
+                var variant = entry.getValue().getAsJsonObject();
                 if (variant.has("data")) {
                     this.loadVariant(entry.getKey(), variant, resourceManager, deserializationContext);
                 }
             });
-        } else if (json.has("data")){
+        } else if (json.has("data")) {
             this.loadVariant("*", json, resourceManager, deserializationContext);
         } else {
             LOGGER.warn("Invalid state definition for {}, missing data or variants entry.", id);
         }
     }
 
-    private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager, ModelVariantMap.DeserializationContext deserializationContext) {
-        Identifier metadataId = Identifier.tryParse(json.get("data").getAsString());
-        Identifier metadataResourceId = new Identifier(id.getNamespace(), metadataId.getPath() + ".json");
+    private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
+                             ModelVariantMap.DeserializationContext deserializationContext) {
+        var metadataId = Identifier.tryParse(json.get("data").getAsString());
+        var metadataResourceId = new Identifier(id.getNamespace(), metadataId.getPath() + ".json");
         try {
-            List<Resource> resources = resourceManager.getAllResources(metadataResourceId);
-            for (Resource resource : resources) {
-                JsonObject metadataJson = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
+            var resources = resourceManager.getAllResources(metadataResourceId);
+            for (var resource : resources) {
+                var metadataJson = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
 
-                for (Map.Entry<String, JsonElement> entry : metadataJson.entrySet()) {
-                    LBGLayerType type = LBGLayerType.fromName(entry.getKey());
+                for (var entry : metadataJson.entrySet()) {
+                    var type = LBGLayerType.fromName(entry.getKey());
 
                     if (type == null)
                         continue;
@@ -87,15 +84,17 @@ public class LBGLayerState extends LBGState {
                 resource.close();
             }
         } catch (IOException e) {
-            LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id + "\" (variant: \"" + variant + "\").", e);
+            LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
+                    + "\" (variant: \"" + variant + "\").", e);
         }
     }
 
-    private void putOrReplaceMetadata(String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson, ModelVariantMap.DeserializationContext deserializationContext) {
-        List<LBGLayerMetadata> metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
-        Iterator<LBGLayerMetadata> it = metadatas.iterator();
+    private void putOrReplaceMetadata(String variant, Identifier metadataId, @Nullable LBGLayerType type, JsonObject metadataJson,
+                                      ModelVariantMap.DeserializationContext deserializationContext) {
+        var metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
+        var it = metadatas.iterator();
         while (it.hasNext()) {
-            LBGLayerMetadata next = it.next();
+            var next = it.next();
 
             if (next.layerType == type) {
                 it.remove();
@@ -116,15 +115,16 @@ public class LBGLayerState extends LBGState {
     }
 
     @Override
-    public @Nullable UnbakedModel getCustomUnbakedModel(@NotNull ModelIdentifier modelId, @NotNull UnbakedModel originalModel, @NotNull Function<Identifier, UnbakedModel> modelGetter) {
+    public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
+                                                        Function<Identifier, UnbakedModel> modelGetter) {
         String[] modelVariant = modelId.getVariant().split(",");
 
-        for (Map.Entry<String, List<LBGLayerMetadata>> entry : this.metadatas.entrySet()) {
+        for (var entry : this.metadatas.entrySet()) {
             if (entry.getKey().equals("*") || this.matchVariant(modelVariant, entry.getKey().split(","))) {
-                List<LBGCompiledLayerMetadata> metadatas = new ArrayList<>();
+                var metadatas = new ArrayList<LBGCompiledLayerMetadata>();
 
                 entry.getValue().forEach(metadata -> {
-                    Pair<UnbakedModel, UnbakedModel> models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
+                    var models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
                     if (models.key == null && models.value == null)
                         return;
 

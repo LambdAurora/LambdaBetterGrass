@@ -18,10 +18,12 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -35,7 +37,7 @@ public class LBGUnbakedModel implements UnbakedModel {
     private final UnbakedModel baseModel;
     private final LBGMetadata metadata;
 
-    public LBGUnbakedModel(@NotNull UnbakedModel baseModel, @NotNull LBGMetadata metadata) {
+    public LBGUnbakedModel(UnbakedModel baseModel, LBGMetadata metadata) {
         this.baseModel = baseModel;
         this.metadata = metadata;
     }
@@ -46,9 +48,10 @@ public class LBGUnbakedModel implements UnbakedModel {
     }
 
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
-        Collection<SpriteIdentifier> baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
-        List<SpriteIdentifier> textures = new ArrayList<>(baseIds);
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
+                                                               Set<Pair<String, String>> unresolvedTextureReferences) {
+        var baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
+        var textures = new ArrayList<>(baseIds);
         textures.addAll(this.metadata.getTextures());
         if (this.metadata.getSnowyVariant() != null)
             textures.addAll(this.metadata.getSnowyVariant().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
@@ -57,10 +60,11 @@ public class LBGUnbakedModel implements UnbakedModel {
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
+                           Identifier modelId) {
         this.metadata.bakeTextures(textureGetter);
 
-        LBGBakedModel model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
+        var model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
 
         this.metadata.propagate(model);
 

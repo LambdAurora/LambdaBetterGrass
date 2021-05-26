@@ -82,7 +82,7 @@ function try_publish() {
       file_parts: [file],
       version_number: full_mod_version,
       version_title: `LambdaBetterGrass v${mod_version} (${mc_version})`,
-      version_body: json.body,
+      changelog: json.body,
       dependencies: [],
       game_versions: [mc_version],
       release_channel: 'release',

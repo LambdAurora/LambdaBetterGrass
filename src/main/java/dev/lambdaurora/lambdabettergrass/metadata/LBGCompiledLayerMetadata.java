@@ -27,7 +27,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockRenderView;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -42,7 +41,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 1.0.2
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -52,13 +51,13 @@ public class LBGCompiledLayerMetadata {
     private BakedModel bakedLayerModel;
     private BakedModel bakedAlternateModel;
 
-    public LBGCompiledLayerMetadata(@NotNull LBGLayerType layerType, @Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
+    public LBGCompiledLayerMetadata(LBGLayerType layerType, @Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
         this.layerType = layerType;
         this.layerModel = layerModel;
         this.alternateModel = alternateModel;
     }
 
-    public void fetchModelDependencies(@NotNull Collection<Identifier> ids) {
+    public void fetchModelDependencies(Collection<Identifier> ids) {
         if (this.layerModel != null) {
             ids.addAll(this.layerModel.getModelDependencies());
         }
@@ -68,8 +67,8 @@ public class LBGCompiledLayerMetadata {
         }
     }
 
-    public void fetchTextureDependencies(@NotNull Collection<SpriteIdentifier> ids, @NotNull Function<Identifier, UnbakedModel> unbakedModelGetter,
-                                         @NotNull Set<Pair<String, String>> unresolvedTextureReferences) {
+    public void fetchTextureDependencies(Collection<SpriteIdentifier> ids, Function<Identifier, UnbakedModel> unbakedModelGetter,
+                                         Set<Pair<String, String>> unresolvedTextureReferences) {
         if (this.layerModel != null) {
             ids.addAll(this.layerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         }
@@ -87,7 +86,7 @@ public class LBGCompiledLayerMetadata {
      * @param rotationContainer The rotation container.
      * @param modelId The model identifier.
      */
-    public void bake(@NotNull ModelLoader loader, @NotNull Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, @NotNull Identifier modelId) {
+    public void bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
         if (this.layerModel != null) {
             this.bakedLayerModel = this.layerModel.bake(loader, textureGetter, rotationContainer, modelId);
         }
@@ -105,19 +104,21 @@ public class LBGCompiledLayerMetadata {
      * @param pos The block position.
      * @param randomSupplier The random supplier.
      * @param context The render context.
-     * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads, or 2 if the custom alternative model has emitted quads.
+     * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads,
+     * or 2 if the custom alternative model has emitted quads.
      */
-    public int emitBlockQuads(@NotNull BlockRenderView world, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Supplier<Random> randomSupplier,
-                              @NotNull RenderContext context) {
+    public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier,
+                              RenderContext context) {
         int success = 0;
-        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1 && this.bakedLayerModel != null) {
-            final BlockPos downPos = pos.down();
-            final BlockState downState = world.getBlockState(downPos);
+        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
+                && this.bakedLayerModel != null) {
+            final var downPos = pos.down();
+            final var downState = world.getBlockState(downPos);
             if (downState.isSideSolidFullSquare(world, downPos, Direction.UP)) {
                 Vec3d offset = state.getModelOffset(world, pos);
                 boolean pushed = false;
                 if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {
-                    Vec3f offsetVec = new Vec3f((float) offset.x, (float) offset.y, (float) offset.z);
+                    var offsetVec = new Vec3f((float) offset.x, (float) offset.y, (float) offset.z);
                     context.pushTransform(quad -> {
                         Vec3f vec = null;
                         for (int i = 0; i < 4; i++) {
@@ -137,7 +138,8 @@ public class LBGCompiledLayerMetadata {
             }
         }
 
-        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1 && this.bakedAlternateModel != null) {
+        if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
+                && this.bakedAlternateModel != null) {
             ((FabricBakedModel) this.bakedAlternateModel).emitBlockQuads(world, state, pos, randomSupplier, context);
             success = 2;
         }

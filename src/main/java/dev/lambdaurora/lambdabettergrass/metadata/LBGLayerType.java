@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata;
 
-import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +32,18 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
-    private static List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
+    private static final List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
 
     public final Identifier id;
     public final Block block;
     public final Identifier modelId;
     private final String name;
 
-    public LBGLayerType(@NotNull Identifier id, @NotNull Block block, @NotNull Identifier modelId) {
+    public LBGLayerType(Identifier id, Block block, Identifier modelId) {
         this.id = id;
         this.block = block;
         this.modelId = modelId;
@@ -59,7 +57,7 @@ public class LBGLayerType implements Nameable {
      * @param modelGetter The model getter.
      * @return The unbaked model.
      */
-    public @NotNull UnbakedModel getLayerModel(@NotNull Function<Identifier, UnbakedModel> modelGetter) {
+    public UnbakedModel getLayerModel(Function<Identifier, UnbakedModel> modelGetter) {
         return modelGetter.apply(this.modelId);
     }
 
@@ -80,7 +78,7 @@ public class LBGLayerType implements Nameable {
     }
 
     public static @Nullable LBGLayerType fromName(String name) {
-        for (LBGLayerType type : LAYER_TYPES) {
+        for (var type : LAYER_TYPES) {
             if (type.getName().equals(name))
                 return type;
         }
@@ -88,18 +86,18 @@ public class LBGLayerType implements Nameable {
     }
 
     public static void load(Identifier resourceId, ResourceManager resourceManager) {
-        Identifier id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
+        var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
         try {
-            InputStream stream = resourceManager.getResource(resourceId).getInputStream();
-            JsonObject json = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            var stream = resourceManager.getResource(resourceId).getInputStream();
+            var json = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
 
-            Identifier affectId = new Identifier(json.get("block").getAsString());
-            Block block = Registry.BLOCK.get(affectId);
+            var affectId = new Identifier(json.get("block").getAsString());
+            var block = Registry.BLOCK.get(affectId);
 
             if (block == Blocks.AIR)
                 return;
 
-            Identifier modelId = new Identifier(json.get("model").getAsString());
+            var modelId = new Identifier(json.get("model").getAsString());
 
             stream.close();
 

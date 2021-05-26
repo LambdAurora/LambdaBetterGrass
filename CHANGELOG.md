@@ -51,5 +51,12 @@ The first release of LambdaBetterGrass!
  - Fix podzol better grass.
  - Updated [SpruceUI].
 
+### 1.1.2
+
+ - Added settings button to video settings.
+ - Minor optimization.
+ - Updated to Java 16.
+ - Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
