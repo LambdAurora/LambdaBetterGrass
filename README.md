@@ -19,23 +19,23 @@ Main issue is it's too rough even at Fancy settings.
 That's why I made my own mod, to fix this issue and provide an alternative of one of OptiFine features to the Fabric ecosystem!
 Grass blocks will now connect, and the nearby grass blocks will be smoothed.
 
-![pack.png with better grass](https://media.forgecdn.net/attachments/312/481/2020-09-11_16.png)
+![pack.png with better grass](images/pack.png)
 
-![mountain with better grass on grass and snowy grass](https://media.forgecdn.net/attachments/312/482/2020-09-11_16.png)
+![mountain with better grass on grass and snowy grass](images/better_grass.png)
 
-![Warped forest with better grass](https://media.forgecdn.net/attachments/311/374/2020-09-04_14.png)
+![Warped forest with better grass](images/better_grass_warped_forest.png)
 
-![Better snow](https://media-cdn.overwolf.wtf/attachments/311/370/2020-09-04_14.png)
+![Better snow](images/better_snow.png)
 
 Better snow with the optional included resource pack:
-![Optional better snow](https://media-cdn.overwolf.wtf/attachments/311/371/2020-09-04_14.png)
+![Optional better snow](images/better_snow_resource_pack.png)
 
 Better "snow" with the optional included resource pack in lush caves (credits to cavebiomes by SuperCoder79):
 
-![Optional better moss](https://media.forgecdn.net/attachments/339/496/2021-02-09_18.png)
+![Optional better moss](images/better_moss.png)
 
 Configuration screen:
-![config screen](https://media-cdn.overwolf.wtf/attachments/311/373/2020-09-04_14.png)
+![config screen](images/config_screen.png)
 
 Searching other mods to replace OptiFine? [Check out that list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
 
