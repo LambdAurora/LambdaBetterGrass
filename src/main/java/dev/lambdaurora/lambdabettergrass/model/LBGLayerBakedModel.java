@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model for layer method.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LBGLayerBakedModel extends ForwardingBakedModel {
@@ -45,7 +45,7 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 
     @Override
     public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
-        if (!LambdaBetterGrass.get().config.hasBetterLayer()) {
+        if (!LambdaBetterGrass.get().hasBetterLayer()) {
             // Don't touch the model.
             super.emitBlockQuads(world, state, pos, randomSupplier, context);
             return;

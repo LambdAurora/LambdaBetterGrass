@@ -34,7 +34,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -64,7 +64,7 @@ public class LBGLayerState extends LBGState {
     private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
                              ModelVariantMap.DeserializationContext deserializationContext) {
         var metadataId = Identifier.tryParse(json.get("data").getAsString());
-        var metadataResourceId = new Identifier(id.getNamespace(), metadataId.getPath() + ".json");
+        var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
         try {
             var resources = resourceManager.getAllResources(metadataResourceId);
             for (var resource : resources) {

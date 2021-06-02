@@ -37,7 +37,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -63,7 +63,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
             return;
         }
 
-        if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().config.hasBetterLayer()
+        if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().hasBetterLayer()
                 && state.getProperties().contains(Properties.SNOWY) && !state.get(Properties.SNOWY)) {
             var upPos = pos.up();
             var up = world.getBlockState(upPos);
@@ -127,7 +127,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 
     private static boolean canConnect(BlockRenderView world, BlockState self, BlockPos selfPos, BlockPos adjacentPos) {
         var adjacent = world.getBlockState(adjacentPos);
-        if (LambdaBetterGrass.get().config.hasBetterLayer() &&
+        if (LambdaBetterGrass.get().hasBetterLayer() &&
                 self.getBlock() instanceof SnowyBlock) {
             boolean selfSnowy = self.get(Properties.SNOWY);
 

@@ -50,8 +50,13 @@ let mc_version = MINECRAFT_VERSION_REGEX.exec(properties)[1];
 let mod_version = MOD_VERSION_REGEX.exec(properties)[1];
 let archives_base_name = ARCHIVES_BASE_NAME_REGEX.exec(properties)[1];
 
+function is_mc_non_release() {
+  return mc_version.match(/^\d\dw\d\d[a-z]$/) ||
+      mc_version.match(/^\d+\.\d+-(pre|rc)(\d+)$/);
+}
+
 function get_mc_version_string() {
-  if (mc_version.match(/^\d\dw\d\d[a-z]$/)) {
+  if (is_mc_non_release()) {
     return mc_version;
   }
   let last_dot = mc_version.lastIndexOf('.');
@@ -85,9 +90,9 @@ function try_publish() {
       version_body: json.body,
       dependencies: [],
       game_versions: [mc_version],
-      release_channel: 'release',
+      release_channel: is_mc_non_release() ? 'beta' : 'release',
       loaders: ['fabric'],
-      featured: !mc_version.match(/^\d\dw\d\d[a-z]$/)
+      featured: !is_mc_non_release()
     }));
     form.append(file, fs.createReadStream('build/libs/' + file), file);
 

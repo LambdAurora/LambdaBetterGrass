@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -35,9 +35,11 @@ public class LambdaBetterGrass implements ClientModInitializer {
     public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = mc("bettergrass/mask/standard_block_side_connect.png");
     public static final Identifier BETTER_GRASS_SIDE_BLEND_UP_MASK = mc("bettergrass/mask/grass_block_side_blend_up.png");
     public static final Identifier BETTER_GRASS_SIDE_ARCH_BLEND_MASK = mc("bettergrass/mask/grass_block_side_arch_blend.png");
+
     private static LambdaBetterGrass INSTANCE;
     public final Logger logger = LogManager.getLogger("lambdabettergrass");
     public final LBGConfig config = new LBGConfig(this);
+    private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
     public LBGResourcePack resourcePack;
 
     @Override
@@ -74,6 +76,17 @@ public class LambdaBetterGrass implements ClientModInitializer {
     }
 
     /**
+     * Returns whether the better layer feature is enabled or not.
+     *
+     * @return {@code true} if the better layer feature is enabled, else {@code false}
+     */
+    public boolean hasBetterLayer() {
+        if (this.config.hasBetterLayer())
+            return !this.betterLayerDisabled.get();
+        return false;
+    }
+
+    /**
      * Returns a LambdaBetterGrass Minecraft identifier.
      *
      * @param path The path.
@@ -90,5 +103,19 @@ public class LambdaBetterGrass implements ClientModInitializer {
      */
     public static LambdaBetterGrass get() {
         return INSTANCE;
+    }
+
+    /**
+     * Pushes the force-disable of the better layer feature.
+     */
+    public static void pushDisableBetterLayer() {
+        get().betterLayerDisabled.set(true);
+    }
+
+    /**
+     * Pops the force-disable of the better layer feature.
+     */
+    public static void popDisableBetterLayer() {
+        get().betterLayerDisabled.remove();
     }
 }
