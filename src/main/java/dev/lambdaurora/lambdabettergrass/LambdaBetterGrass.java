@@ -60,7 +60,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
     /**
      * Prints a message to the terminal.
      *
-     * @param info The message to print.
+     * @param info the message to print
      */
     public void log(String info) {
         this.logger.info("[LambdaBetterGrass] " + info);
@@ -69,7 +69,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
     /**
      * Prints a warning message to the terminal.
      *
-     * @param info The message to print.
+     * @param info the message to print
      */
     public void warn(String info) {
         this.logger.warn("[LambdaBetterGrass] " + info);
@@ -78,7 +78,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
     /**
      * Returns whether the better layer feature is enabled or not.
      *
-     * @return {@code true} if the better layer feature is enabled, else {@code false}
+     * @return {@code true} if the better layer feature is enabled, otherwise {@code false}
      */
     public boolean hasBetterLayer() {
         if (this.config.hasBetterLayer())
@@ -87,19 +87,16 @@ public class LambdaBetterGrass implements ClientModInitializer {
     }
 
     /**
-     * Returns a LambdaBetterGrass Minecraft identifier.
+     * {@return a LambdaBetterGrass Minecraft identifier}
      *
-     * @param path The path.
-     * @return The identifier.
+     * @param path the path
      */
-    public static net.minecraft.util.Identifier mc(@NotNull String path) {
-        return new net.minecraft.util.Identifier(NAMESPACE, path);
+    public static Identifier mc(@NotNull String path) {
+        return new Identifier(NAMESPACE, path);
     }
 
     /**
-     * Returns the LambdaBetterGrass mod instance.
-     *
-     * @return The mod instance.
+     * {@return the LambdaBetterGrass mod instance}
      */
     public static LambdaBetterGrass get() {
         return INSTANCE;

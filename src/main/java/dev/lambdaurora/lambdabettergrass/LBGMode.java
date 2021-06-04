@@ -40,16 +40,14 @@ public enum LBGMode implements Nameable {
     /**
      * Returns whether this mode enables better grass.
      *
-     * @return True if the mode enables better grass, else false.
+     * @return {@code true} if the mode enables better grass, otherwise {@code false}
      */
     public boolean isEnabled() {
         return this != OFF;
     }
 
     /**
-     * Returns the next better grass mode available.
-     *
-     * @return The next available better grass mode.
+     * {@return the next available better grass mode}
      */
     public LBGMode next() {
         var v = values();
@@ -59,9 +57,7 @@ public enum LBGMode implements Nameable {
     }
 
     /**
-     * Returns the translated text of the better grass mode.
-     *
-     * @return The translated text of the better grass mode.
+     * {@return the translated text of the better grass mode}
      */
     public @NotNull Text getTranslatedText() {
         return this.text;
@@ -75,8 +71,8 @@ public enum LBGMode implements Nameable {
     /**
      * Gets the better grass mode from its identifier.
      *
-     * @param id The identifier of the better grass mode.
-     * @return The better grass mode if found, else empty.
+     * @param id the identifier of the better grass mode
+     * @return the better grass mode if found, otherwise empty
      */
     public static @NotNull Optional<LBGMode> byId(@NotNull String id) {
         return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();

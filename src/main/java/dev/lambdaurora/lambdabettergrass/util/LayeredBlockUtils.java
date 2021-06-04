@@ -42,8 +42,8 @@ public final class LayeredBlockUtils {
     /**
      * Returns the unbaked model of snow layer.
      *
-     * @param modelGetter The model getter.
-     * @return The unbaked model.
+     * @param modelGetter the model getter
+     * @return the unbaked model
      */
     public static @Nullable UnbakedModel getSnowLayerModel(Function<Identifier, UnbakedModel> modelGetter) {
         return modelGetter.apply(LambdaBetterGrass.mc("block/snowy_layer"));

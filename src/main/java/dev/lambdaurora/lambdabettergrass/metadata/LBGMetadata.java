@@ -80,7 +80,7 @@ public class LBGMetadata {
     /**
      * Returns the next layer index to assign and increments the internal layer index counter.
      *
-     * @return The next layer index.
+     * @return the next layer index
      */
     protected int nextLayerIndex() {
         return this.lastLayerIndex++;
@@ -94,7 +94,7 @@ public class LBGMetadata {
     /**
      * Bakes the textures.
      *
-     * @param textureGetter The texture getter.
+     * @param textureGetter the texture getter
      */
     public void bakeTextures(Function<SpriteIdentifier, Sprite> textureGetter) {
         for (var layer : this.layers) {
@@ -105,8 +105,8 @@ public class LBGMetadata {
     /**
      * Returns the layer assigned to the specified color index.
      *
-     * @param colorIndex The color index.
-     * @return The optional layer.
+     * @param colorIndex the color index
+     * @return the optional layer
      */
     public Optional<LBGLayer> getLayer(int colorIndex) {
         for (var layer : this.layers) {
@@ -117,27 +117,21 @@ public class LBGMetadata {
     }
 
     /**
-     * Returns the textures.
-     *
-     * @return The textures.
+     * {@return the textures}
      */
     public Collection<SpriteIdentifier> getTextures() {
         return this.textures;
     }
 
     /**
-     * Returns the snowy variant of this.
-     *
-     * @return The snowy variant.
+     * {@return the snowy variant of this}
      */
     public @Nullable UnbakedModel getSnowyVariant() {
         return this.snowyVariant;
     }
 
     /**
-     * Returns the snowy model variant.
-     *
-     * @return The snowy model variant.
+     * {@return the snowy model variant}
      */
     public @Nullable BakedModel getSnowyModelVariant() {
         return this.snowyModelVariant;
@@ -146,7 +140,7 @@ public class LBGMetadata {
     /**
      * Propagates the baked model to other variants if applicable.
      *
-     * @param model The model to propagate.
+     * @param model the model to propagate
      */
     public void propagate(LBGBakedModel model) {
         if (this.snowyModelVariantProvider != null)

@@ -72,9 +72,9 @@ public class LBGGrassState extends LBGState {
     /**
      * Loads the metadata from the resource manager.
      *
-     * @param resourceManager The resource manager.
-     * @param metadataId The metadata identifier.
-     * @return The metadata if loaded successfully, else null
+     * @param resourceManager the resource manager
+     * @param metadataId the metadata identifier
+     * @return the metadata if loaded successfully, else {@code null}
      */
     private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
         var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
@@ -96,8 +96,8 @@ public class LBGGrassState extends LBGState {
     /**
      * Returns the metadata corresponding to the specified model identifier.
      *
-     * @param modelId The model identifier.
-     * @return A metadata if it exists for the given model id, else null.
+     * @param modelId the model identifier
+     * @return a metadata if it exists for the given model id, else {@code null}
      */
     public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
         if (this.metadata != null)

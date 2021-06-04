@@ -13,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id 'fabric-loom' version '0.8.15' // @TODO 0.8.16 is broken, once #410 is fixed revert to -SNAPSHOT
+    id 'fabric-loom' version '0.8.+'
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
@@ -76,7 +76,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
+    // Fabric API.
     modules.stream().map { fabricApi.module(it, project.fabric_api_version) }.forEach {
         modImplementation it
     }
@@ -133,6 +133,7 @@ shadowJar {
 
     relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
+remapJar.dependsOn(shadowJar)
 
 task shadowRemapJar(type: RemapJarTask) {
     dependsOn shadowJar

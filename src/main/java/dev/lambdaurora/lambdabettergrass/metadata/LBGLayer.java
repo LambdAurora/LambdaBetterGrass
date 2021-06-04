@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdabettergrass.metadata;
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.util.LBGTextureGenerator;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.texture.NativeImage;
@@ -22,13 +21,14 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * Represents a layer.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.0
  * @since 1.0.0
  */
 public class LBGLayer {
@@ -55,7 +55,7 @@ public class LBGLayer {
     private SpriteIdentifier blendUpMirroredTexture;
     private SpriteIdentifier archTexture;
 
-    private final Object2ObjectMap<String, Sprite> bakedSprites = new Object2ObjectOpenHashMap<>();
+    private final Map<String, Sprite> bakedSprites = new Object2ObjectOpenHashMap<>();
 
     public LBGLayer(LBGMetadata metadata, JsonObject json) {
         this.parentMetadata = metadata;
@@ -109,9 +109,9 @@ public class LBGLayer {
     /**
      * Returns the overriden texture with the specified name if it exists.
      *
-     * @param overrides The overrides JSON object.
-     * @param name The name of the texture.
-     * @return Null if not specified, else the identifier of the overriden texture.
+     * @param overrides the overrides JSON object
+     * @param name the name of the texture
+     * @return {@code null} if not specified, else the identifier of the overriden texture
      */
     private @Nullable SpriteIdentifier getOverridenTexture(JsonObject overrides, String name) {
         if (overrides.has(name)) {
@@ -183,7 +183,7 @@ public class LBGLayer {
     /**
      * Bakes the textures of this layer.
      *
-     * @param textureGetter The texture getter.
+     * @param textureGetter the texture getter
      */
     public void bakeTextures(Function<SpriteIdentifier, Sprite> textureGetter) {
         this.tryBakeSprite("connect", this.connectTexture, textureGetter);
@@ -208,8 +208,8 @@ public class LBGLayer {
     /**
      * Return the baked texture by its name.
      *
-     * @param name The name of the baked texture.
-     * @return The baked texture if found, else null.
+     * @param name the name of the baked texture
+     * @return the baked texture if found, else {@code null}
      */
     public @Nullable Sprite getBakedTexture(String name) {
         return this.bakedSprites.get(name);
@@ -226,9 +226,9 @@ public class LBGLayer {
     /**
      * Merges two layers.
      *
-     * @param parent The parent layer.
-     * @param child The child layer.
-     * @return The merged layer.
+     * @param parent the parent layer
+     * @param child the child layer
+     * @return the merged layer
      */
     public static LBGLayer mergeLayers(LBGLayer parent, LBGLayer child) {
         if (parent.colorIndex != child.colorIndex)

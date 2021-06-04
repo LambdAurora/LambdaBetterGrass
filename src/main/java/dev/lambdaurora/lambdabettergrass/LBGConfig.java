@@ -64,9 +64,7 @@ public class LBGConfig {
     }
 
     /**
-     * Returns the better grass mode.
-     *
-     * @return The better grass mode.
+     * {@return the better grass mode}
      */
     public LBGMode getMode() {
         return this.mode;
@@ -75,7 +73,7 @@ public class LBGConfig {
     /**
      * Sets the better grass mode.
      *
-     * @param mode The better grass mode.
+     * @param mode the better grass mode
      */
     public void setMode(@NotNull LBGMode mode) {
         this.mode = mode;
@@ -85,7 +83,7 @@ public class LBGConfig {
     /**
      * Returns whether better snow is enabled or not.
      *
-     * @return True if better snow is enabled, else false.
+     * @return {@code true} if better snow is enabled, otherwise {@code false}
      */
     public boolean hasBetterLayer() {
         return this.config.getOrElse("better_layer", DEFAULT_BETTER_LAYER);
@@ -94,7 +92,7 @@ public class LBGConfig {
     /**
      * Sets whether better snow is enabled or not.
      *
-     * @param betterSnow True if better snow is enabled, else false.
+     * @param betterSnow {@code true} if better snow is enabled, otherwise {@code false}
      */
     public void setBetterLayer(boolean betterSnow) {
         this.config.set("better_layer", betterSnow);
@@ -103,7 +101,7 @@ public class LBGConfig {
     /**
      * Returns whether this mod is in debug mode.
      *
-     * @return True if this mod is in debug mode, else false.
+     * @return {@code true} if this mod is in debug mode, otherwise {@code false}
      */
     public boolean isDebug() {
         return this.config.getOrElse("debug", DEFAULT_DEBUG);
@@ -112,7 +110,7 @@ public class LBGConfig {
     /**
      * Sets whether this mod is in debug mode.
      *
-     * @param debug True if this mod is in debug mode, else false.
+     * @param debug {@code true} if this mod is in debug mode, otherwise {@code false}
      */
     public void setDebug(boolean debug) {
         this.config.set("debug", debug);

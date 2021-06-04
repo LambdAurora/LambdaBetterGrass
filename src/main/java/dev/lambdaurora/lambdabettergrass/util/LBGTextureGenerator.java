@@ -30,8 +30,8 @@ public enum LBGTextureGenerator {
     /**
      * Returns the fallback {@link NativeImage} instance.
      *
-     * @param resourceManager The resource manager.
-     * @return The fallback {@link NativeImage} instance if possible, else a new instance with non-cleared buffer.
+     * @param resourceManager the resource manager
+     * @return the fallback {@link NativeImage} instance if possible, otherwise a new instance with non-cleared buffer
      */
     private static NativeImage getFallbackNativeImage(ResourceManager resourceManager) {
         if (!resourceManager.containsResource(FALLBACK_TEXTURE)) {
@@ -50,9 +50,9 @@ public enum LBGTextureGenerator {
     /**
      * Returns the {@link NativeImage} instance from the texture at the specified path.
      *
-     * @param resourceManager The resource manager.
-     * @param path The texture path.
-     * @return The {@link NativeImage} instance if possible, else the fallback texture.
+     * @param resourceManager the resource manager
+     * @param path the texture path
+     * @return the {@link NativeImage} instance if possible, otherwise the fallback texture
      * @see #getFallbackNativeImage(ResourceManager)
      */
     public static NativeImage getNativeImage(ResourceManager resourceManager, Identifier path) {
@@ -73,8 +73,8 @@ public enum LBGTextureGenerator {
     /**
      * Returns a new texture which is the mirrored version of the specified texture.
      *
-     * @param source The source texture.
-     * @return The mirrored texture.
+     * @param source the source texture
+     * @return the mirrored texture
      */
     public static NativeImage mirrorImage(NativeImage source) {
         var result = new NativeImage(source.getWidth(), source.getHeight(), false);
@@ -91,11 +91,11 @@ public enum LBGTextureGenerator {
     /**
      * Generates the side texture using the original side texture, the top texture and the mask texture.
      *
-     * @param target The texture name.
-     * @param side The original side texture.
-     * @param top The top texture.
-     * @param mask The mask texture.
-     * @return The generated texture identifier.
+     * @param target the texture name
+     * @param side the original side texture
+     * @param top the top texture
+     * @param mask the mask texture
+     * @return the generated texture identifier
      */
     public static Identifier generateTexture(String target, NativeImage side, NativeImage top, NativeImage mask) {
         var image = applyMask(side, top, mask);
@@ -108,10 +108,10 @@ public enum LBGTextureGenerator {
      * <p>
      * If a pixel is alpha 255 in the mask texture, then the pixel will be from the top texture, else it will be from the source texture.
      *
-     * @param source The source texture.
-     * @param top The top texture.
-     * @param mask The mask texture.
-     * @return The generated texture.
+     * @param source the source texture
+     * @param top the top texture
+     * @param mask the mask texture
+     * @return the generated texture
      */
     public static NativeImage applyMask(NativeImage source, NativeImage top, NativeImage mask) {
         // Determine the highest resolution from the images.

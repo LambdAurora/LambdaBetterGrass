@@ -77,8 +77,8 @@ public abstract class LBGState {
     /**
      * Returns the state from the cache using its identifier.
      *
-     * @param id The identifier of the state.
-     * @return The state if cached, else null.
+     * @param id the identifier of the state
+     * @return the state if cached, else {@code null}
      */
     public static @Nullable LBGState getMetadataState(Identifier id) {
         return LBG_STATES.get(id);
