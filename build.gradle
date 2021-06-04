@@ -1,22 +1,8 @@
-buildscript {
-    // Fix a bug with shadow plugin having an outdated dependency.
-    dependencies {
-        constraints {
-            ["asm", "asm-util", "asm-tree", "asm-analysis"].each {
-                classpath("org.ow2.asm:$it") {
-                    version { require("9.1") }
-                    because("Fabric's TinyRemapper requires ASM 9")
-                }
-            }
-        }
-    }
-}
-
 plugins {
     id 'fabric-loom' version '0.8.+'
     id 'java-library'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'org.cadixdev.licenser' version '0.6.0'
 }
 
