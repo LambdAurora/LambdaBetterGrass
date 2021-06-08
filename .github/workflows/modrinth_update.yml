@@ -17,17 +17,7 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Set up NodeJS
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
       - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Fetch Node modules
-        run: cd update && npm install && cd ..
-      - name: Publish to Modrinth
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: node update/modrinth.mjs
+        run: ./gradlew publishModrinth
