@@ -42,8 +42,8 @@ String getMCVersionString() {
     if (isMCVersionNonRelease()) {
         return project.minecraft_version
     }
-    int lastDot = project.minecraft_version.lastIndexOf('.')
-    return project.minecraft_version.substring(0, lastDot)
+    def version = project.minecraft_version.split('\\.')
+    return version[0] + '.' + version[1]
 }
 
 String parseReadme() {
@@ -161,6 +161,7 @@ task publishModrinth(type: TaskModrinthUpload) {
     token = System.getenv('MODRINTH_TOKEN')
     projectId = project.modrinth_id
     versionNumber = version
+    versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
     uploadFile = shadowRemapJar
     addGameVersion((String) project.minecraft_version)
     addLoader('fabric')
@@ -184,8 +185,8 @@ task publishModrinth(type: TaskModrinthUpload) {
         var json = new JsonObject()
         json.addProperty("body", parseReadme())
         patch.setEntity(EntityBuilder.create()
-                .text(json.toString())
-                .contentType(ContentType.APPLICATION_JSON)
+                .setText(json.toString())
+                .setContentType(ContentType.APPLICATION_JSON)
                 .build())
 
         final def response = client.execute(patch)
