@@ -8,7 +8,7 @@
     },
     {
       "textures": {
-        "top": "lambdabettergrass:block/snow_outline",
+        "top": "lambdabettergrass:block/transparent",
         "side": "lambdabettergrass:block/transparent",
         "overrides": {
           "connect": "lambdabettergrass:block/transparent"
