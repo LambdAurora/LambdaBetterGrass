@@ -168,7 +168,7 @@ task publishModrinth(type: TaskModrinthUpload) {
     versionType = isMCVersionNonRelease() ? VersionType.BETA : VersionType.RELEASE
 
     // Changelog fetching
-    def changelogText = file('CHANGELOG.md').text
+    def changelogText = file('CHANGELOG.md').text.replaceAll('\\r\\n', '\n')
     def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
     def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
     def matcher = changelogText =~ changelogRegex
