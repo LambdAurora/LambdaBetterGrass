@@ -97,7 +97,7 @@ public class LBGConfig {
      * @param betterSnow {@code true} if better snow is enabled, otherwise {@code false}
      */
     public void setBetterLayer(boolean betterSnow) {
-    	this.betterLayer = betterSnow;
+        this.betterLayer = betterSnow;
         this.config.set("better_layer", betterSnow);
     }
 
