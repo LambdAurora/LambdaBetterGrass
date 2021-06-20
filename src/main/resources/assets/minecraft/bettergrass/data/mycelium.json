@@ -4,9 +4,10 @@
       "textures": {
         "top": "minecraft:block/mycelium_top",
         "side": "minecraft:block/mycelium_side",
-        "masks": {
-          "blend_up": "lambdabettergrass:bettergrass/mask/grass_block_side_underlay_blend_up",
-          "arch": "lambdabettergrass:bettergrass/mask/grass_block_side_underlay_arch_blend"
+        "overrides": {
+          "blend_up": "lambdabettergrass:block/mycelium/mycelium_blend_up",
+          "blend_up_m": "lambdabettergrass:block/mycelium/mycelium_blend_up_m",
+          "arch": "lambdabettergrass:block/mycelium/mycelium_side_arch"
         }
       }
     }
