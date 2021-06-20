@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "See mod kasutab ressursipakki, et otsustada, milliseid plokke muudetakse.",
+  "lambdabettergrass.menu.info.2": "See tähendab, et plokkidel parema muru/lume funktsiooni lubamiseks",
+  "lambdabettergrass.menu.info.3": "tuleb neid ressursipakkidega muuta.",
+  "lambdabettergrass.menu.info.read_more": "Loe lisaks saidil: %s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass seadistus",
+  "lambdabettergrass.menu.title.info": "Kuidas see mod töötab?",
+  "lambdabettergrass.option.better_snow": "Parem lumi",
+  "lambdabettergrass.option.mode": "Parem muru",
+  "lambdabettergrass.tooltip.better_snow": "Lubab parema lume funktsiooni.\nLubamisel võivad mõned plokid saada lumise variandi ja/või täiendava lumekihi, kui lumi on lähedal.\nMärkus: see toimib ka teistel kihtidega lumesarnastel plokkidel, kui vajalikud failid on olemas.",
+  "lambdabettergrass.tooltip.mode": "Lubab parema muru funktsiooni.\n - %s keelab parema muru funktsiooni täielikult.\n - %s kopeerib muruploki pealmise tekstuuri selle igale küljele. Sarnaneb OptiFine'i \"kiire\" valikuga.\n - %s ühendab muruplokitekstuurid nagu OptiFine'i \"uhke\" valik.\n - %s ühendab muruplokitekstuurid ja silub lähedalasuvate muruplokkide küljetekstuurid."
+}
