@@ -51,6 +51,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
         FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> {
             ResourceManagerHelper.registerBuiltinResourcePack(mc("default"), modContainer, ResourcePackActivationType.DEFAULT_ENABLED);
             ResourceManagerHelper.registerBuiltinResourcePack(mc("32x"), modContainer, ResourcePackActivationType.NORMAL);
+            ResourceManagerHelper.registerBuiltinResourcePack(mc("compat"), modContainer, ResourcePackActivationType.NORMAL);
         });
 
         LBGState.registerType("grass", (id, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
