@@ -18,8 +18,8 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -30,7 +30,7 @@ import java.util.function.Function;
  * Represents the LambdaBetterGrass unbaked model.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGUnbakedModel implements UnbakedModel {
@@ -58,10 +58,9 @@ public class LBGUnbakedModel implements UnbakedModel {
         return textures;
     }
 
-    @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
-                           Identifier modelId) {
+    public @Nullable BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
+                                     Identifier modelId) {
         this.metadata.bakeTextures(textureGetter);
 
         var model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);

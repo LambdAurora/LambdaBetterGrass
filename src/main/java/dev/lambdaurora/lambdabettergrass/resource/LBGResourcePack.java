@@ -19,8 +19,8 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -114,9 +114,8 @@ public class LBGResourcePack implements ResourcePack {
         return NAMESPACES;
     }
 
-    @Nullable
     @Override
-    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
+    public <T> @Nullable T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
         return null;
     }
 

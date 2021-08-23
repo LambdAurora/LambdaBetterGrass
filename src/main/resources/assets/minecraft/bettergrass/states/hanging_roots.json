@@ -1,4 +1,8 @@
 {
   "type": "layer",
-  "data": "minecraft:bettergrass/data/hanging_roots"
+  "variants": {
+    "waterlogged=false": {
+      "data": "minecraft:bettergrass/data/on_ceiling"
+    }
+  }
 }

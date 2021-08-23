@@ -13,6 +13,7 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -29,7 +30,7 @@ import java.util.function.Function;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -50,6 +51,10 @@ public final class LayeredBlockUtils {
     }
 
     public static boolean shouldGrassBeSnowy(BlockRenderView world, BlockPos pos, Identifier stateId, BlockState upState, boolean onlyPureSnow) {
+        // Ignore blocks that are not rendered through the normal system.
+        if (upState.getRenderType() != BlockRenderType.MODEL)
+            return false;
+
         var state = LBGState.getMetadataState(stateId);
         if (!(state instanceof LBGLayerState layerState))
             return false;
@@ -68,7 +73,7 @@ public final class LayeredBlockUtils {
 
         boolean[] shouldTry = {false};
         layerState.forEach(modelVariant, metadata -> {
-            if (metadata.layerType.getName().equals("snow")) {
+            if (metadata.layerType.getName().equals("snow") && metadata.hasLayerModel()) {
                 shouldTry[0] = true;
             }
         });

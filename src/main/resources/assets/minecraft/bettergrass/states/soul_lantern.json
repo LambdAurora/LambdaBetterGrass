@@ -2,7 +2,7 @@
   "type": "layer",
   "variants": {
     "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/soul_lantern"
+      "data": "minecraft:bettergrass/data/lantern"
     }
   }
 }

@@ -1,429 +1,611 @@
-[
-  "acacia_door",
-  {
-    "id": "acacia_fence",
-    "waterloggable": true
-  },
-  "acacia_fence_gate",
-  "acacia_sapling",
-  {
-    "id": "acacia_trapdoor",
-    "waterloggable": true
-  },
-  "allium",
-  {
-    "id": "amethyst_cluster",
-    "waterloggable": true
-  },
-  "anvil",
-  "azure_bluet",
-  "bamboo",
-  "bamboo_sapling",
-  "bell",
-  {
-    "id": "big_dripleaf",
-    "waterloggable": true
-  },
-  {
-    "id": "big_dripleaf_stem",
-    "waterloggable": true
-  },
-  "birch_door",
-  {
-    "id": "birch_fence",
-    "waterloggable": true
-  },
-  "birch_fence_gate",
-  "birch_sapling",
-  {
-    "id": "birch_trapdoor",
-    "watterloggable": true
-  },
-  {
-    "id": "black_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "blue_candle",
-    "waterloggable": true
-  },
-  "blue_orchid",
-  {
-    "id": "brain_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "brain_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "brain_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "brown_candle",
-    "waterloggable": true
-  },
-  "brown_mushroom",
-  {
-    "id": "bubble_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "bubble_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "bubble_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "candle",
-    "waterloggable": true
-  },
-  "cauldron",
-  "cave_vines_head",
-  {
-    "id": "chain",
-    "waterloggable": true
-  },
-  "chipped_anvil",
-  "cornflower",
-  "crimson_door",
-  {
-    "id": "crimson_fence",
-    "waterloggable": true
-  },
-  "crimson_fence_gate",
-  "crimson_fungus",
-  "crimson_roots",
-  {
-    "id": "crimson_trapdoor",
-    "waterloggable": true
-  },
-  {
-    "id": "cyan_candle",
-    "waterloggable": true
-  },
-  "damaged_anvil",
-  "dandelion",
-  "dark_oak_door",
-  {
-    "id": "dark_oak_fence",
-    "waterloggable": true
-  },
-  "dark_oak_fence_gate",
-  "dark_oak_sapling",
-  {
-    "id": "dark_oak_trapdoor",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_brain_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_brain_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_brain_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_bubble_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_bubble_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_bubble_coral_wall_fan",
-    "waterloggable": true
-  },
-  "dead_bush",
-  {
-    "id": "dead_fire_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_fire_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_fire_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_horn_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_horn_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_horn_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_tube_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_tube_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "dead_tube_coral_wall_fan",
-    "waterloggable": true
-  },
-  "end_rod",
-  "fern",
-  {
-    "id": "fire_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "fire_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "fire_coral_wall_fan",
-    "waterloggable": true
-  },
-  "flower_pot",
-  {
-    "id": "glow_lichen",
-    "waterloggable": true
-  },
-  "grass",
-  {
-    "id": "gray_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "green_candle",
-    "waterloggable": true
-  },
-  "grindstone",
-  "hanging_roots",
-  "hopper",
-  {
-    "id": "horn_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "horn_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "horn_coral_wall_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "iron_bars",
-    "waterloggable": true
-  },
-  "iron_door",
-  {
-    "id": "iron_trapdoor",
-    "waterloggable": true
-  },
-  "jungle_door",
-  {
-    "id": "jungle_fence",
-    "waterloggable": true
-  },
-  "jungle_fence_gate",
-  "jungle_sapling",
-  {
-    "id": "jungle_trapdoor",
-    "waterloggable": true
-  },
-  "ladder",
-  {
-    "id": "lantern",
-    "waterloggable": true
-  },
-  {
-    "id": "large_amethyst_bud",
-    "waterloggable": true
-  },
-  "large_fern",
-  "lava_cauldron",
-  "lever",
-  {
-    "id": "light_blue_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "light_gray_candle",
-    "waterloggable": true
-  },
-  "lilac",
-  "lily_of_the_valley",
-  {
-    "id": "lime_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "magenta_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "medium_amethyst_bud",
-    "waterloggable": true
-  },
-  {
-    "id": "nether_brick_fence",
-    "waterloggable": true
-  },
-  "nether_sprouts",
-  "oak_door",
-  {
-    "id": "oak_fence",
-    "waterloggable": true
-  },
-  "oak_fence_gate",
-  "oak_sapling",
-  {
-    "id": "oak_trapdoor",
-    "waterloggable": true
-  },
-  {
-    "id": "orange_candle",
-    "waterloggable": true
-  },
-  "orange_tulip",
-  "oxeye_daisy",
-  "peony",
-  {
-    "id": "pink_candle",
-    "waterloggable": true
-  },
-  "pink_tulip",
-  {
-    "id": "pointed_dripstone",
-    "waterloggable": true
-  },
-  "poppy",
-  "powder_snow_cauldron",
-  {
-    "id": "purple_candle",
-    "waterloggable": true
-  },
-  {
-    "id": "red_candle",
-    "waterloggable": true
-  },
-  "red_mushroom",
-  "red_tulip",
-  "redstone_torch",
-  "redstone_wall_torch",
-  "rose_bush",
-  {
-    "id": "scaffolding",
-    "waterloggable": true
-  },
-  {
-    "id": "sea_pickle",
-    "waterloggable": true
-  },
-  {
-    "id": "small_amethyst_bud",
-    "waterloggable": true
-  },
-  {
-    "id": "small_dripleaf",
-    "waterloggable": true
-  },
-  {
-    "id": "soul_lantern",
-    "waterloggable": true
-  },
-  "spore_blossom",
-  "spruce_door",
-  {
-    "id": "spruce_fence",
-    "waterloggable": true
-  },
-  "spruce_fence_gate",
-  "spruce_sapling",
-  {
-    "id": "spruce_trapdoor",
-    "waterloggable": true
-  },
-  "sugar_cane",
-  "sunflower",
-  "sweet_berry_bush",
-  "tall_grass",
-  "torch",
-  "tripwire",
-  "tripwire_hook",
-  {
-    "id": "tube_coral",
-    "waterloggable": true
-  },
-  {
-    "id": "tube_coral_fan",
-    "waterloggable": true
-  },
-  {
-    "id": "tube_coral_wall_fan",
-    "waterloggable": true
-  },
-  "twisting_vines",
-  "vine",
-  "warped_door",
-  {
-    "id": "warped_fence",
-    "waterloggable": true
-  },
-  "warped_fence_gate",
-  "warped_fungus",
-  "warped_roots",
-  {
-    "id": "warped_trapdoor",
-    "waterloggable": true
-  },
-  "water_cauldron",
-  "weeping_wines",
-  {
-    "id": "white_candle",
-    "waterloggable": true
-  },
-  "white_tulip",
-  "wither_rose",
-  {
-    "id": "yellow_candle",
-    "waterloggable": true
-  },
-
-  "cinderscapes:bramble_berry_bush",
-  "cinderscapes:crystinium",
-  "cinderscapes:ghastly_ectoplasm",
-  "cinderscapes:luminous_pod",
-  "cinderscapes:photofern",
-  "cinderscapes:polypite_quartz",
-  "cinderscapes:polypite_rose_quartz",
-  "cinderscapes:polypite_smoky_quartz",
-  "cinderscapes:polypite_sulfur_quartz",
-  "cinderscapes:pyracinth",
-  "cinderscapes:scorched_door",
-  "cinderscapes:scorched_fence",
-  "cinderscapes:scorched_fence_gate",
-  "cinderscapes:scorched_shrub",
-  "cinderscapes:scorched_sprouts",
-  "cinderscapes:scorched_tendrils",
-  "cinderscapes:scorched_trapdoor",
-  "cinderscapes:tall_photofern",
-  "cinderscapes:twilight_fescues",
-  "cinderscapes:twilight_tendrils",
-  "cinderscapes:umbral_door",
-  "cinderscapes:umbral_fence",
-  "cinderscapes:umbral_fence_gate",
-  "cinderscapes:umbral_fungus",
-  "cinderscapes:umbral_trapdoor"
-]
+{
+  "bed": [
+    "black_bed",
+    "blue_bed",
+    "brown_bed",
+    "cyan_bed",
+    "gray_bed",
+    "green_bed",
+    "light_blue_bed",
+    "light_gray_bed",
+    "lime_bed",
+    "magenta_bed",
+    "orange_bed",
+    "pink_bed",
+    "purple_bed",
+    "red_bed",
+    "white_bed",
+    "yellow_bed"
+  ],
+  "torch": [
+    "torch",
+    "wall_torch",
+    "redstone_torch",
+    "redstone_wall_torch",
+    "soul_torch",
+    "soul_wall_torch"
+  ],
+  "glass_pane": [
+    "black_stained_glass_pane",
+    "blue_stained_glass_pane",
+    "brown_stained_glass_pane",
+    "cyan_stained_glass_pane",
+    "glass_pane",
+    "gray_stained_glass_pane",
+    "green_stained_glass_pane",
+    "light_blue_stained_glass_pane",
+    "light_gray_stained_glass_pane",
+    "lime_stained_glass_pane",
+    "magenta_stained_glass_pane",
+    "orange_stained_glass_pane",
+    "pink_stained_glass_pane",
+    "purple_stained_glass_pane",
+    "red_stained_glass_pane",
+    "white_stained_glass_pane",
+    "yellow_stained_glass_pane"
+  ],
+  "head": [
+    "creeper_head",
+    "dragon_head",
+    "player_head",
+    "skeleton_head",
+    "wither_skeleton_head",
+    "zombie_head"
+  ],
+  "lantern": [
+    {
+      "id": "lantern",
+      "waterloggable": true
+    },
+    {
+      "id": "soul_lantern",
+      "waterloggable": true
+    }
+  ],
+  "on_ceiling": {
+    "entries": [
+      "cave_vines",
+      {
+        "id": "hanging_roots",
+        "waterloggable": true
+      },
+      "spore_blossom",
+      "weeping_vines"
+    ],
+    "data": {
+      "snow": {
+        "layer": false
+      }
+    }
+  },
+  "global": [
+    "acacia_door",
+    {
+      "id": "acacia_fence",
+      "waterloggable": true
+    },
+    "acacia_fence_gate",
+    "acacia_sapling",
+    {
+      "id": "acacia_trapdoor",
+      "waterloggable": true
+    },
+    "allium",
+    {
+      "id": "amethyst_cluster",
+      "waterloggable": true
+    },
+    {
+      "id": "andesite_wall",
+      "waterloggable": true
+    },
+    "anvil",
+    "azure_bluet",
+    "bamboo",
+    "bamboo_sapling",
+    "bell",
+    {
+      "id": "big_dripleaf",
+      "waterloggable": true
+    },
+    {
+      "id": "big_dripleaf_stem",
+      "waterloggable": true
+    },
+    "birch_door",
+    {
+      "id": "birch_fence",
+      "waterloggable": true
+    },
+    "birch_fence_gate",
+    "birch_sapling",
+    {
+      "id": "birch_trapdoor",
+      "watterloggable": true
+    },
+    {
+      "id": "black_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "blackstone_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "blue_candle",
+      "waterloggable": true
+    },
+    "blue_orchid",
+    {
+      "id": "brain_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "brain_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "brain_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "brewing_stand",
+      "data": {
+        "snow": {
+          "layer": true,
+          "offset": [
+            0,
+            0.001,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "id": "brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "brown_candle",
+      "waterloggable": true
+    },
+    "brown_mushroom",
+    {
+      "id": "bubble_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "bubble_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "bubble_coral_wall_fan",
+      "waterloggable": true
+    },
+    "cake",
+    {
+      "id": "candle",
+      "waterloggable": true
+    },
+    "cauldron",
+    "cave_vines_head",
+    {
+      "id": "chain",
+      "waterloggable": true
+    },
+    {
+      "id": "chest",
+      "waterloggable": true
+    },
+    "chipped_anvil",
+    {
+      "id": "cobbled_deepslate_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "cobblestone_wall",
+      "waterloggable": true
+    },
+    "cobweb",
+    {
+      "id": "conduit",
+      "waterloggable": true
+    },
+    "cornflower",
+    "crimson_door",
+    {
+      "id": "crimson_fence",
+      "waterloggable": true
+    },
+    "crimson_fence_gate",
+    "crimson_fungus",
+    "crimson_roots",
+    {
+      "id": "crimson_trapdoor",
+      "waterloggable": true
+    },
+    {
+      "id": "cyan_candle",
+      "waterloggable": true
+    },
+    "damaged_anvil",
+    "dandelion",
+    "dark_oak_door",
+    {
+      "id": "dark_oak_fence",
+      "waterloggable": true
+    },
+    "dark_oak_fence_gate",
+    "dark_oak_sapling",
+    {
+      "id": "dark_oak_trapdoor",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_brain_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_brain_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_brain_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_bubble_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_bubble_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_bubble_coral_wall_fan",
+      "waterloggable": true
+    },
+    "dead_bush",
+    {
+      "id": "dead_fire_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_fire_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_fire_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_horn_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_horn_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_horn_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_tube_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_tube_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "dead_tube_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "deepslate_brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "deepslate_tile_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "diorite_wall",
+      "waterloggable": true
+    },
+    "end_rod",
+    {
+      "id": "end_stone_brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "ender_chest",
+      "waterloggable": true
+    },
+    "fern",
+    {
+      "id": "fire_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "fire_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "fire_coral_wall_fan",
+      "waterloggable": true
+    },
+    "flower_pot",
+    {
+      "id": "glow_lichen",
+      "waterloggable": true
+    },
+    {
+      "id": "granite_wall",
+      "waterloggable": true
+    },
+    "grass",
+    {
+      "id": "gray_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "green_candle",
+      "waterloggable": true
+    },
+    "grindstone",
+    "hopper",
+    {
+      "id": "horn_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "horn_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "horn_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "iron_bars",
+      "waterloggable": true
+    },
+    "iron_door",
+    {
+      "id": "iron_trapdoor",
+      "waterloggable": true
+    },
+    "jungle_door",
+    {
+      "id": "jungle_fence",
+      "waterloggable": true
+    },
+    "jungle_fence_gate",
+    "jungle_sapling",
+    {
+      "id": "jungle_trapdoor",
+      "waterloggable": true
+    },
+    "ladder",
+    {
+      "id": "large_amethyst_bud",
+      "waterloggable": true
+    },
+    "large_fern",
+    "lava_cauldron",
+    "lever",
+    {
+      "id": "light_blue_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "light_gray_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "lightning_rod",
+      "waterloggable": true
+    },
+    "lilac",
+    "lily_of_the_valley",
+    {
+      "id": "lime_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "magenta_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "medium_amethyst_bud",
+      "waterloggable": true
+    },
+    {
+      "id": "mossy_cobblestone_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "mossy_stone_brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "nether_brick_fence",
+      "waterloggable": true
+    },
+    {
+      "id": "nether_brick_wall",
+      "waterloggable": true
+    },
+    "nether_sprouts",
+    "oak_door",
+    {
+      "id": "oak_fence",
+      "waterloggable": true
+    },
+    "oak_fence_gate",
+    "oak_sapling",
+    {
+      "id": "oak_trapdoor",
+      "waterloggable": true
+    },
+    {
+      "id": "orange_candle",
+      "waterloggable": true
+    },
+    "orange_tulip",
+    "oxeye_daisy",
+    "peony",
+    {
+      "id": "pink_candle",
+      "waterloggable": true
+    },
+    "pink_tulip",
+    {
+      "id": "pointed_dripstone",
+      "waterloggable": true
+    },
+    {
+      "id": "polished_blackstone_brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "polished_blackstone_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "polished_deepslate_wall",
+      "waterloggable": true
+    },
+    "poppy",
+    "powder_snow_cauldron",
+    {
+      "id": "prismarine_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "purple_candle",
+      "waterloggable": true
+    },
+    {
+      "id": "red_candle",
+      "waterloggable": true
+    },
+    "red_mushroom",
+    {
+      "id": "red_nether_brick_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "red_sandstone_wall",
+      "waterloggable": true
+    },
+    "red_tulip",
+    "rose_bush",
+    {
+      "id": "sandstone_wall",
+      "waterloggable": true
+    },
+    {
+      "id": "scaffolding",
+      "waterloggable": true
+    },
+    {
+      "id": "sea_pickle",
+      "waterloggable": true
+    },
+    {
+      "id": "small_amethyst_bud",
+      "waterloggable": true
+    },
+    {
+      "id": "small_dripleaf",
+      "waterloggable": true
+    },
+    "spruce_door",
+    {
+      "id": "spruce_fence",
+      "waterloggable": true
+    },
+    "spruce_fence_gate",
+    "spruce_sapling",
+    {
+      "id": "spruce_trapdoor",
+      "waterloggable": true
+    },
+    {
+      "id": "stone_brick_wall",
+      "waterloggable": true
+    },
+    "sugar_cane",
+    "sunflower",
+    "sweet_berry_bush",
+    "tall_grass",
+    "tripwire",
+    "tripwire_hook",
+    {
+      "id": "tube_coral",
+      "waterloggable": true
+    },
+    {
+      "id": "tube_coral_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "tube_coral_wall_fan",
+      "waterloggable": true
+    },
+    "twisting_vines",
+    "vine",
+    "warped_door",
+    {
+      "id": "warped_fence",
+      "waterloggable": true
+    },
+    "warped_fence_gate",
+    "warped_fungus",
+    "warped_roots",
+    {
+      "id": "warped_trapdoor",
+      "waterloggable": true
+    },
+    "water_cauldron",
+    "weeping_wines",
+    {
+      "id": "white_candle",
+      "waterloggable": true
+    },
+    "white_tulip",
+    "wither_rose",
+    {
+      "id": "yellow_candle",
+      "waterloggable": true
+    },
+    "cinderscapes:bramble_berry_bush",
+    "cinderscapes:crystinium",
+    "cinderscapes:ghastly_ectoplasm",
+    "cinderscapes:luminous_pod",
+    "cinderscapes:photofern",
+    "cinderscapes:polypite_quartz",
+    "cinderscapes:polypite_rose_quartz",
+    "cinderscapes:polypite_smoky_quartz",
+    "cinderscapes:polypite_sulfur_quartz",
+    "cinderscapes:pyracinth",
+    "cinderscapes:scorched_door",
+    "cinderscapes:scorched_fence",
+    "cinderscapes:scorched_fence_gate",
+    "cinderscapes:scorched_shrub",
+    "cinderscapes:scorched_sprouts",
+    "cinderscapes:scorched_tendrils",
+    "cinderscapes:scorched_trapdoor",
+    "cinderscapes:tall_photofern",
+    "cinderscapes:twilight_fescues",
+    "cinderscapes:twilight_tendrils",
+    "cinderscapes:umbral_door",
+    "cinderscapes:umbral_fence",
+    "cinderscapes:umbral_fence_gate",
+    "cinderscapes:umbral_fungus",
+    "cinderscapes:umbral_trapdoor"
+  ]
+}

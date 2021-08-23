@@ -2,37 +2,50 @@ import * as fs from 'fs';
 
 let better_snow = JSON.parse(fs.readFileSync('datagen/better_snow.json', 'utf-8'));
 
-function parse_id(raw_id) {
-    let result;
-    if (!raw_id.includes(':'))
-        result = {namespace: 'minecraft', path: raw_id};
-    else {
-        let id = raw_id.split(':');
-        result = {namespace: id[0], path: id[1]};
+class Identifier {
+    constructor(namespace, path) {
+        this.namespace = namespace;
+        this.path = path;
     }
-    result.to_string = function () {
+
+    to_string() {
         return `${this.namespace}:${this.path}`;
     }
-    return result;
 }
 
-for (let block of better_snow) {
+function parse_id(raw_id) {
+    if (!raw_id.includes(':'))
+        return new Identifier('minecraft', raw_id);
+    else {
+        let id = raw_id.split(':');
+        return new Identifier(id[0], id[1]);
+    }
+}
+
+function write_to_file(path, data) {
+    fs.writeFileSync(path, JSON.stringify(data, null, 2), {encoding: 'utf-8'});
+}
+
+function get_state_path(id) {
+    return `src/main/resources/assets/${id.namespace}/bettergrass/states/${id.path}.json`;
+}
+
+function make_state_json(block, data_provider) {
     let id;
+    let data = undefined;
     let waterloggable = false;
 
     if (typeof block === 'string') {
         id = parse_id(block);
     } else {
         id = parse_id(block.id);
-        waterloggable = block.waterloggable;
+        data = block.data;
+        waterloggable = block.waterloggable !== undefined ? block.waterloggable : false;
     }
-
-    let state_path = `src/main/resources/assets/${id.namespace}/bettergrass/states/${id.path}.json`;
-    let data_path = `src/main/resources/assets/${id.namespace}/bettergrass/data/${id.path}.json`;
 
     let state_json = {
         type: 'layer',
-        data: `${id.namespace}:bettergrass/data/${id.path}`
+        data: data_provider(id)
     };
 
     if (waterloggable) {
@@ -40,15 +53,21 @@ for (let block of better_snow) {
             type: 'layer',
             variants: {
                 'waterlogged=false': {
-                    data: `${id.namespace}:bettergrass/data/${id.path}`
+                    data: data_provider(id)
                 }
             }
         }
     }
 
-    fs.writeFileSync(state_path, JSON.stringify(state_json, null, 2), {encoding: 'utf-8'});
+    return {id: id, path: get_state_path(id), json: state_json, data: data};
+}
 
-    fs.writeFileSync(data_path, JSON.stringify({
+function get_data_path(id) {
+    return `src/main/resources/assets/${id.namespace}/bettergrass/data/${id.path}.json`;
+}
+
+function make_data_json(options) {
+    return Object.assign({
         snow: {
             layer: true
         },
@@ -58,7 +77,51 @@ for (let block of better_snow) {
         ash: {
             layer: true
         }
-    }, null, 2))
+    }, options);
+}
 
-    console.log(`Wrote better snow data for ${id.to_string()}.`);
+function get_group_data(raw) {
+    let entries;
+    let data = make_data_json();
+    if (raw instanceof Array) {
+        entries = raw;
+    } else {
+        entries = raw.entries;
+        if (raw.data !== undefined) {
+            data = make_data_json(raw.data);
+        }
+    }
+
+    return {entries: entries, data: data};
+}
+
+for (const [group, group_raw_data] of Object.entries(better_snow)) {
+    if (group === "global") {
+        for (let block of group_raw_data) {
+            let state_data = make_state_json(block, id => `${id.namespace}:bettergrass/data/${id.path}`);
+            let data_path = get_data_path(state_data.id);
+
+            write_to_file(state_data.path, state_data.json);
+            write_to_file(data_path, make_data_json(state_data.data));
+
+            console.log(`Wrote better snow data for ${state_data.id.to_string()}.`);
+        }
+    } else {
+        const group_data = get_group_data(group_raw_data);
+        const data_id = `minecraft:bettergrass/data/${group}`;
+
+        console.log(`Writing better snow data for group ${group} (${group_data.entries.length} entries)...`);
+
+        write_to_file(get_data_path(parse_id(group)), group_data.data);
+
+        let i = 0;
+        for (let block of group_data.entries) {
+            i++;
+
+            let state_data = make_state_json(block, _ => data_id);
+            write_to_file(state_data.path, state_data.json);
+
+            console.log(`  => Wrote better snow data for ${state_data.id.to_string()} (${i}/${group_data.entries.length} entries).`);
+        }
+    }
 }

@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -19,7 +20,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.aperlambda.lambdacommon.LambdaConstants;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -68,7 +68,7 @@ public class LBGLayerState extends LBGState {
         try {
             var resources = resourceManager.getAllResources(metadataResourceId);
             for (var resource : resources) {
-                var metadataJson = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
+                var metadataJson = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
 
                 for (var entry : metadataJson.entrySet()) {
                     var type = LBGLayerType.fromName(entry.getKey());
@@ -125,10 +125,10 @@ public class LBGLayerState extends LBGState {
 
                 entry.getValue().forEach(metadata -> {
                     var models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
-                    if (models.key == null && models.value == null)
+                    if (models.isEmpty())
                         return;
 
-                    metadatas.add(new LBGCompiledLayerMetadata(metadata.layerType, models.key, models.value));
+                    metadatas.add(new LBGCompiledLayerMetadata(metadata.layerType, metadata.offset(), models));
                 });
 
                 if (metadatas.size() != 0) {

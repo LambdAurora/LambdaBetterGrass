@@ -16,7 +16,7 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.util.Identifier;
-import org.aperlambda.lambdacommon.utils.Pair;
+import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.StringReader;
@@ -26,13 +26,14 @@ import java.util.function.Function;
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
     public final Identifier id;
     public final LBGLayerType layerType;
     private final boolean layerModel;
+    private final @Nullable Vec3f offset;
     private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
     private UnbakedModel alternateModel;
     private final boolean hasAlternateModel;
@@ -47,6 +48,14 @@ public class LBGLayerMetadata {
         } else {
             this.layerModel = false;
         }
+
+        if (json.has("offset")) {
+            var offsetJson = json.get("offset");
+            if (offsetJson.isJsonArray()) {
+                var offsetArray = offsetJson.getAsJsonArray();
+                this.offset = new Vec3f(offsetArray.get(0).getAsFloat(), offsetArray.get(1).getAsFloat(), offsetArray.get(2).getAsFloat());
+            } else this.offset = null;
+        } else this.offset = null;
 
         if (!json.has("block_state")) {
             this.alternateModel = null;
@@ -63,8 +72,15 @@ public class LBGLayerMetadata {
         this.hasAlternateModel = true;
     }
 
-    public Pair<UnbakedModel, UnbakedModel> getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-                                                                  Function<Identifier, UnbakedModel> modelGetter) {
+    public boolean hasLayerModel() {
+        return this.layerModel;
+    }
+
+    public @Nullable Vec3f offset() {
+        return this.offset;
+    }
+
+    public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel, Function<Identifier, UnbakedModel> modelGetter) {
         UnbakedModel layerModel = null;
         if (this.layerModel) {
             layerModel = this.layerType.getLayerModel(modelGetter);
@@ -82,7 +98,7 @@ public class LBGLayerMetadata {
             }
         }
 
-        return Pair.of(layerModel, alternateModel);
+        return new LayerUnbakedModels(layerModel, alternateModel);
     }
 
     @Override
@@ -93,5 +109,11 @@ public class LBGLayerMetadata {
                 ", layerModel=" + layerModel +
                 ", hasAlternateModel=" + hasAlternateModel +
                 '}';
+    }
+
+    public record LayerUnbakedModels(@Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
+        public boolean isEmpty() {
+            return this.layerModel() == null && this.alternateModel() == null;
+        }
     }
 }

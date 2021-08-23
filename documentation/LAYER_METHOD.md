@@ -35,6 +35,7 @@ The root object will contain fields for each layer type to override.
 
 Each layer type object contain:
  - `layer` - True if the mod should add the layer model.
+ - `offset` (optional) - A 3-component array representing the XYZ offset of the original model. Doesn't apply if a custom model is provided.
  - `block_state` (optional) - A custom block state to provide a custom model of the block state, useful to provide snowy variations for example.
 
 Layer metadata files from different resource packs are merged.
@@ -64,6 +65,38 @@ In `assets/minecraft/bettergrass/data/lilac.json`:
 {
   "snow": {
     "layer": true
+  },
+  "moss": {
+    "layer": true
+  },
+  "ash": {
+    "layer": true
+  }
+}
+```
+
+#### Brewing Stand
+
+In `assets/minecraft/bettergrass/states/brewing_stand.json`:
+
+```json
+{
+  "type": "layer",
+  "data": "minecraft:bettergrass/data/brewing_stand"
+}
+```
+
+In `assets/minecraft/bettergrass/data/brewing_stand.json`:
+
+```json
+{
+  "snow": {
+    "layer": true,
+    "offset": [
+      0,
+      0.001,
+      0
+    ]
   },
   "moss": {
     "layer": true

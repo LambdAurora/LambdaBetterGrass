@@ -1,0 +1,16 @@
+{
+  "snow": {
+    "layer": true,
+    "offset": [
+      0,
+      0.001,
+      0
+    ]
+  },
+  "moss": {
+    "layer": true
+  },
+  "ash": {
+    "layer": true
+  }
+}

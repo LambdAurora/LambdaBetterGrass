@@ -31,14 +31,11 @@
     "minecraft": ">=1.17",
     "fabric-renderer-api-v1": "*",
     "fabric-resource-loader-v0": ">=0.4.7",
-    "spruceui": ">=3.1.0",
+    "spruceui": ">=3.3.0",
     "java": ">=16"
   },
   "recommends": {
-    "modmenu": ">=2.0.0-beta.7"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "modmenu": ">=2.0.0"
   },
   "breaks": {
     "optifabric": "*"
