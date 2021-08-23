@@ -36,7 +36,7 @@ public class LBGOption extends Option {
     @Override
     public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
         return new SpruceButtonWidget(Position.of(x, y), width, 20, new LiteralText("LambdaBetterGrass"),
-                btn -> MinecraftClient.getInstance().openScreen(new SettingsScreen(this.parent)))
+                btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent)))
                 .asVanilla();
     }
 }

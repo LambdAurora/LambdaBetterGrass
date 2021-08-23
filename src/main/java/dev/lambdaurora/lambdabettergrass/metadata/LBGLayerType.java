@@ -10,15 +10,13 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import dev.lambdaurora.spruceui.util.Nameable;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.aperlambda.lambdacommon.LambdaConstants;
-import org.aperlambda.lambdacommon.utils.Nameable;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -32,7 +30,7 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
@@ -62,7 +60,7 @@ public class LBGLayerType implements Nameable {
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return this.name;
     }
 
@@ -89,7 +87,7 @@ public class LBGLayerType implements Nameable {
         var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
         try {
             var stream = resourceManager.getResource(resourceId).getInputStream();
-            var json = LambdaConstants.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+            var json = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
 
             var affectId = new Identifier(json.get("block").getAsString());
             var block = Registry.BLOCK.get(affectId);

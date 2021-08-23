@@ -41,40 +41,44 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
     public final LBGLayerType layerType;
-    public final UnbakedModel layerModel;
-    public final UnbakedModel alternateModel;
+    private final @Nullable Vec3f offset;
+    public final LBGLayerMetadata.LayerUnbakedModels unbakedModels;
     private BakedModel bakedLayerModel;
     private BakedModel bakedAlternateModel;
 
-    public LBGCompiledLayerMetadata(LBGLayerType layerType, @Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
+    public LBGCompiledLayerMetadata(LBGLayerType layerType, @Nullable Vec3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels) {
         this.layerType = layerType;
-        this.layerModel = layerModel;
-        this.alternateModel = alternateModel;
+        this.offset = offset;
+        this.unbakedModels = unbakedModels;
+    }
+
+    public @Nullable Vec3f offset() {
+        return this.offset;
     }
 
     public void fetchModelDependencies(Collection<Identifier> ids) {
-        if (this.layerModel != null) {
-            ids.addAll(this.layerModel.getModelDependencies());
+        if (this.unbakedModels.layerModel() != null) {
+            ids.addAll(this.unbakedModels.layerModel().getModelDependencies());
         }
 
-        if (this.alternateModel != null) {
-            ids.addAll(this.alternateModel.getModelDependencies());
+        if (this.unbakedModels.alternateModel() != null) {
+            ids.addAll(this.unbakedModels.alternateModel().getModelDependencies());
         }
     }
 
     public void fetchTextureDependencies(Collection<SpriteIdentifier> ids, Function<Identifier, UnbakedModel> unbakedModelGetter,
                                          Set<Pair<String, String>> unresolvedTextureReferences) {
-        if (this.layerModel != null) {
-            ids.addAll(this.layerModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        if (this.unbakedModels.layerModel() != null) {
+            ids.addAll(this.unbakedModels.layerModel().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         }
 
-        if (this.alternateModel != null) {
-            ids.addAll(this.alternateModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+        if (this.unbakedModels.alternateModel() != null) {
+            ids.addAll(this.unbakedModels.alternateModel().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
         }
     }
 
@@ -87,12 +91,12 @@ public class LBGCompiledLayerMetadata {
      * @param modelId The model identifier.
      */
     public void bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
-        if (this.layerModel != null) {
-            this.bakedLayerModel = this.layerModel.bake(loader, textureGetter, rotationContainer, modelId);
+        if (this.unbakedModels.layerModel() != null) {
+            this.bakedLayerModel = this.unbakedModels.layerModel().bake(loader, textureGetter, rotationContainer, modelId);
         }
 
-        if (this.alternateModel != null) {
-            this.bakedAlternateModel = this.alternateModel.bake(loader, textureGetter, rotationContainer, modelId);
+        if (this.unbakedModels.alternateModel() != null) {
+            this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(loader, textureGetter, rotationContainer, modelId);
         }
     }
 

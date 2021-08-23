@@ -10,10 +10,9 @@
 package dev.lambdaurora.lambdabettergrass;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
+import dev.lambdaurora.spruceui.util.Nameable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.aperlambda.lambdacommon.utils.Nameable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -22,7 +21,7 @@ import java.util.Optional;
  * Represents the better grass mode.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public enum LBGMode implements Nameable {
@@ -33,7 +32,7 @@ public enum LBGMode implements Nameable {
 
     private final Text text;
 
-    LBGMode(@NotNull Text text, @NotNull Formatting formatting) {
+    LBGMode(Text text, Formatting formatting) {
         this.text = text.copy().formatted(formatting);
     }
 
@@ -59,12 +58,12 @@ public enum LBGMode implements Nameable {
     /**
      * {@return the translated text of the better grass mode}
      */
-    public @NotNull Text getTranslatedText() {
+    public Text getTranslatedText() {
         return this.text;
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return this.name().toLowerCase();
     }
 
@@ -74,7 +73,7 @@ public enum LBGMode implements Nameable {
      * @param id the identifier of the better grass mode
      * @return the better grass mode if found, otherwise empty
      */
-    public static @NotNull Optional<LBGMode> byId(@NotNull String id) {
+    public static Optional<LBGMode> byId(String id) {
         return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();
     }
 }

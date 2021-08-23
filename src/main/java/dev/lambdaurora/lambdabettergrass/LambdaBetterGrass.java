@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass;
 
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
@@ -26,11 +27,12 @@ import org.jetbrains.annotations.NotNull;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
     public static final String NAMESPACE = "lambdabettergrass";
+    public static final JsonParser JSON_PARSER = new JsonParser();
     /* Default masks */
     public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = mc("bettergrass/mask/standard_block_side_connect.png");
     public static final Identifier BETTER_GRASS_SIDE_BLEND_UP_MASK = mc("bettergrass/mask/grass_block_side_blend_up.png");

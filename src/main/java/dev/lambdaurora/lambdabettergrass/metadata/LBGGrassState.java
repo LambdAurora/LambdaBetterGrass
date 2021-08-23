@@ -17,7 +17,6 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.aperlambda.lambdacommon.LambdaConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +29,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -80,7 +79,7 @@ public class LBGGrassState extends LBGState {
         var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
         if (resourceManager.containsResource(metadataResourceId)) {
             try {
-                var metadataJson = (JsonObject) LambdaConstants.JSON_PARSER.parse(
+                var metadataJson = (JsonObject) LambdaBetterGrass.JSON_PARSER.parse(
                         new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream())
                 );
 

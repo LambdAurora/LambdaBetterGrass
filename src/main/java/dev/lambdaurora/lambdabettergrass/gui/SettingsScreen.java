@@ -87,7 +87,7 @@ public class SettingsScreen extends SpruceScreen {
 
     @Override
     public void onClose() {
-        this.client.openScreen(this.parent);
+        this.client.setScreen(this.parent);
     }
 
     @Override

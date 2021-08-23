@@ -25,7 +25,7 @@ import java.util.function.Function;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.1
  * @since 1.0.0
  */
 public abstract class LBGState {
@@ -52,6 +52,9 @@ public abstract class LBGState {
      */
     protected boolean matchVariant(String[] modelVariant, String[] dataVariant) {
         for (String dataProperty : dataVariant) {
+            if (dataProperty.equals("*"))
+                return true;
+
             boolean matched = false;
             for (String modelProperty : modelVariant) {
                 if (modelProperty.equals(dataProperty)) {

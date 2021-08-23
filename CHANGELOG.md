@@ -35,7 +35,7 @@ The first release of LambdaBetterGrass!
 
  - Tweaked better grass logic to be more thread-safe.
 
-### 1.1.0
+## 1.1.0
 
  - Added "moss" layer for 1.17.
    - (Resource Pack Extension) Added mossy fences.
@@ -58,10 +58,19 @@ The first release of LambdaBetterGrass!
  - Updated to Java 16.
  - Updated [SpruceUI].
 
-### 1.2.0
+## 1.2.0
 
  - Added a way to disable temporarily the better layer feature. Thread-bound.
  - Fixed an issue in layer data loading, it wasn't respecting metadata namespace.
+
+### 1.2.1
+
+ - Added a lot of missing better snow/moss data for blocks like walls, [lightning_rod](https://github.com/LambdAurora/LambdaBetterGrass/issues/17), etc.
+ - Added an `offset` field to the `better_layer` data structure.
+ - Added Estonian translations ([#23](https://github.com/LambdAurora/LambdaBetterGrass/pull/23)).
+ - Improved chunk rebuild performance by caching hasBetterLayer ([#21](https://github.com/LambdAurora/LambdaBetterGrass/pull/21)).
+ - Fixed better grass not connecting properly with better snow ([#25](https://github.com/LambdAurora/LambdaBetterGrass/issues/25)).
+ - Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -13,10 +13,10 @@ An actual better grass and snow mod for Fabric.
 
 ## 📖 What's this mod?
 
-Have you ever used MCPatcher/OptiFine better grass feature?
-I did, and I did not like it, not at all.
-Main issue is it's too rough even at Fancy settings.
-That's why I made my own mod, to fix this issue and provide an alternative of one of OptiFine features to the Fabric ecosystem!
+Have you ever used the MCPatcher/OptiFine better grass feature?
+I did, and I didn't like it at all.
+The main issue is that it's too rough even at Fancy settings.
+That's why I made my own mod to fix this issue and provide an alternative to one of the OptiFine features on the Fabric ecosystem!
 Grass blocks will now connect, and the nearby grass blocks will be smoothed.
 
 ![pack.png with better grass](images/pack.png)
@@ -37,7 +37,7 @@ Better "snow" with the optional included resource pack in lush caves (credits to
 Configuration screen:
 ![config screen](images/config_screen.png)
 
-Searching other mods to replace OptiFine? [Check out that list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
+Searching other mods to replace OptiFine? [Check out this list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
 
 ## ✅ Features:
 
@@ -55,7 +55,7 @@ Searching other mods to replace OptiFine? [Check out that list!](https://gist.gi
 
 ## 📖 Usage
 
-To use this mod it's very simple!
+Using this mod is very simple!
 
 Install it in your mods folder along with [Fabric API] and [ModMenu].
 
