@@ -173,7 +173,6 @@ task publishModrinth(type: TaskModrinthUpload) {
     def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
     def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
     def matcher = changelogText =~ changelogRegex
-    matcher.find()
 
     if (matcher.find()) {
         changelog = matcher.group(1)
