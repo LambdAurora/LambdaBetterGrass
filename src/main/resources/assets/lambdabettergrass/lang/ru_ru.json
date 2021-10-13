@@ -1,6 +1,6 @@
 {
   "lambdabettergrass.menu.info.1": "Мод использует файлы пакета ресурсов, чтобы понять, какие блоки затрагивать.",
-  "lambdabettergrass.menu.info.2": "Включение или отключение функции улучшенного дёрна/снега на блоках",
+  "lambdabettergrass.menu.info.2": "Это значит, включение/отключение влияния улучшенной травы/снега на блоки",
   "lambdabettergrass.menu.info.3": "нужно модифицировать с помощью ресурспака.",
   "lambdabettergrass.menu.info.read_more": "Подробнее читайте на: %s",
   "lambdabettergrass.menu.title": "Настройки LambdaBetterGrass",
