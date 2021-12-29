@@ -33,7 +33,7 @@ public class VideoOptionsScreenMixin extends Screen {
 			index = 0
 	)
 	private Option[] addOptionButton(Option[] old) {
-		Option[] options = new Option[old.length + 1];
+		var options = new Option[old.length + 1];
 		System.arraycopy(old, 0, options, 0, old.length);
 		options[options.length - 1] = new LBGOption(this);
 		return options;
