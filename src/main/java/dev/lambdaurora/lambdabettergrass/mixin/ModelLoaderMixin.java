@@ -34,73 +34,73 @@ import java.util.Set;
 
 @Mixin(ModelLoader.class)
 public abstract class ModelLoaderMixin {
-    @Shadow
-    @Final
-    private Map<Identifier, UnbakedModel> unbakedModels;
+	@Shadow
+	@Final
+	private Map<Identifier, UnbakedModel> unbakedModels;
 
-    @Shadow
-    @Final
-    private ResourceManager resourceManager;
+	@Shadow
+	@Final
+	private ResourceManager resourceManager;
 
-    @Shadow
-    public abstract UnbakedModel getOrLoadModel(Identifier id);
+	@Shadow
+	public abstract UnbakedModel getOrLoadModel(Identifier id);
 
-    @Shadow
-    @Final
-    private ModelVariantMap.DeserializationContext variantMapDeserializationContext;
+	@Shadow
+	@Final
+	private ModelVariantMap.DeserializationContext variantMapDeserializationContext;
 
-    @Shadow
-    @Final
-    private Set<Identifier> modelsToLoad;
+	@Shadow
+	@Final
+	private Set<Identifier> modelsToLoad;
 
-    @Unique
-    private boolean lbg$firstLoad = true;
+	@Unique
+	private boolean lbg$firstLoad = true;
 
-    @Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
-    private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci) {
-        if (id instanceof ModelIdentifier modelId) {
-            if (!modelId.getVariant().equals("inventory")) {
-                if (this.lbg$firstLoad) {
-                    LBGState.reset();
-                    LBGLayerType.reset();
-                    var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
-                            path -> path.endsWith(".json"));
-                    for (var layerTypeId : layerTypes) {
-                        LBGLayerType.load(layerTypeId, this.resourceManager);
-                    }
-                    this.lbg$firstLoad = false;
-                }
+	@Inject(method = "putModel", at = @At("HEAD"), cancellable = true)
+	private void onPutModel(Identifier id, UnbakedModel unbakedModel, CallbackInfo ci) {
+		if (id instanceof ModelIdentifier modelId) {
+			if (!modelId.getVariant().equals("inventory")) {
+				if (this.lbg$firstLoad) {
+					LBGState.reset();
+					LBGLayerType.reset();
+					var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
+							path -> path.endsWith(".json"));
+					for (var layerTypeId : layerTypes) {
+						LBGLayerType.load(layerTypeId, this.resourceManager);
+					}
+					this.lbg$firstLoad = false;
+				}
 
-                var stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
+				var stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
 
-                // Get cached states metadata.
-                var state = LBGState.getMetadataState(stateId);
+				// Get cached states metadata.
+				var state = LBGState.getMetadataState(stateId);
 
-                // Find and load states metadata if not cached.
-                if (state == null) {
-                    var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-                    if (this.resourceManager.containsResource(stateResourceId)) {
-                        try {
-                            var json = (JsonObject) LambdaBetterGrass.JSON_PARSER.parse(
-                                    new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream())
-                            );
-                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
-                        } catch (IOException e) {
-                            // Ignore.
-                        }
-                    }
-                }
+				// Find and load states metadata if not cached.
+				if (state == null) {
+					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
+					if (this.resourceManager.containsResource(stateResourceId)) {
+						try {
+							var json = (JsonObject) LambdaBetterGrass.JSON_PARSER.parse(
+									new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream())
+							);
+							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
+						} catch (IOException e) {
+							// Ignore.
+						}
+					}
+				}
 
-                // If states metadata found, search for corresponding metadata and if exists replace the model.
-                if (state != null) {
-                    var newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
-                    if (newModel != null) {
-                        this.unbakedModels.put(modelId, newModel);
-                        this.modelsToLoad.addAll(newModel.getModelDependencies());
-                        ci.cancel();
-                    }
-                }
-            }
-        }
-    }
+				// If states metadata found, search for corresponding metadata and if exists replace the model.
+				if (state != null) {
+					var newModel = state.getCustomUnbakedModel(modelId, unbakedModel, this::getOrLoadModel);
+					if (newModel != null) {
+						this.unbakedModels.put(modelId, newModel);
+						this.modelsToLoad.addAll(newModel.getModelDependencies());
+						ci.cancel();
+					}
+				}
+			}
+		}
+	}
 }

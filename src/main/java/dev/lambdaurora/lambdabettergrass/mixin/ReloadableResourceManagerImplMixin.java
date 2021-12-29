@@ -26,21 +26,21 @@ import java.util.concurrent.Executor;
 
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin implements ReloadableResourceManager {
-    @Shadow
-    @Final
-    private ResourceType type;
+	@Shadow
+	@Final
+	private ResourceType type;
 
-    @Shadow
-    public abstract void addPack(ResourcePack resourcePack);
+	@Shadow
+	public abstract void addPack(ResourcePack resourcePack);
 
-    @Inject(method = "reload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
-    private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs,
-                          CallbackInfoReturnable<ResourceReload> cir) {
-        if (this.type != ResourceType.CLIENT_RESOURCES)
-            return;
+	@Inject(method = "reload", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+	private void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs,
+	                      CallbackInfoReturnable<ResourceReload> cir) {
+		if (this.type != ResourceType.CLIENT_RESOURCES)
+			return;
 
-        var mod = LambdaBetterGrass.get();
-        mod.log("Inject generated resource packs.");
-        this.addPack(mod.resourcePack = new LBGResourcePack(mod));
-    }
+		var mod = LambdaBetterGrass.get();
+		mod.log("Inject generated resource packs.");
+		this.addPack(mod.resourcePack = new LBGResourcePack(mod));
+	}
 }

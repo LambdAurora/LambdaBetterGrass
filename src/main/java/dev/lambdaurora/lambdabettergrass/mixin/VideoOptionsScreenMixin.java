@@ -20,22 +20,22 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(VideoOptionsScreen.class)
 public class VideoOptionsScreenMixin extends Screen {
-    protected VideoOptionsScreenMixin(Text title) {
-        super(title);
-    }
+	protected VideoOptionsScreenMixin(Text title) {
+		super(title);
+	}
 
-    @ModifyArg(
-            method = "init",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;addAll([Lnet/minecraft/client/option/Option;)V"
-            ),
-            index = 0
-    )
-    private Option[] addOptionButton(Option[] old) {
-        Option[] options = new Option[old.length + 1];
-        System.arraycopy(old, 0, options, 0, old.length);
-        options[options.length - 1] = new LBGOption(this);
-        return options;
-    }
+	@ModifyArg(
+			method = "init",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;addAll([Lnet/minecraft/client/option/Option;)V"
+			),
+			index = 0
+	)
+	private Option[] addOptionButton(Option[] old) {
+		Option[] options = new Option[old.length + 1];
+		System.arraycopy(old, 0, options, 0, old.length);
+		options[options.length - 1] = new LBGOption(this);
+		return options;
+	}
 }

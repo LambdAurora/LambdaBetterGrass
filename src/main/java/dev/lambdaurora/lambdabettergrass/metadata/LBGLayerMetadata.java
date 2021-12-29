@@ -30,90 +30,90 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
-    public final Identifier id;
-    public final LBGLayerType layerType;
-    private final boolean layerModel;
-    private final @Nullable Vec3f offset;
-    private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
-    private UnbakedModel alternateModel;
-    private final boolean hasAlternateModel;
+	public final Identifier id;
+	public final LBGLayerType layerType;
+	private final boolean layerModel;
+	private final @Nullable Vec3f offset;
+	private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
+	private UnbakedModel alternateModel;
+	private final boolean hasAlternateModel;
 
-    public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-                            ModelVariantMap.DeserializationContext deserializationContext) {
-        this.id = id;
-        this.layerType = layerType;
+	public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
+	                        ModelVariantMap.DeserializationContext deserializationContext) {
+		this.id = id;
+		this.layerType = layerType;
 
-        if (json.has("layer")) {
-            this.layerModel = json.get("layer").getAsBoolean();
-        } else {
-            this.layerModel = false;
-        }
+		if (json.has("layer")) {
+			this.layerModel = json.get("layer").getAsBoolean();
+		} else {
+			this.layerModel = false;
+		}
 
-        if (json.has("offset")) {
-            var offsetJson = json.get("offset");
-            if (offsetJson.isJsonArray()) {
-                var offsetArray = offsetJson.getAsJsonArray();
-                this.offset = new Vec3f(offsetArray.get(0).getAsFloat(), offsetArray.get(1).getAsFloat(), offsetArray.get(2).getAsFloat());
-            } else this.offset = null;
-        } else this.offset = null;
+		if (json.has("offset")) {
+			var offsetJson = json.get("offset");
+			if (offsetJson.isJsonArray()) {
+				var offsetArray = offsetJson.getAsJsonArray();
+				this.offset = new Vec3f(offsetArray.get(0).getAsFloat(), offsetArray.get(1).getAsFloat(), offsetArray.get(2).getAsFloat());
+			} else this.offset = null;
+		} else this.offset = null;
 
-        if (!json.has("block_state")) {
-            this.alternateModel = null;
-            this.hasAlternateModel = false;
-            return;
-        }
+		if (!json.has("block_state")) {
+			this.alternateModel = null;
+			this.hasAlternateModel = false;
+			return;
+		}
 
-        var map = ModelVariantMap.fromJson(deserializationContext, new StringReader(json.get("block_state").toString()));
-        if (map.hasMultipartModel())
-            this.alternateModel = map.getMultipartModel();
-        else
-            this.variantModels.putAll(map.getVariantMap());
+		var map = ModelVariantMap.fromJson(deserializationContext, new StringReader(json.get("block_state").toString()));
+		if (map.hasMultipartModel())
+			this.alternateModel = map.getMultipartModel();
+		else
+			this.variantModels.putAll(map.getVariantMap());
 
-        this.hasAlternateModel = true;
-    }
+		this.hasAlternateModel = true;
+	}
 
-    public boolean hasLayerModel() {
-        return this.layerModel;
-    }
+	public boolean hasLayerModel() {
+		return this.layerModel;
+	}
 
-    public @Nullable Vec3f offset() {
-        return this.offset;
-    }
+	public @Nullable Vec3f offset() {
+		return this.offset;
+	}
 
-    public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel, Function<Identifier, UnbakedModel> modelGetter) {
-        UnbakedModel layerModel = null;
-        if (this.layerModel) {
-            layerModel = this.layerType.getLayerModel(modelGetter);
-        }
+	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel, Function<Identifier, UnbakedModel> modelGetter) {
+		UnbakedModel layerModel = null;
+		if (this.layerModel) {
+			layerModel = this.layerType.getLayerModel(modelGetter);
+		}
 
-        UnbakedModel alternateModel = null;
-        if (this.hasAlternateModel) {
-            if (this.alternateModel != null) {
-                alternateModel = this.alternateModel;
-            } else {
-                UnbakedModel alternateVariantModel = this.variantModels.get(modelId.getVariant());
-                if (alternateVariantModel != null) {
-                    alternateModel = alternateVariantModel;
-                }
-            }
-        }
+		UnbakedModel alternateModel = null;
+		if (this.hasAlternateModel) {
+			if (this.alternateModel != null) {
+				alternateModel = this.alternateModel;
+			} else {
+				UnbakedModel alternateVariantModel = this.variantModels.get(modelId.getVariant());
+				if (alternateVariantModel != null) {
+					alternateModel = alternateVariantModel;
+				}
+			}
+		}
 
-        return new LayerUnbakedModels(layerModel, alternateModel);
-    }
+		return new LayerUnbakedModels(layerModel, alternateModel);
+	}
 
-    @Override
-    public String toString() {
-        return "LBGLayerMetadata{" +
-                "id=" + id +
-                ", layerType=" + layerType +
-                ", layerModel=" + layerModel +
-                ", hasAlternateModel=" + hasAlternateModel +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "LBGLayerMetadata{" +
+				"id=" + id +
+				", layerType=" + layerType +
+				", layerModel=" + layerModel +
+				", hasAlternateModel=" + hasAlternateModel +
+				'}';
+	}
 
-    public record LayerUnbakedModels(@Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
-        public boolean isEmpty() {
-            return this.layerModel() == null && this.alternateModel() == null;
-        }
-    }
+	public record LayerUnbakedModels(@Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
+		public boolean isEmpty() {
+			return this.layerModel() == null && this.alternateModel() == null;
+		}
+	}
 }

@@ -31,34 +31,34 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGLayerUnbakedModel implements UnbakedModel {
-    private final UnbakedModel baseModel;
-    private final List<LBGCompiledLayerMetadata> metadatas;
+	private final UnbakedModel baseModel;
+	private final List<LBGCompiledLayerMetadata> metadatas;
 
-    public LBGLayerUnbakedModel(UnbakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
-        this.baseModel = baseModel;
-        this.metadatas = metadatas;
-    }
+	public LBGLayerUnbakedModel(UnbakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
+		this.baseModel = baseModel;
+		this.metadatas = metadatas;
+	}
 
-    @Override
-    public Collection<Identifier> getModelDependencies() {
-        Set<Identifier> ids = new HashSet<>(this.baseModel.getModelDependencies());
-        this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
-        return ids;
-    }
+	@Override
+	public Collection<Identifier> getModelDependencies() {
+		Set<Identifier> ids = new HashSet<>(this.baseModel.getModelDependencies());
+		this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
+		return ids;
+	}
 
-    @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
-                                                               Set<Pair<String, String>> unresolvedTextureReferences) {
-        var ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        this.metadatas.forEach(metadata -> metadata.fetchTextureDependencies(ids, unbakedModelGetter, unresolvedTextureReferences));
-        return ids;
-    }
+	@Override
+	public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
+	                                                           Set<Pair<String, String>> unresolvedTextureReferences) {
+		var ids = new ArrayList<>(this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+		this.metadatas.forEach(metadata -> metadata.fetchTextureDependencies(ids, unbakedModelGetter, unresolvedTextureReferences));
+		return ids;
+	}
 
-    @Nullable
-    @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
-                           Identifier modelId) {
-        this.metadatas.forEach(metadata -> metadata.bake(loader, textureGetter, rotationContainer, modelId));
-        return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadatas);
-    }
+	@Nullable
+	@Override
+	public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
+	                       Identifier modelId) {
+		this.metadatas.forEach(metadata -> metadata.bake(loader, textureGetter, rotationContainer, modelId));
+		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadatas);
+	}
 }

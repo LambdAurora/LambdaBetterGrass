@@ -38,106 +38,106 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
-    private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger();
 
-    private final Map<String, List<LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
+	private final Map<String, List<LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
 
-    public LBGLayerState(Identifier id, ResourceManager resourceManager, JsonObject json,
-                         ModelVariantMap.DeserializationContext deserializationContext) {
-        super(id);
+	public LBGLayerState(Identifier id, ResourceManager resourceManager, JsonObject json,
+	                     ModelVariantMap.DeserializationContext deserializationContext) {
+		super(id);
 
-        if (json.has("variants")) {
-            var variants = json.getAsJsonObject("variants");
-            variants.entrySet().forEach(entry -> {
-                var variant = entry.getValue().getAsJsonObject();
-                if (variant.has("data")) {
-                    this.loadVariant(entry.getKey(), variant, resourceManager, deserializationContext);
-                }
-            });
-        } else if (json.has("data")) {
-            this.loadVariant("*", json, resourceManager, deserializationContext);
-        } else {
-            LOGGER.warn("Invalid state definition for {}, missing data or variants entry.", id);
-        }
-    }
+		if (json.has("variants")) {
+			var variants = json.getAsJsonObject("variants");
+			variants.entrySet().forEach(entry -> {
+				var variant = entry.getValue().getAsJsonObject();
+				if (variant.has("data")) {
+					this.loadVariant(entry.getKey(), variant, resourceManager, deserializationContext);
+				}
+			});
+		} else if (json.has("data")) {
+			this.loadVariant("*", json, resourceManager, deserializationContext);
+		} else {
+			LOGGER.warn("Invalid state definition for {}, missing data or variants entry.", id);
+		}
+	}
 
-    private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
-                             ModelVariantMap.DeserializationContext deserializationContext) {
-        var metadataId = Identifier.tryParse(json.get("data").getAsString());
-        var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-        try {
-            var resources = resourceManager.getAllResources(metadataResourceId);
-            for (var resource : resources) {
-                var metadataJson = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
+	private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
+	                         ModelVariantMap.DeserializationContext deserializationContext) {
+		var metadataId = Identifier.tryParse(json.get("data").getAsString());
+		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
+		try {
+			var resources = resourceManager.getAllResources(metadataResourceId);
+			for (var resource : resources) {
+				var metadataJson = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
 
-                for (var entry : metadataJson.entrySet()) {
-                    var type = LBGLayerType.fromName(entry.getKey());
+				for (var entry : metadataJson.entrySet()) {
+					var type = LBGLayerType.fromName(entry.getKey());
 
-                    if (type == null)
-                        continue;
+					if (type == null)
+						continue;
 
-                    if (entry.getValue().isJsonObject()) {
-                        this.putOrReplaceMetadata(variant, metadataId, type, entry.getValue().getAsJsonObject(), deserializationContext);
-                    }
-                }
+					if (entry.getValue().isJsonObject()) {
+						this.putOrReplaceMetadata(variant, metadataId, type, entry.getValue().getAsJsonObject(), deserializationContext);
+					}
+				}
 
-                resource.close();
-            }
-        } catch (IOException e) {
-            LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
-                    + "\" (variant: \"" + variant + "\").", e);
-        }
-    }
+				resource.close();
+			}
+		} catch (IOException e) {
+			LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
+					+ "\" (variant: \"" + variant + "\").", e);
+		}
+	}
 
-    private void putOrReplaceMetadata(String variant, Identifier metadataId, @Nullable LBGLayerType type, JsonObject metadataJson,
-                                      ModelVariantMap.DeserializationContext deserializationContext) {
-        var metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
-        var it = metadatas.iterator();
-        while (it.hasNext()) {
-            var next = it.next();
+	private void putOrReplaceMetadata(String variant, Identifier metadataId, @Nullable LBGLayerType type, JsonObject metadataJson,
+	                                  ModelVariantMap.DeserializationContext deserializationContext) {
+		var metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
+		var it = metadatas.iterator();
+		while (it.hasNext()) {
+			var next = it.next();
 
-            if (next.layerType == type) {
-                it.remove();
-                break;
-            }
-        }
+			if (next.layerType == type) {
+				it.remove();
+				break;
+			}
+		}
 
-        metadatas.add(new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
-    }
+		metadatas.add(new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
+	}
 
-    public void forEach(String[] variant, Consumer<LBGLayerMetadata> consumer) {
-        for (Map.Entry<String, List<LBGLayerMetadata>> entry : this.metadatas.entrySet()) {
-            if (this.matchVariant(variant, entry.getKey().split(","))) {
-                entry.getValue().forEach(consumer);
-                return;
-            }
-        }
-    }
+	public void forEach(String[] variant, Consumer<LBGLayerMetadata> consumer) {
+		for (Map.Entry<String, List<LBGLayerMetadata>> entry : this.metadatas.entrySet()) {
+			if (this.matchVariant(variant, entry.getKey().split(","))) {
+				entry.getValue().forEach(consumer);
+				return;
+			}
+		}
+	}
 
-    @Override
-    public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-                                                        Function<Identifier, UnbakedModel> modelGetter) {
-        String[] modelVariant = modelId.getVariant().split(",");
+	@Override
+	public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
+	                                                    Function<Identifier, UnbakedModel> modelGetter) {
+		String[] modelVariant = modelId.getVariant().split(",");
 
-        for (var entry : this.metadatas.entrySet()) {
-            if (entry.getKey().equals("*") || this.matchVariant(modelVariant, entry.getKey().split(","))) {
-                var metadatas = new ArrayList<LBGCompiledLayerMetadata>();
+		for (var entry : this.metadatas.entrySet()) {
+			if (entry.getKey().equals("*") || this.matchVariant(modelVariant, entry.getKey().split(","))) {
+				var metadatas = new ArrayList<LBGCompiledLayerMetadata>();
 
-                entry.getValue().forEach(metadata -> {
-                    var models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
-                    if (models.isEmpty())
-                        return;
+				entry.getValue().forEach(metadata -> {
+					var models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
+					if (models.isEmpty())
+						return;
 
-                    metadatas.add(new LBGCompiledLayerMetadata(metadata.layerType, metadata.offset(), models));
-                });
+					metadatas.add(new LBGCompiledLayerMetadata(metadata.layerType, metadata.offset(), models));
+				});
 
-                if (metadatas.size() != 0) {
-                    return new LBGLayerUnbakedModel(originalModel, metadatas);
-                }
+				if (metadatas.size() != 0) {
+					return new LBGLayerUnbakedModel(originalModel, metadatas);
+				}
 
-                return null;
-            }
-        }
-        return null;
-    }
+				return null;
+			}
+		}
+		return null;
+	}
 }

@@ -26,17 +26,17 @@ import net.minecraft.text.LiteralText;
  * @since 1.1.2
  */
 public class LBGOption extends Option {
-    private final Screen parent;
+	private final Screen parent;
 
-    public LBGOption(Screen parent) {
-        super("lambdabettergrass");
-        this.parent = parent;
-    }
+	public LBGOption(Screen parent) {
+		super("lambdabettergrass");
+		this.parent = parent;
+	}
 
-    @Override
-    public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-        return new SpruceButtonWidget(Position.of(x, y), width, 20, new LiteralText("LambdaBetterGrass"),
-                btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent)))
-                .asVanilla();
-    }
+	@Override
+	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
+		return new SpruceButtonWidget(Position.of(x, y), width, 20, new LiteralText("LambdaBetterGrass"),
+				btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent)))
+				.asVanilla();
+	}
 }

@@ -41,93 +41,93 @@ import org.jetbrains.annotations.Nullable;
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
-    private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/API.md";
+	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/API.md";
 
-    private final LBGConfig config;
-    private final Screen parent;
+	private final LBGConfig config;
+	private final Screen parent;
 
-    private final SpruceOption modeOption;
-    private final SpruceOption betterSnowOption;
-    private final SpruceOption resetOption;
+	private final SpruceOption modeOption;
+	private final SpruceOption betterSnowOption;
+	private final SpruceOption resetOption;
 
-    public SettingsScreen(@Nullable Screen parent) {
-        super(new TranslatableText("lambdabettergrass.menu.title"));
-        this.config = LambdaBetterGrass.get().config;
-        this.parent = parent;
+	public SettingsScreen(@Nullable Screen parent) {
+		super(new TranslatableText("lambdabettergrass.menu.title"));
+		this.config = LambdaBetterGrass.get().config;
+		this.parent = parent;
 
-        this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
-                amount -> {
-                    this.config.setMode(this.config.getMode().next());
-                    if (this.client != null && this.client.worldRenderer != null)
-                        this.client.worldRenderer.reload();
-                },
-                option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
-                new TranslatableText("lambdabettergrass.tooltip.mode",
-                        LBGMode.OFF.getTranslatedText(),
-                        LBGMode.FASTEST.getTranslatedText(),
-                        LBGMode.FAST.getTranslatedText(),
-                        LBGMode.FANCY.getTranslatedText()));
+		this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
+				amount -> {
+					this.config.setMode(this.config.getMode().next());
+					if (this.client != null && this.client.worldRenderer != null)
+						this.client.worldRenderer.reload();
+				},
+				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
+				new TranslatableText("lambdabettergrass.tooltip.mode",
+						LBGMode.OFF.getTranslatedText(),
+						LBGMode.FASTEST.getTranslatedText(),
+						LBGMode.FAST.getTranslatedText(),
+						LBGMode.FANCY.getTranslatedText()));
 
-        this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_snow",
-                this.config::hasBetterLayer,
-                betterSnow -> {
-                    this.config.setBetterLayer(betterSnow);
-                    if (this.client != null && this.client.worldRenderer != null)
-                        this.client.worldRenderer.reload();
-                },
-                new TranslatableText("lambdabettergrass.tooltip.better_snow"),
-                true);
+		this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_snow",
+				this.config::hasBetterLayer,
+				betterSnow -> {
+					this.config.setBetterLayer(betterSnow);
+					if (this.client != null && this.client.worldRenderer != null)
+						this.client.worldRenderer.reload();
+				},
+				new TranslatableText("lambdabettergrass.tooltip.better_snow"),
+				true);
 
-        this.resetOption = SpruceSimpleActionOption.reset(btn -> {
-            this.config.reset();
-            var client = MinecraftClient.getInstance();
-            this.init(client, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight());
-        });
-    }
+		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
+			this.config.reset();
+			var client = MinecraftClient.getInstance();
+			this.init(client, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight());
+		});
+	}
 
-    @Override
-    public void onClose() {
-        this.client.setScreen(this.parent);
-    }
+	@Override
+	public void onClose() {
+		this.client.setScreen(this.parent);
+	}
 
-    @Override
-    protected void init() {
-        super.init();
-        int buttonHeight = 20;
+	@Override
+	protected void init() {
+		super.init();
+		int buttonHeight = 20;
 
-        this.addDrawableChild(this.modeOption.createWidget(Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
-                200));
-        this.addDrawableChild(this.betterSnowOption.createWidget(Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200));
+		this.addDrawableChild(this.modeOption.createWidget(Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
+				200));
+		this.addDrawableChild(this.betterSnowOption.createWidget(Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200));
 
-        this.buildLabels();
+		this.buildLabels();
 
-        this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
-        this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
-                buttonHeight, SpruceTexts.GUI_DONE,
-                (buttonWidget) -> this.onClose()));
-    }
+		this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
+		this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
+				buttonHeight, SpruceTexts.GUI_DONE,
+				(buttonWidget) -> this.onClose()));
+	}
 
-    private void buildLabels() {
-        int y = this.height / 2;
+	private void buildLabels() {
+		int y = this.height / 2;
 
-        var text = new LiteralText("");
-        text.append(new TranslatableText("lambdabettergrass.menu.title.info").formatted(Formatting.GOLD, Formatting.BOLD));
-        text.append("\n");
-        text.append(new TranslatableText("lambdabettergrass.menu.info.1")).append("\n");
-        text.append(new TranslatableText("lambdabettergrass.menu.info.2")).append(" ");
-        text.append(new TranslatableText("lambdabettergrass.menu.info.3")).append("\n");
-        var widget = this.addDrawableChild(new SpruceLabelWidget(Position.of(this, 0, y),
-                text, this.width, true));
-        var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
-                new TranslatableText("lambdabettergrass.menu.info.read_more", "[GitHub]").formatted(Formatting.GREEN),
-                this.width,
-                label -> Util.getOperatingSystem().open(API_URL), true);
-        readMore.setTooltip(new TranslatableText("chat.link.open"));
-        this.addDrawableChild(readMore);
-    }
+		var text = new LiteralText("");
+		text.append(new TranslatableText("lambdabettergrass.menu.title.info").formatted(Formatting.GOLD, Formatting.BOLD));
+		text.append("\n");
+		text.append(new TranslatableText("lambdabettergrass.menu.info.1")).append("\n");
+		text.append(new TranslatableText("lambdabettergrass.menu.info.2")).append(" ");
+		text.append(new TranslatableText("lambdabettergrass.menu.info.3")).append("\n");
+		var widget = this.addDrawableChild(new SpruceLabelWidget(Position.of(this, 0, y),
+				text, this.width, true));
+		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
+				new TranslatableText("lambdabettergrass.menu.info.read_more", "[GitHub]").formatted(Formatting.GREEN),
+				this.width,
+				label -> Util.getOperatingSystem().open(API_URL), true);
+		readMore.setTooltip(new TranslatableText("chat.link.open"));
+		this.addDrawableChild(readMore);
+	}
 
-    @Override
-    public void renderTitle(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
-    }
+	@Override
+	public void renderTitle(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 8, 16777215);
+	}
 }

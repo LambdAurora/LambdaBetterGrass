@@ -34,39 +34,39 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGUnbakedModel implements UnbakedModel {
-    private final UnbakedModel baseModel;
-    private final LBGMetadata metadata;
+	private final UnbakedModel baseModel;
+	private final LBGMetadata metadata;
 
-    public LBGUnbakedModel(UnbakedModel baseModel, LBGMetadata metadata) {
-        this.baseModel = baseModel;
-        this.metadata = metadata;
-    }
+	public LBGUnbakedModel(UnbakedModel baseModel, LBGMetadata metadata) {
+		this.baseModel = baseModel;
+		this.metadata = metadata;
+	}
 
-    @Override
-    public Collection<Identifier> getModelDependencies() {
-        return this.baseModel.getModelDependencies();
-    }
+	@Override
+	public Collection<Identifier> getModelDependencies() {
+		return this.baseModel.getModelDependencies();
+	}
 
-    @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
-                                                               Set<Pair<String, String>> unresolvedTextureReferences) {
-        var baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
-        var textures = new ArrayList<>(baseIds);
-        textures.addAll(this.metadata.getTextures());
-        if (this.metadata.getSnowyVariant() != null)
-            textures.addAll(this.metadata.getSnowyVariant().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
-        return textures;
-    }
+	@Override
+	public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter,
+	                                                           Set<Pair<String, String>> unresolvedTextureReferences) {
+		var baseIds = this.baseModel.getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences);
+		var textures = new ArrayList<>(baseIds);
+		textures.addAll(this.metadata.getTextures());
+		if (this.metadata.getSnowyVariant() != null)
+			textures.addAll(this.metadata.getSnowyVariant().getTextureDependencies(unbakedModelGetter, unresolvedTextureReferences));
+		return textures;
+	}
 
-    @Override
-    public @Nullable BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
-                                     Identifier modelId) {
-        this.metadata.bakeTextures(textureGetter);
+	@Override
+	public @Nullable BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer,
+	                                 Identifier modelId) {
+		this.metadata.bakeTextures(textureGetter);
 
-        var model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
+		var model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(loader, textureGetter, rotationContainer, modelId)), this.metadata);
 
-        this.metadata.propagate(model);
+		this.metadata.propagate(model);
 
-        return model;
-    }
+		return model;
+	}
 }

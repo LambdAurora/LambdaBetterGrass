@@ -32,56 +32,56 @@ import java.util.function.Supplier;
  * @since 1.0.0
  */
 public class LBGLayerBakedModel extends ForwardingBakedModel {
-    private final List<LBGCompiledLayerMetadata> metadatas;
+	private final List<LBGCompiledLayerMetadata> metadatas;
 
-    public LBGLayerBakedModel(BakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
-        this.wrapped = baseModel;
-        this.metadatas = metadatas;
-    }
+	public LBGLayerBakedModel(BakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
+		this.wrapped = baseModel;
+		this.metadatas = metadatas;
+	}
 
-    @Override
-    public boolean isVanillaAdapter() {
-        return false;
-    }
+	@Override
+	public boolean isVanillaAdapter() {
+		return false;
+	}
 
-    @Override
-    public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
-        if (!LambdaBetterGrass.get().hasBetterLayer()) {
-            // Don't touch the model.
-            super.emitBlockQuads(world, state, pos, randomSupplier, context);
-            return;
-        }
+	@Override
+	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
+		if (!LambdaBetterGrass.get().hasBetterLayer()) {
+			// Don't touch the model.
+			super.emitBlockQuads(world, state, pos, randomSupplier, context);
+			return;
+		}
 
-        for (var metadata : this.metadatas) {
-            int success = metadata.emitBlockQuads(world, state, pos, randomSupplier, context);
-            if (success != 0) {
-                if (success == 1) {
-                    final Vec3f offset = metadata.offset();
-                    if (offset != null) {
-                        context.pushTransform(quad -> {
-                            Vec3f vec = null;
-                            for (int i = 0; i < 4; i++) {
-                                vec = quad.copyPos(i, vec);
-                                vec.add(offset);
-                                quad.pos(i, vec);
-                            }
-                            return true;
-                        });
-                    }
-                    super.emitBlockQuads(world, state, pos, randomSupplier, context);
-                    if (offset != null) {
-                        context.popTransform();
-                    }
-                }
-                return;
-            }
-        }
+		for (var metadata : this.metadatas) {
+			int success = metadata.emitBlockQuads(world, state, pos, randomSupplier, context);
+			if (success != 0) {
+				if (success == 1) {
+					final Vec3f offset = metadata.offset();
+					if (offset != null) {
+						context.pushTransform(quad -> {
+							Vec3f vec = null;
+							for (int i = 0; i < 4; i++) {
+								vec = quad.copyPos(i, vec);
+								vec.add(offset);
+								quad.pos(i, vec);
+							}
+							return true;
+						});
+					}
+					super.emitBlockQuads(world, state, pos, randomSupplier, context);
+					if (offset != null) {
+						context.popTransform();
+					}
+				}
+				return;
+			}
+		}
 
-        super.emitBlockQuads(world, state, pos, randomSupplier, context);
-    }
+		super.emitBlockQuads(world, state, pos, randomSupplier, context);
+	}
 
-    @Override
-    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
-    }
+	@Override
+	public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
+		throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
+	}
 }

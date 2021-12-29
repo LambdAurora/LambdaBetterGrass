@@ -1,19 +1,19 @@
 plugins {
-    id 'fabric-loom' version '0.9.45'
-    id 'io.github.juuxel.loom-quiltflower' version '1.1.3'
-    id 'java-library'
-    id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
-    id 'org.cadixdev.licenser' version '0.6.1'
-    id 'com.modrinth.minotaur' version '1.2.+'
+	id 'fabric-loom' version '0.9.45'
+	id 'io.github.juuxel.loom-quiltflower' version '1.1.3'
+	id 'java-library'
+	id 'maven-publish'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'org.cadixdev.licenser' version '0.6.1'
+	id 'com.modrinth.minotaur' version '1.2.+'
 }
 
-import net.fabricmc.loom.task.RemapJarTask
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.modrinth.minotaur.TaskModrinthUpload
 import com.modrinth.minotaur.request.VersionType
 import com.modrinth.minotaur.responses.ResponseError
+import net.fabricmc.loom.task.RemapJarTask
 import org.apache.http.client.config.CookieSpecs
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.entity.EntityBuilder
@@ -26,238 +26,238 @@ group = project.maven_group
 version = "${project.mod_version}+${getMCVersionString()}"
 archivesBaseName = project.archives_base_name
 Set<String> modules = [
-        'fabric-renderer-api-v1',
-        'fabric-renderer-indigo',
-        'fabric-resource-loader-v0'
+		'fabric-renderer-api-v1',
+		'fabric-renderer-indigo',
+		'fabric-resource-loader-v0'
 ]
 
 // This field defines the Java version your mod target.
 def targetJavaVersion = 16
 
 boolean isMCVersionNonRelease() {
-    return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
-            || project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
+			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
 }
 
 String getMCVersionString() {
-    if (isMCVersionNonRelease()) {
-        return project.minecraft_version
-    }
-    def version = project.minecraft_version.split('\\.')
-    return version[0] + '.' + version[1]
+	if (isMCVersionNonRelease()) {
+		return project.minecraft_version
+	}
+	def version = project.minecraft_version.split('\\.')
+	return version[0] + '.' + version[1]
 }
 
 String parseReadme() {
-    def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
-    def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
+	def excludeRegex = /(?m)<!-- modrinth_exclude\.start -->(.|\n)*?<!-- modrinth_exclude\.end -->/
+	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
 
-    def readme = (String) file('README.md').text
-    readme = readme.replaceAll(excludeRegex, '')
-    readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.17/$2)')
-    return readme
+	def readme = (String) file('README.md').text
+	readme = readme.replaceAll(excludeRegex, '')
+	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.17/$2)')
+	return readme
 }
 
 minecraft {
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        name 'Gegy'
-        url 'https://maven.gegy.dev'
-    }
-    maven {
-        name 'TerraformersMC'
-        url 'https://maven.terraformersmc.com/'
-        content {
-            includeGroup 'dev.emi'
-            includeGroup 'com.terraformersmc'
-        }
-    }
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name 'Gegy'
+		url 'https://maven.gegy.dev'
+	}
+	maven {
+		name 'TerraformersMC'
+		url 'https://maven.terraformersmc.com/'
+		content {
+			includeGroup 'dev.emi'
+			includeGroup 'com.terraformersmc'
+		}
+	}
 }
 
 configurations {
-    shadow
-    api.extendsFrom shadow
+	shadow
+	api.extendsFrom shadow
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API.
-    modules.stream().map { fabricApi.module(it, project.fabric_api_version) }.forEach {
-        modImplementation it
-    }
+	// Fabric API.
+	modules.stream().map { fabricApi.module(it, project.fabric_api_version) }.forEach {
+		modImplementation it
+	}
 
-    modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
-    include "dev.lambdaurora:spruceui:${project.spruceui_version}"
+	modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
+	include "dev.lambdaurora:spruceui:${project.spruceui_version}"
 
-    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
-        transitive = false
-    }
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		transitive = false
+	}
 
-    shadow 'com.electronwill.night-config:core:3.6.3'
-    shadow 'com.electronwill.night-config:toml:3.6.3'
+	shadow 'com.electronwill.night-config:core:3.6.3'
+	shadow 'com.electronwill.night-config:toml:3.6.3'
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
-    targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
+	sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
+	targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
 
-    withSourcesJar()
+	withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = 'UTF-8'
+	it.options.encoding = 'UTF-8'
 
-    it.options.release.set(targetJavaVersion)
+	it.options.release.set(targetJavaVersion)
 }
 
 processResources {
-    inputs.property 'version', project.version
+	inputs.property 'version', project.version
 
-    filesMatching('fabric.mod.json') {
-        expand 'version': project.version
-    }
+	filesMatching('fabric.mod.json') {
+		expand 'version': project.version
+	}
 }
 
 jar {
-    from('LICENSE') {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
+	from('LICENSE') {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
 }
 
 license {
-    header file('HEADER')
-    include '**/*.java'
+	header file('HEADER')
+	include '**/*.java'
 }
 
 shadowJar {
-    dependsOn jar
-    configurations = [project.configurations.shadow]
-    archiveClassifier.set('dev')
+	dependsOn jar
+	configurations = [project.configurations.shadow]
+	archiveClassifier.set('dev')
 
-    relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
+	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
 remapJar.dependsOn(shadowJar)
 
 task shadowRemapJar(type: RemapJarTask) {
-    dependsOn shadowJar
+	dependsOn shadowJar
 
-    input.set(file("${project.buildDir}/libs/$archivesBaseName-${project.version}-dev.jar"))
-    archiveFileName = "${archivesBaseName}-${project.version}.jar"
-    addNestedDependencies.set(true)
+	input.set(file("${project.buildDir}/libs/$archivesBaseName-${project.version}-dev.jar"))
+	archiveFileName = "${archivesBaseName}-${project.version}.jar"
+	addNestedDependencies.set(true)
 }
 build.dependsOn(shadowRemapJar)
 
 task publishModrinth(type: TaskModrinthUpload) {
-    dependsOn(build)
-    onlyIf {
-        System.getenv('MODRINTH_TOKEN')
-    }
+	dependsOn(build)
+	onlyIf {
+		System.getenv('MODRINTH_TOKEN')
+	}
 
-    token = System.getenv('MODRINTH_TOKEN')
-    projectId = project.modrinth_id
-    versionNumber = version
-    versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
-    uploadFile = shadowRemapJar
-    addGameVersion((String) project.minecraft_version)
-    addLoader('fabric')
-    versionType = isMCVersionNonRelease() ? VersionType.BETA : VersionType.RELEASE
+	token = System.getenv('MODRINTH_TOKEN')
+	projectId = project.modrinth_id
+	versionNumber = version
+	versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
+	uploadFile = shadowRemapJar
+	addGameVersion((String) project.minecraft_version)
+	addLoader('fabric')
+	versionType = isMCVersionNonRelease() ? VersionType.BETA : VersionType.RELEASE
 
-    // Changelog fetching
-    def changelogText = file('CHANGELOG.md').text.replaceAll('\\r\\n', '\n')
-    def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
-    def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
-    def matcher = changelogText =~ changelogRegex
+	// Changelog fetching
+	def changelogText = file('CHANGELOG.md').text.replaceAll('\\r\\n', '\n')
+	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
+	def matcher = changelogText =~ changelogRegex
 
-    if (matcher.find()) {
-        changelog = matcher.group(1)
+	if (matcher.find()) {
+		changelog = matcher.group(1)
 
-        def changelogLines = changelogText.split('\n')
-        def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
-        for (int i = changelogLines.length - 1; i > 0; i--) {
-            def line = changelogLines[i]
-            if ((line =~ linkRefRegex).find())
-                changelog += '\n' + line
-            else break
-        }
-    }
+		def changelogLines = changelogText.split('\n')
+		def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
+		for (int i = changelogLines.length - 1; i > 0; i--) {
+			def line = changelogLines[i]
+			if ((line =~ linkRefRegex).find())
+				changelog += '\n' + line
+			else break
+		}
+	}
 
-    // Readme
-    doFirst {
-        final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
-        final def patch = new HttpPatch((String) (apiURL + '/v1/mod/' + projectId))
-        patch.addHeader("Authorization", token)
+	// Readme
+	doFirst {
+		final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
+		final def patch = new HttpPatch((String) (apiURL + '/v1/mod/' + projectId))
+		patch.addHeader("Authorization", token)
 
-        var json = new JsonObject()
-        json.addProperty("body", parseReadme())
-        patch.setEntity(EntityBuilder.create()
-                .setText(json.toString())
-                .setContentType(ContentType.APPLICATION_JSON)
-                .build())
+		var json = new JsonObject()
+		json.addProperty("body", parseReadme())
+		patch.setEntity(EntityBuilder.create()
+				.setText(json.toString())
+				.setContentType(ContentType.APPLICATION_JSON)
+				.build())
 
-        final def response = client.execute(patch)
-        final int status = response.getStatusLine().getStatusCode()
+		final def response = client.execute(patch)
+		final int status = response.getStatusLine().getStatusCode()
 
-        final def gson = new GsonBuilder().create()
-        if (status == 200) {
-            project.getLogger().lifecycle("Successfully updated readme to ${projectId}.")
-        } else {
-            errorInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), ResponseError.class)
-            project.getLogger().error("Upload failed! Status: ${status} Error: ${errorInfo.getError()} Reason: ${errorInfo.getDescription()}")
-            throw new GradleException("Upload failed! Status: ${status} Reason: ${errorInfo.getDescription()}")
-        }
-    }
+		final def gson = new GsonBuilder().create()
+		if (status == 200) {
+			project.getLogger().lifecycle("Successfully updated readme to ${projectId}.")
+		} else {
+			errorInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), ResponseError.class)
+			project.getLogger().error("Upload failed! Status: ${status} Error: ${errorInfo.getError()} Reason: ${errorInfo.getDescription()}")
+			throw new GradleException("Upload failed! Status: ${status} Reason: ${errorInfo.getDescription()}")
+		}
+	}
 }
 
 // Configure the maven publication.
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
 
-            pom {
-                name = 'LambdaBetterGrass'
-                description = 'Adds actual better grass to the game.'
-            }
+			pom {
+				name = 'LambdaBetterGrass'
+				description = 'Adds actual better grass to the game.'
+			}
 
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
+			pom.withXml {
+				def dependenciesNode = asNode().appendNode('dependencies')
 
-                configurations.shadow.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
+				configurations.shadow.allDependencies.each {
+					def dependencyNode = dependenciesNode.appendNode('dependency')
 
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                    dependencyNode.appendNode('scope', 'compile')
-                }
-            }
-        }
-    }
+					dependencyNode.appendNode('groupId', it.group)
+					dependencyNode.appendNode('artifactId', it.name)
+					dependencyNode.appendNode('version', it.version)
+					dependencyNode.appendNode('scope', 'compile')
+				}
+			}
+		}
+	}
 
-    repositories {
-        mavenLocal()
-        maven {
-            name = 'BuildDirLocal'
-            url = "$buildDir/repo"
-        }
-        maven {
-            name = 'GithubPackages'
-            url = uri('https://maven.pkg.github.com/LambdAurora/LambdaBetterGrass')
-            credentials {
-                username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
-                password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
-            }
-        }
-    }
+	repositories {
+		mavenLocal()
+		maven {
+			name = 'BuildDirLocal'
+			url = "$buildDir/repo"
+		}
+		maven {
+			name = 'GithubPackages'
+			url = uri('https://maven.pkg.github.com/LambdAurora/LambdaBetterGrass')
+			credentials {
+				username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+				password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
+			}
+		}
+	}
 }

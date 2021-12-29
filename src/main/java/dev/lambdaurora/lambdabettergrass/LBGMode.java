@@ -25,55 +25,55 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public enum LBGMode implements Nameable {
-    OFF(SpruceTexts.OPTIONS_OFF, Formatting.RED),
-    FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, Formatting.GOLD),
-    FAST(SpruceTexts.OPTIONS_GENERIC_FAST, Formatting.YELLOW),
-    FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, Formatting.GREEN);
+	OFF(SpruceTexts.OPTIONS_OFF, Formatting.RED),
+	FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, Formatting.GOLD),
+	FAST(SpruceTexts.OPTIONS_GENERIC_FAST, Formatting.YELLOW),
+	FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, Formatting.GREEN);
 
-    private final Text text;
+	private final Text text;
 
-    LBGMode(Text text, Formatting formatting) {
-        this.text = text.copy().formatted(formatting);
-    }
+	LBGMode(Text text, Formatting formatting) {
+		this.text = text.copy().formatted(formatting);
+	}
 
-    /**
-     * Returns whether this mode enables better grass.
-     *
-     * @return {@code true} if the mode enables better grass, otherwise {@code false}
-     */
-    public boolean isEnabled() {
-        return this != OFF;
-    }
+	/**
+	 * Returns whether this mode enables better grass.
+	 *
+	 * @return {@code true} if the mode enables better grass, otherwise {@code false}
+	 */
+	public boolean isEnabled() {
+		return this != OFF;
+	}
 
-    /**
-     * {@return the next available better grass mode}
-     */
-    public LBGMode next() {
-        var v = values();
-        if (v.length == this.ordinal() + 1)
-            return v[0];
-        return v[this.ordinal() + 1];
-    }
+	/**
+	 * {@return the next available better grass mode}
+	 */
+	public LBGMode next() {
+		var v = values();
+		if (v.length == this.ordinal() + 1)
+			return v[0];
+		return v[this.ordinal() + 1];
+	}
 
-    /**
-     * {@return the translated text of the better grass mode}
-     */
-    public Text getTranslatedText() {
-        return this.text;
-    }
+	/**
+	 * {@return the translated text of the better grass mode}
+	 */
+	public Text getTranslatedText() {
+		return this.text;
+	}
 
-    @Override
-    public String getName() {
-        return this.name().toLowerCase();
-    }
+	@Override
+	public String getName() {
+		return this.name().toLowerCase();
+	}
 
-    /**
-     * Gets the better grass mode from its identifier.
-     *
-     * @param id the identifier of the better grass mode
-     * @return the better grass mode if found, otherwise empty
-     */
-    public static Optional<LBGMode> byId(String id) {
-        return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();
-    }
+	/**
+	 * Gets the better grass mode from its identifier.
+	 *
+	 * @param id the identifier of the better grass mode
+	 * @return the better grass mode if found, otherwise empty
+	 */
+	public static Optional<LBGMode> byId(String id) {
+		return Arrays.stream(values()).filter(mode -> mode.getName().equalsIgnoreCase(id)).findFirst();
+	}
 }

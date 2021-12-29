@@ -17,6 +17,6 @@ import java.nio.channels.WritableByteChannel;
 
 @Mixin(NativeImage.class)
 public interface NativeImageAccessor {
-    @Invoker("write")
-    boolean lbg$write(WritableByteChannel writableByteChannel);
+	@Invoker("write")
+	boolean lbg$write(WritableByteChannel writableByteChannel);
 }

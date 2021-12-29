@@ -21,8 +21,8 @@ import dev.lambdaurora.lambdabettergrass.gui.SettingsScreen;
  * @since 1.0.0
  */
 public class LambdaBetterGrassModMenu implements ModMenuApi {
-    @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return SettingsScreen::new;
-    }
+	@Override
+	public ConfigScreenFactory<?> getModConfigScreenFactory() {
+		return SettingsScreen::new;
+	}
 }

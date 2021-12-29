@@ -34,83 +34,83 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
-    private static final List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
+	private static final List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
 
-    public final Identifier id;
-    public final Block block;
-    public final Identifier modelId;
-    private final String name;
+	public final Identifier id;
+	public final Block block;
+	public final Identifier modelId;
+	private final String name;
 
-    public LBGLayerType(Identifier id, Block block, Identifier modelId) {
-        this.id = id;
-        this.block = block;
-        this.modelId = modelId;
-        String[] path = this.id.getPath().split("/");
-        this.name = path[path.length - 1];
-    }
+	public LBGLayerType(Identifier id, Block block, Identifier modelId) {
+		this.id = id;
+		this.block = block;
+		this.modelId = modelId;
+		String[] path = this.id.getPath().split("/");
+		this.name = path[path.length - 1];
+	}
 
-    /**
-     * Returns the unbaked layer model.
-     *
-     * @param modelGetter The model getter.
-     * @return The unbaked model.
-     */
-    public UnbakedModel getLayerModel(Function<Identifier, UnbakedModel> modelGetter) {
-        return modelGetter.apply(this.modelId);
-    }
+	/**
+	 * Returns the unbaked layer model.
+	 *
+	 * @param modelGetter The model getter.
+	 * @return The unbaked model.
+	 */
+	public UnbakedModel getLayerModel(Function<Identifier, UnbakedModel> modelGetter) {
+		return modelGetter.apply(this.modelId);
+	}
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
+	@Override
+	public String getName() {
+		return this.name;
+	}
 
-    /**
-     * Resets the registered layer types.
-     */
-    public static void reset() {
-        LAYER_TYPES.clear();
-    }
+	/**
+	 * Resets the registered layer types.
+	 */
+	public static void reset() {
+		LAYER_TYPES.clear();
+	}
 
-    public static void forEach(Consumer<LBGLayerType> consumer) {
-        LAYER_TYPES.forEach(consumer);
-    }
+	public static void forEach(Consumer<LBGLayerType> consumer) {
+		LAYER_TYPES.forEach(consumer);
+	}
 
-    public static @Nullable LBGLayerType fromName(String name) {
-        for (var type : LAYER_TYPES) {
-            if (type.getName().equals(name))
-                return type;
-        }
-        return null;
-    }
+	public static @Nullable LBGLayerType fromName(String name) {
+		for (var type : LAYER_TYPES) {
+			if (type.getName().equals(name))
+				return type;
+		}
+		return null;
+	}
 
-    public static void load(Identifier resourceId, ResourceManager resourceManager) {
-        var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
-        try {
-            var stream = resourceManager.getResource(resourceId).getInputStream();
-            var json = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+	public static void load(Identifier resourceId, ResourceManager resourceManager) {
+		var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
+		try {
+			var stream = resourceManager.getResource(resourceId).getInputStream();
+			var json = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
 
-            var affectId = new Identifier(json.get("block").getAsString());
-            var block = Registry.BLOCK.get(affectId);
+			var affectId = new Identifier(json.get("block").getAsString());
+			var block = Registry.BLOCK.get(affectId);
 
-            if (block == Blocks.AIR)
-                return;
+			if (block == Blocks.AIR)
+				return;
 
-            var modelId = new Identifier(json.get("model").getAsString());
+			var modelId = new Identifier(json.get("model").getAsString());
 
-            stream.close();
+			stream.close();
 
-            LAYER_TYPES.add(new LBGLayerType(id, block, modelId));
-        } catch (IOException | IllegalStateException e) {
-            LambdaBetterGrass.get().warn("Failed to load layer type \"" + id + "\".");
-        }
-    }
+			LAYER_TYPES.add(new LBGLayerType(id, block, modelId));
+		} catch (IOException | IllegalStateException e) {
+			LambdaBetterGrass.get().warn("Failed to load layer type \"" + id + "\".");
+		}
+	}
 
-    @Override
-    public String toString() {
-        return "LBGLayerType{" +
-                "id=" + id +
-                ", block=" + block +
-                ", modelId=" + modelId +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "LBGLayerType{" +
+				"id=" + id +
+				", block=" + block +
+				", modelId=" + modelId +
+				'}';
+	}
 }
