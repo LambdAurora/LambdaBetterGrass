@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LambdaBetterGrass implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdabettergrass";
-	@Deprecated(forRemoval = true) // JsonParser constructor is deprecated in 1.18+
 	public static final JsonParser JSON_PARSER = new JsonParser();
 	/* Default masks */
 	public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = mc("bettergrass/mask/standard_block_side_connect.png");
