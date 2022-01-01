@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "Bu mod, etkilenecek blokları belirlemek için kaynak paket dosyaları kullanır.",
+  "lambdabettergrass.menu.info.2": "Bu, bloklardaki Daha İyi Çimen/Kar özelliğinin açılması veya kapatılması için",
+  "lambdabettergrass.menu.info.3": "kaynak paketleriyle değiştirilmesi gerektiği anlamına geliyor.",
+  "lambdabettergrass.menu.info.read_more": "Fazlası için oku: %s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass ayarlaması",
+  "lambdabettergrass.menu.title.info": "Mod nasıl çalışsın?",
+  "lambdabettergrass.option.better_snow": "Daha İyi Kar",
+  "lambdabettergrass.option.mode": "Daha İyi Çimen",
+  "lambdabettergrass.tooltip.better_snow": "Daha iyi kar özelliğini etkinleştirir.\nEtkinken, bazı blokların yanlarında kar varsa, karlı varyasyonları ve/veya altında kar tabakası eklenir. \nNot: Eğer geçerli dosyalar mevcutsa, diğer kara benzeyen bloklarla da çalışır.",
+  "lambdabettergrass.tooltip.mode": "Daha iyi çimen özelliğini etkinleştirir.\n - %s daha iyi çimen özelliğini tamamen devre dışı bırakır.\n - %s Çimen bloğunun üst dokusunu alıp tüm yan taraflarına kopyalar. OptiFine'daki Hızlı seçeneğine benzer.\n - %s OptiFine'daki Fancy seçeneğindeki gibi çimen blok dokularını bağlar\n - %s çimen blok dokularını bağlar ve komşu çimen bloklarının yan dokularını düzeltir."
+}
