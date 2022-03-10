@@ -137,26 +137,18 @@ license {
 shadowJar {
 	dependsOn jar
 	configurations = [project.configurations.shadow]
+	destinationDirectory.set(file("${project.buildDir}/devlibs"))
 	archiveClassifier.set('dev')
 
 	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
-remapJar.dependsOn(shadowJar)
-
-task shadowRemapJar(type: RemapJarTask) {
-	dependsOn shadowJar
-
-	input = file("${project.buildDir}/devlibs/$archivesBaseName-${project.version}-dev.jar")
-	archiveFileName = "${archivesBaseName}-${project.version}.jar"
-	addNestedDependencies.set(true)
-}
-build.dependsOn(shadowRemapJar)
+prepareRemapJar.dependsOn(shadowJar)
 
 modrinth {
 	projectId = project.modrinth_id
 	versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
 	versionType = isMCVersionNonRelease() ? "beta" : "release"
-	uploadFile = tasks.shadowRemapJar
+	uploadFile = tasks.remapJar
 	gameVersions = [project.minecraft_version]
 	loaders = ["fabric"]
 	dependencies = [
