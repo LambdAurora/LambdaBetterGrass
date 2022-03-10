@@ -1,10 +1,10 @@
 plugins {
 	id 'fabric-loom' version '0.10.+'
 	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
+	id 'org.quiltmc.gradle.licenser' version '1.0.1'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.0.0'
-	id 'org.cadixdev.licenser' version '0.6.1'
 	id 'com.modrinth.minotaur' version '1.2.+'
 }
 
@@ -126,7 +126,7 @@ jar {
 }
 
 license {
-	header file('HEADER')
+	rule file('HEADER')
 	include '**/*.java'
 }
 
