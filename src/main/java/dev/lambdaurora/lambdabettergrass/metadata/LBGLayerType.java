@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata;
 
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.spruceui.util.Nameable;
 import net.minecraft.block.Block;
@@ -30,7 +31,7 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
@@ -86,8 +87,8 @@ public class LBGLayerType implements Nameable {
 	public static void load(Identifier resourceId, ResourceManager resourceManager) {
 		var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
 		try {
-			var stream = resourceManager.getResource(resourceId).getInputStream();
-			var json = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(stream)).getAsJsonObject();
+			var stream = resourceManager.method_14486(resourceId).getInputStream();
+			var json = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
 
 			var affectId = new Identifier(json.get("block").getAsString());
 			var block = Registry.BLOCK.get(affectId);

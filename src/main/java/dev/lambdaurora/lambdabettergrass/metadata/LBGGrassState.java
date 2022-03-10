@@ -10,6 +10,7 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -29,7 +30,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -79,9 +80,9 @@ public class LBGGrassState extends LBGState {
 		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
 		if (resourceManager.containsResource(metadataResourceId)) {
 			try {
-				var metadataJson = (JsonObject) LambdaBetterGrass.JSON_PARSER.parse(
-						new InputStreamReader(resourceManager.getResource(metadataResourceId).getInputStream())
-				);
+				var metadataJson = JsonParser.parseReader(
+						new InputStreamReader(resourceManager.method_14486(metadataResourceId).getInputStream())
+				).getAsJsonObject();
 
 				return new LBGMetadata(resourceManager, metadataId, metadataJson);
 			} catch (IOException e) {

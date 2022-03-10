@@ -27,15 +27,15 @@
     "lambdabettergrass.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.12",
-    "minecraft": ">=1.17",
+    "fabricloader": ">=0.13.3",
+    "minecraft": ">=1.18.2",
     "fabric-renderer-api-v1": "*",
     "fabric-resource-loader-v0": ">=0.4.7",
-    "spruceui": ">=3.3.2",
-    "java": ">=16"
+    "spruceui": ">=3.3.3",
+    "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=2.0.0"
+    "modmenu": ">=3.1.0"
   },
   "breaks": {
     "optifabric": "*"

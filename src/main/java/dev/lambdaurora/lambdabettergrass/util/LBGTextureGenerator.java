@@ -40,7 +40,7 @@ public enum LBGTextureGenerator {
 		}
 
 		try {
-			return NativeImage.read(resourceManager.getResource(FALLBACK_TEXTURE).getInputStream());
+			return NativeImage.read(resourceManager.method_14486(FALLBACK_TEXTURE).getInputStream());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
@@ -62,7 +62,7 @@ public enum LBGTextureGenerator {
 		}
 
 		try {
-			return NativeImage.read(resourceManager.getResource(path).getInputStream());
+			return NativeImage.read(resourceManager.method_14486(path).getInputStream());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
 					+ ". Loading fallback texture instead.");

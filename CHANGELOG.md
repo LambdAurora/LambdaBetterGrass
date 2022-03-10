@@ -78,5 +78,11 @@ The first release of LambdaBetterGrass!
 - Fixed layer block detection in better snow.
 - Updated [SpruceUI].
 
+### 1.2.3
+
+- Added Turkish translations ([#35](https://github.com/LambdAurora/LambdaBetterGrass/pull/35)).
+- Updated to Minecraft 1.18.2.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

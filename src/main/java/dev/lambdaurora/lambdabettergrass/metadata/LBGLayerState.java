@@ -10,7 +10,7 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
-import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -34,7 +34,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -68,7 +68,7 @@ public class LBGLayerState extends LBGState {
 		try {
 			var resources = resourceManager.getAllResources(metadataResourceId);
 			for (var resource : resources) {
-				var metadataJson = LambdaBetterGrass.JSON_PARSER.parse(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
+				var metadataJson = JsonParser.parseReader(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
 
 				for (var entry : metadataJson.entrySet()) {
 					var type = LBGLayerType.fromName(entry.getKey());

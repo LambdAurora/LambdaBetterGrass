@@ -9,8 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass.mixin;
 
-import com.google.gson.JsonObject;
-import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerType;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import net.minecraft.client.render.model.ModelLoader;
@@ -81,9 +80,9 @@ public abstract class ModelLoaderMixin {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
 					if (this.resourceManager.containsResource(stateResourceId)) {
 						try {
-							var json = (JsonObject) LambdaBetterGrass.JSON_PARSER.parse(
-									new InputStreamReader(this.resourceManager.getResource(stateResourceId).getInputStream())
-							);
+							var json = JsonParser.parseReader(
+									new InputStreamReader(this.resourceManager.method_14486(stateResourceId).getInputStream())
+							).getAsJsonObject();
 							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
 						} catch (IOException e) {
 							// Ignore.

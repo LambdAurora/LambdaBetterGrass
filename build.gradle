@@ -33,7 +33,7 @@ Set<String> modules = [
 ]
 
 // This field defines the Java version your mod target.
-def targetJavaVersion = 16
+def targetJavaVersion = 17
 
 boolean isMCVersionNonRelease() {
 	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
@@ -81,7 +81,9 @@ configurations {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
+	mappings(loom.layered {
+		addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:v2"))
+	})
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API.

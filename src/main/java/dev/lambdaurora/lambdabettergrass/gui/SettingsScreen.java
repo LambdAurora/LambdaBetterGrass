@@ -36,12 +36,12 @@ import org.jetbrains.annotations.Nullable;
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.2.3
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
-	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/API.md";
+	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.18/documentation/API.md";
 
 	private final LBGConfig config;
 	private final Screen parent;
