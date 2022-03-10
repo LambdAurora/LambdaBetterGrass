@@ -1,17 +1,18 @@
 plugins {
-	id 'fabric-loom' version '0.10.+'
-	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
+	id 'fabric-loom' version '0.11.+'
+	id 'io.github.juuxel.loom-quiltflower' version '1.6.0'
+	id 'org.quiltmc.quilt-mappings-on-loom' version '4.0.0'
 	id 'org.quiltmc.gradle.licenser' version '1.0.1'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.0.0'
-	id 'com.modrinth.minotaur' version '1.2.+'
+	id 'com.modrinth.minotaur' version '2.+'
 }
+
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import com.modrinth.minotaur.TaskModrinthUpload
-import com.modrinth.minotaur.request.VersionType
+import com.modrinth.minotaur.dependencies.ModDependency
 import com.modrinth.minotaur.responses.ResponseError
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.http.client.config.CookieSpecs
@@ -107,7 +108,8 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
-
+	it.options.deprecation(true)
+	it.options.incremental(true)
 	it.options.release.set(targetJavaVersion)
 }
 
@@ -142,26 +144,22 @@ remapJar.dependsOn(shadowJar)
 task shadowRemapJar(type: RemapJarTask) {
 	dependsOn shadowJar
 
-	input.set(file("${project.buildDir}/libs/$archivesBaseName-${project.version}-dev.jar"))
+	input = file("${project.buildDir}/devlibs/$archivesBaseName-${project.version}-dev.jar")
 	archiveFileName = "${archivesBaseName}-${project.version}.jar"
 	addNestedDependencies.set(true)
 }
 build.dependsOn(shadowRemapJar)
 
-task publishModrinth(type: TaskModrinthUpload) {
-	dependsOn(build)
-	onlyIf {
-		System.getenv('MODRINTH_TOKEN')
-	}
-
-	token = System.getenv('MODRINTH_TOKEN')
+modrinth {
 	projectId = project.modrinth_id
-	versionNumber = version
 	versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
-	uploadFile = shadowRemapJar
-	addGameVersion((String) project.minecraft_version)
-	addLoader('fabric')
-	versionType = isMCVersionNonRelease() ? VersionType.BETA : VersionType.RELEASE
+	versionType = isMCVersionNonRelease() ? "beta" : "release"
+	uploadFile = tasks.shadowRemapJar
+	gameVersions = [project.minecraft_version]
+	loaders = ["fabric"]
+	dependencies = [
+			new ModDependency("P7dR8mSH", "required")
+	]
 
 	// Changelog fetching
 	def changelogText = file('CHANGELOG.md').text.replaceAll('\\r\\n', '\n')
@@ -170,42 +168,52 @@ task publishModrinth(type: TaskModrinthUpload) {
 	def matcher = changelogText =~ changelogRegex
 
 	if (matcher.find()) {
-		changelog = matcher.group(1)
+		def changelogContent = matcher.group(1)
 
 		def changelogLines = changelogText.split('\n')
 		def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
 		for (int i = changelogLines.length - 1; i > 0; i--) {
 			def line = changelogLines[i]
 			if ((line =~ linkRefRegex).find())
-				changelog += '\n' + line
+				changelogContent += '\n' + line
 			else break
 		}
-	}
 
-	// Readme
-	doFirst {
-		final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
-		final def patch = new HttpPatch((String) (apiURL + '/v1/mod/' + projectId))
-		patch.addHeader("Authorization", token)
-
-		var json = new JsonObject()
-		json.addProperty("body", parseReadme())
-		patch.setEntity(EntityBuilder.create()
-				.setText(json.toString())
-				.setContentType(ContentType.APPLICATION_JSON)
-				.build())
-
-		final def response = client.execute(patch)
-		final int status = response.getStatusLine().getStatusCode()
-
-		final def gson = new GsonBuilder().create()
-		if (status == 200) {
-			project.getLogger().lifecycle("Successfully updated readme to ${projectId}.")
-		} else {
-			errorInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), ResponseError.class)
-			project.getLogger().error("Upload failed! Status: ${status} Error: ${errorInfo.getError()} Reason: ${errorInfo.getDescription()}")
-			throw new GradleException("Upload failed! Status: ${status} Reason: ${errorInfo.getDescription()}")
+		changelog = changelogContent
+	} else {
+		afterEvaluate {
+			tasks.modrinth.setEnabled(false)
 		}
+	}
+}
+
+tasks.modrinth.dependsOn(build)
+tasks.modrinth.doFirst {
+	final def client = HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build()).build()
+	final def patch = new HttpPatch((String) (modrinth.apiUrl.get() + '/project/' + project.modrinth_id))
+	patch.addHeader("Authorization", modrinth.token.get())
+
+	var json = new JsonObject()
+	json.addProperty("body", parseReadme())
+	patch.setEntity(EntityBuilder.create()
+			.setText(json.toString())
+			.setContentType(ContentType.APPLICATION_JSON)
+			.build())
+
+	final def response = client.execute(patch)
+	final int status = response.getStatusLine().getStatusCode()
+
+	final def gson = new GsonBuilder().create()
+	if (status == 200 || status == 204) {
+		project.getLogger().lifecycle("Successfully updated readme to ${modrinth.projectId.get()}.")
+	} else {
+		if (response.getEntity() == null) {
+			project.getLogger().error("Readme update failed! Status: ${status} Reason: ${response.statusLine.reasonPhrase}")
+			throw new GradleException("Readme update failed! Status: ${status} Reason: ${response.statusLine.reasonPhrase}")
+		}
+		errorInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), ResponseError.class)
+		project.getLogger().error("Readme update failed! Status: ${status} Error: ${errorInfo.getError()} Reason: ${errorInfo.getDescription()}")
+		throw new GradleException("Readme failed! Status: ${status} Reason: ${errorInfo.getDescription()}")
 	}
 }
 
