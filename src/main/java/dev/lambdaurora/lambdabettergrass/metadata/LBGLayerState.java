@@ -68,7 +68,7 @@ public class LBGLayerState extends LBGState {
 		try {
 			var resources = resourceManager.getAllResources(metadataResourceId);
 			for (var resource : resources) {
-				var metadataJson = JsonParser.parseReader(new InputStreamReader(resource.getInputStream())).getAsJsonObject();
+				var metadataJson = JsonParser.parseReader(new InputStreamReader(resource.open())).getAsJsonObject();
 
 				for (var entry : metadataJson.entrySet()) {
 					var type = LBGLayerType.fromName(entry.getKey());
@@ -81,7 +81,7 @@ public class LBGLayerState extends LBGState {
 					}
 				}
 
-				resource.close();
+				// resource.close();
 			}
 		} catch (IOException e) {
 			LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id

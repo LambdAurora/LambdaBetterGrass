@@ -63,8 +63,8 @@ public abstract class ModelLoaderMixin {
 					LBGState.reset();
 					LBGLayerType.reset();
 					var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
-							path -> path.endsWith(".json"));
-					for (var layerTypeId : layerTypes) {
+							path -> path.toString().endsWith(".json"));
+					for (var layerTypeId : layerTypes.keySet()) {
 						LBGLayerType.load(layerTypeId, this.resourceManager);
 					}
 					this.lbg$firstLoad = false;
@@ -78,10 +78,10 @@ public abstract class ModelLoaderMixin {
 				// Find and load states metadata if not cached.
 				if (state == null) {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-					if (this.resourceManager.containsResource(stateResourceId)) {
+					if (this.resourceManager.getResource(stateResourceId).isPresent()) {
 						try {
 							var json = JsonParser.parseReader(
-									new InputStreamReader(this.resourceManager.method_14486(stateResourceId).getInputStream())
+									new InputStreamReader(this.resourceManager.open(stateResourceId))
 							).getAsJsonObject();
 							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
 						} catch (IOException e) {
