@@ -65,28 +65,27 @@ public class LBGLayerState extends LBGState {
 	                         ModelVariantMap.DeserializationContext deserializationContext) {
 		var metadataId = Identifier.tryParse(json.get("data").getAsString());
 		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-		try {
-			var resources = resourceManager.getAllResources(metadataResourceId);
-			for (var resource : resources) {
-				var metadataJson = JsonParser.parseReader(new InputStreamReader(resource.open())).getAsJsonObject();
+		
+        var resources = resourceManager.getAllResources(metadataResourceId);
+        for (var resource : resources) {
+            try (var reader = new InputStreamReader(resource.open())) {
+                var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
-				for (var entry : metadataJson.entrySet()) {
-					var type = LBGLayerType.fromName(entry.getKey());
+                for (var entry : metadataJson.entrySet()) {
+                    var type = LBGLayerType.fromName(entry.getKey());
 
-					if (type == null)
-						continue;
+                    if (type == null)
+                        continue;
 
-					if (entry.getValue().isJsonObject()) {
-						this.putOrReplaceMetadata(variant, metadataId, type, entry.getValue().getAsJsonObject(), deserializationContext);
-					}
-				}
-
-				// resource.close();
-			}
-		} catch (IOException e) {
-			LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
-					+ "\" (variant: \"" + variant + "\").", e);
-		}
+                    if (entry.getValue().isJsonObject()) {
+                        this.putOrReplaceMetadata(variant, metadataId, type, entry.getValue().getAsJsonObject(), deserializationContext);
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
+                        + "\" (variant: \"" + variant + "\").", e);
+            }
+        }
 	}
 
 	private void putOrReplaceMetadata(String variant, Identifier metadataId, @Nullable LBGLayerType type, JsonObject metadataJson,

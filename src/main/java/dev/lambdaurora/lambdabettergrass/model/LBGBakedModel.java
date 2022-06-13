@@ -31,7 +31,6 @@ import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 /**

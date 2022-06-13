@@ -78,11 +78,10 @@ public abstract class ModelLoaderMixin {
 				// Find and load states metadata if not cached.
 				if (state == null) {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-					if (this.resourceManager.getResource(stateResourceId).isPresent()) {
-						try {
-							var json = JsonParser.parseReader(
-									new InputStreamReader(this.resourceManager.open(stateResourceId))
-							).getAsJsonObject();
+                    var stateResource = resourceManager.getResource(stateResourceId);
+					if (stateResource.isPresent()) {
+						try (var reader = new InputStreamReader(stateResource.get().open())) {
+							var json = JsonParser.parseReader(reader).getAsJsonObject();
 							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
 						} catch (IOException e) {
 							// Ignore.

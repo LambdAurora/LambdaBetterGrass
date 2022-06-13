@@ -86,8 +86,7 @@ public class LBGLayerType implements Nameable {
 
 	public static void load(Identifier resourceId, ResourceManager resourceManager) {
 		var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
-		try {
-			var stream = resourceManager.open(resourceId);
+		try (var stream = resourceManager.open(resourceId)) {
 			var json = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
 
 			var affectId = new Identifier(json.get("block").getAsString());

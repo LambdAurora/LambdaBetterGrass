@@ -1,5 +1,5 @@
 /*
- * Copyright � 2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -34,13 +34,14 @@ public enum LBGTextureGenerator {
 	 * @return the fallback {@link NativeImage} instance if possible, otherwise a new instance with non-cleared buffer
 	 */
 	private static NativeImage getFallbackNativeImage(ResourceManager resourceManager) {
-		if (!resourceManager.getResource(FALLBACK_TEXTURE).isPresent()) {
+        var fallbackTexture = resourceManager.getResource(FALLBACK_TEXTURE);
+		if (fallbackTexture.isEmpty()) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
 		}
 
 		try {
-			return NativeImage.read(resourceManager.open(FALLBACK_TEXTURE));
+			return NativeImage.read(fallbackTexture.get().open());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
