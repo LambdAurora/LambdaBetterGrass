@@ -34,14 +34,14 @@ public enum LBGTextureGenerator {
 	 * @return the fallback {@link NativeImage} instance if possible, otherwise a new instance with non-cleared buffer
 	 */
 	private static NativeImage getFallbackNativeImage(ResourceManager resourceManager) {
-        var fallbackTexture = resourceManager.getResource(FALLBACK_TEXTURE);
-		if (fallbackTexture.isEmpty()) {
+        var fallbackResource = resourceManager.getResource(FALLBACK_TEXTURE);
+		if (fallbackResource.isEmpty()) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
 		}
 
 		try {
-			return NativeImage.read(fallbackTexture.get().open());
+			return NativeImage.read(fallbackResource.get().open());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
@@ -57,13 +57,14 @@ public enum LBGTextureGenerator {
 	 * @see #getFallbackNativeImage(ResourceManager)
 	 */
 	public static NativeImage getNativeImage(ResourceManager resourceManager, Identifier path) {
-		if (!resourceManager.getResource(path).isPresent()) {
+        var nativeImageResource = resourceManager.getResource(path);
+		if (nativeImageResource.isEmpty()) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Loading fallback texture instead.");
 			return getFallbackNativeImage(resourceManager);
 		}
 
 		try {
-			return NativeImage.read(resourceManager.open(path));
+			return NativeImage.read(nativeImageResource.get().open());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
 					+ ". Loading fallback texture instead.");
