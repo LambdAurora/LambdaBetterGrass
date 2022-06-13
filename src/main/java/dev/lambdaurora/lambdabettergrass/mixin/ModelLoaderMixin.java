@@ -16,6 +16,7 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -26,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -78,15 +80,18 @@ public abstract class ModelLoaderMixin {
 				// Find and load states metadata if not cached.
 				if (state == null) {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-                    var stateResource = resourceManager.getResource(stateResourceId);
-					if (stateResource.isPresent()) {
-						try (var reader = new InputStreamReader(stateResource.get().open())) {
-							var json = JsonParser.parseReader(reader).getAsJsonObject();
-							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
-						} catch (IOException e) {
-							// Ignore.
-						}
-					}
+                    try {
+                        var stateResource = resourceManager.getResourceOrThrow(stateResourceId);
+
+                        try (var reader = new InputStreamReader(stateResource.open())) {
+                            var json = JsonParser.parseReader(reader).getAsJsonObject();
+                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
+                        } catch (IOException e) {
+                            // Ignore.
+                        }
+                    } catch (FileNotFoundException e) {
+                        // Ignore.
+                    }
 				}
 
 				// If states metadata found, search for corresponding metadata and if exists replace the model.
