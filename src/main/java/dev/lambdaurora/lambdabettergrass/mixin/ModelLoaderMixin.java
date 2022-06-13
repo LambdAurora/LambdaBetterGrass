@@ -16,7 +16,6 @@ import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -80,18 +79,14 @@ public abstract class ModelLoaderMixin {
 				// Find and load states metadata if not cached.
 				if (state == null) {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-                    try {
-                        var stateResource = resourceManager.getResourceOrThrow(stateResourceId);
-
-                        try (var reader = new InputStreamReader(stateResource.open())) {
-                            var json = JsonParser.parseReader(reader).getAsJsonObject();
-                            state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
-                        } catch (IOException e) {
-                            // Ignore.
-                        }
-                    } catch (FileNotFoundException e) {
-                        // Ignore.
-                    }
+					try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(stateResourceId).open())) {
+						var json = JsonParser.parseReader(reader).getAsJsonObject();
+						state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
+					} catch (FileNotFoundException e) {
+						// Ignore.
+					} catch (IOException e) {
+						// Ignore.
+					}
 				}
 
 				// If states metadata found, search for corresponding metadata and if exists replace the model.

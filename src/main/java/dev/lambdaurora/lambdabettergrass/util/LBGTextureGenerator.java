@@ -16,6 +16,7 @@ import com.mojang.blaze3d.texture.NativeImage;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
@@ -34,14 +35,13 @@ public enum LBGTextureGenerator {
 	 * @return the fallback {@link NativeImage} instance if possible, otherwise a new instance with non-cleared buffer
 	 */
 	private static NativeImage getFallbackNativeImage(ResourceManager resourceManager) {
-        var fallbackResource = resourceManager.getResource(FALLBACK_TEXTURE);
-		if (fallbackResource.isEmpty()) {
+		try {
+			var fallbackResource = resourceManager.getResourceOrThrow(FALLBACK_TEXTURE);
+
+			return NativeImage.read(fallbackResource.open());
+		} catch (FileNotFoundException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
-		}
-
-		try {
-			return NativeImage.read(fallbackResource.get().open());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
@@ -57,14 +57,13 @@ public enum LBGTextureGenerator {
 	 * @see #getFallbackNativeImage(ResourceManager)
 	 */
 	public static NativeImage getNativeImage(ResourceManager resourceManager, Identifier path) {
-        var nativeImageResource = resourceManager.getResource(path);
-		if (nativeImageResource.isEmpty()) {
+		try {
+			var nativeImageResource = resourceManager.getResourceOrThrow(path);
+
+			return NativeImage.read(nativeImageResource.open());
+		} catch (FileNotFoundException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Loading fallback texture instead.");
 			return getFallbackNativeImage(resourceManager);
-		}
-
-		try {
-			return NativeImage.read(nativeImageResource.get().open());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
 					+ ". Loading fallback texture instead.");
