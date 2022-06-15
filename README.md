@@ -1,8 +1,8 @@
 # LambdaBetterGrass
 
 <!-- modrinth_exclude.start -->
-![Java 16](https://img.shields.io/badge/language-Java%2016-9B599A.svg?style=flat-square) <!-- modrinth_exclude.end -->
-[![GitHub license](https://img.shields.io/github/license/LambdAurora/LambdaBetterGrass?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/master/LICENSE)
+![Java 17](https://img.shields.io/badge/language-Java%2017-9B599A.svg?style=flat-square) <!-- modrinth_exclude.end -->
+[![GitHub license](https://img.shields.io/github/license/LambdAurora/LambdaBetterGrass?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.18/LICENSE)
 ![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=flat-square)
 [![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/LambdaBetterGrass?label=version&style=flat-square)
