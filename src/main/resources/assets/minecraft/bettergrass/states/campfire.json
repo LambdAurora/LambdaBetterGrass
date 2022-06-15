@@ -1,6 +1,9 @@
 {
   "type": "layer",
   "variants": {
+    "lit=true,waterlogged=false": {
+      "data": "minecraft:bettergrass/data/lit_campfire"
+    },
     "lit=false,waterlogged=false": {
       "data": "minecraft:bettergrass/data/campfire"
     }

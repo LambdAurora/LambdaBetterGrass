@@ -1,7 +1,4 @@
 {
-  "snow": {
-    "layer": true
-  },
   "moss": {
     "layer": true,
     "offset": [
@@ -9,8 +6,5 @@
       0.001,
       0
     ]
-  },
-  "ash": {
-    "layer": true
   }
 }

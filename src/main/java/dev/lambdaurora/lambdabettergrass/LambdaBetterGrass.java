@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass;
 
+import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
@@ -18,33 +19,33 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 /**
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.2.4
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdabettergrass";
+	public static final Logger LOGGER = LogUtils.getLogger();
 	/* Default masks */
 	public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = mc("bettergrass/mask/standard_block_side_connect.png");
 	public static final Identifier BETTER_GRASS_SIDE_BLEND_UP_MASK = mc("bettergrass/mask/grass_block_side_blend_up.png");
 	public static final Identifier BETTER_GRASS_SIDE_ARCH_BLEND_MASK = mc("bettergrass/mask/grass_block_side_arch_blend.png");
 
-	private static LambdaBetterGrass INSTANCE;
-	public final Logger logger = LogManager.getLogger("lambdabettergrass");
+	@ApiStatus.Internal
+	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
 	public final LBGConfig config = new LBGConfig(this);
 	private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
 	public LBGResourcePack resourcePack;
 
 	@Override
 	public void onInitializeClient() {
-		INSTANCE = this;
 		this.log("Initializing LambdaBetterGrass...");
 		this.config.load();
 
@@ -63,7 +64,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param info the message to print
 	 */
 	public void log(String info) {
-		this.logger.info("[LambdaBetterGrass] " + info);
+		LOGGER.info("[LambdaBetterGrass] " + info);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param info the message to print
 	 */
 	public void warn(String info) {
-		this.logger.warn("[LambdaBetterGrass] " + info);
+		LOGGER.warn("[LambdaBetterGrass] " + info);
 	}
 
 	/**

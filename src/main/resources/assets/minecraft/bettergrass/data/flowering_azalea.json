@@ -1,11 +1,5 @@
 {
   "snow": {
     "layer": false
-  },
-  "moss": {
-    "layer": true
-  },
-  "ash": {
-    "layer": true
   }
 }

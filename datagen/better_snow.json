@@ -78,6 +78,66 @@
       }
     }
   },
+  "flower": [
+    "allium",
+    "azure_bluet",
+    "blue_orchid",
+    "cornflower",
+    "dandelion",
+    "lily_of_the_valley",
+    "orange_tulip",
+    "oxeye_daisy",
+    "pink_tulip",
+    "poppy",
+    "red_tulip",
+    "white_tulip"
+  ],
+  "double_flower": [
+    "lilac",
+    "peony",
+    "rose_bush",
+    "sunflower"
+  ],
+  "button": {
+    "entries": [
+      "acacia_button",
+      "polished_blackstone_button",
+      "birch_button",
+      "crimson_button",
+      "dark_oak_button",
+      "jungle_button",
+      "oak_button",
+      "spruce_button",
+      "stone_button",
+      "warped_button"
+    ],
+    "data": {
+      "snow": {
+        "layer": true,
+        "offset": [
+          0,
+          0.001,
+          0
+        ]
+      },
+      "moss": {
+        "layer": true,
+        "offset": [
+          0,
+          0.001,
+          0
+        ]
+      },
+      "ash": {
+        "layer": true,
+        "offset": [
+          0,
+          0.001,
+          0
+        ]
+      }
+    }
+  },
   "global": [
     "acacia_door",
     {
@@ -90,7 +150,6 @@
       "id": "acacia_trapdoor",
       "waterloggable": true
     },
-    "allium",
     {
       "id": "amethyst_cluster",
       "waterloggable": true
@@ -100,7 +159,6 @@
       "waterloggable": true
     },
     "anvil",
-    "azure_bluet",
     "bamboo",
     "bamboo_sapling",
     "bell",
@@ -135,7 +193,6 @@
       "id": "blue_candle",
       "waterloggable": true
     },
-    "blue_orchid",
     {
       "id": "brain_coral",
       "waterloggable": true
@@ -211,7 +268,6 @@
       "id": "conduit",
       "waterloggable": true
     },
-    "cornflower",
     "crimson_door",
     {
       "id": "crimson_fence",
@@ -229,7 +285,6 @@
       "waterloggable": true
     },
     "damaged_anvil",
-    "dandelion",
     "dark_oak_door",
     {
       "id": "dark_oak_fence",
@@ -408,8 +463,6 @@
       "id": "lightning_rod",
       "waterloggable": true
     },
-    "lilac",
-    "lily_of_the_valley",
     {
       "id": "lime_candle",
       "waterloggable": true
@@ -454,14 +507,10 @@
       "id": "orange_candle",
       "waterloggable": true
     },
-    "orange_tulip",
-    "oxeye_daisy",
-    "peony",
     {
       "id": "pink_candle",
       "waterloggable": true
     },
-    "pink_tulip",
     {
       "id": "pointed_dripstone",
       "waterloggable": true
@@ -478,7 +527,6 @@
       "id": "polished_deepslate_wall",
       "waterloggable": true
     },
-    "poppy",
     "powder_snow_cauldron",
     {
       "id": "prismarine_wall",
@@ -501,8 +549,6 @@
       "id": "red_sandstone_wall",
       "waterloggable": true
     },
-    "red_tulip",
-    "rose_bush",
     {
       "id": "sandstone_wall",
       "waterloggable": true
@@ -539,7 +585,6 @@
       "waterloggable": true
     },
     "sugar_cane",
-    "sunflower",
     "sweet_berry_bush",
     "tall_grass",
     "tripwire",
@@ -576,7 +621,6 @@
       "id": "white_candle",
       "waterloggable": true
     },
-    "white_tulip",
     "wither_rose",
     {
       "id": "yellow_candle",

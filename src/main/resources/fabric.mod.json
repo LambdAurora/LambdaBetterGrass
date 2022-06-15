@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass"
+      "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass::INSTANCE"
     ],
     "modmenu": [
       "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu"
