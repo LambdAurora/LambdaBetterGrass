@@ -84,5 +84,12 @@ The first release of LambdaBetterGrass!
 - Updated to Minecraft 1.18.2.
 - Updated [SpruceUI].
 
+### 1.2.4
+
+- Fixed grass connecting to obstructed grass ([#29](https://github.com/LambdAurora/LambdaBetterGrass/pull/29)).
+- Fixed random startup crashes ([#37](https://github.com/LambdAurora/LambdaBetterGrass/pull/37)).
+- Made data files default every non-explicit layers to `{ layer: true }`.
+- \[meta] Fixed compatibility changes being outdated on mod pages.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

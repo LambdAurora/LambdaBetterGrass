@@ -37,7 +37,7 @@ Better "snow" with the optional included resource pack in lush caves (credits to
 Configuration screen:
 ![config screen](images/config_screen.png)
 
-Searching other mods to replace OptiFine? [Check out this list!](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
+Searching other mods to replace OptiFine? [Check out this list!](https://lambdaurora.dev/optifine_alternatives)
 
 ## ✅ Features:
 
@@ -73,7 +73,7 @@ Please check out [this documentation](https://github.com/LambdAurora/LambdaBette
 
 ## 📖 Compatibility
 
-- [Sodium] is currently incompatible as it is missing the required Fabric Rendering API implementation which will be added in the future.
+- [Sodium] is compatible only with [Indium] present.
 - Canvas is compatible.
 - ConnectedBlockTextures is compatible.
 - OptiFabric is obviously incompatible.
@@ -83,3 +83,4 @@ Please check out [this documentation](https://github.com/LambdAurora/LambdaBette
 [Fabric API]: https://modrinth.com/mod/fabric-api "Fabric API Modrinth page"
 [ModMenu]: https://modrinth.com/mod/modmenu "ModMenu Modrinth page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
+[Indium]: https://modrinth.com/mod/indium "Indium Modrinth page"
