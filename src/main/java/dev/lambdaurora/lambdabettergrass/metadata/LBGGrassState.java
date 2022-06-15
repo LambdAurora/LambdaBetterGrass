@@ -83,8 +83,6 @@ public class LBGGrassState extends LBGState {
 			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
 			return new LBGMetadata(resourceManager, metadataId, metadataJson);
-		} catch (FileNotFoundException e) {
-			// Ignore.
 		} catch (IOException e) {
 			// Ignore.
 		}

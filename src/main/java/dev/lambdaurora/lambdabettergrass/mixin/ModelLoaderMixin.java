@@ -82,8 +82,6 @@ public abstract class ModelLoaderMixin {
 					try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(stateResourceId).open())) {
 						var json = JsonParser.parseReader(reader).getAsJsonObject();
 						state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
-					} catch (FileNotFoundException e) {
-						// Ignore.
 					} catch (IOException e) {
 						// Ignore.
 					}
