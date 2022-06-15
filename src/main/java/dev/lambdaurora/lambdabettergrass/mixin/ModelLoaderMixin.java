@@ -64,7 +64,7 @@ public abstract class ModelLoaderMixin {
 					LBGState.reset();
 					LBGLayerType.reset();
 					var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
-							path -> path.toString().endsWith(".json"));
+							path -> path.getPath().endsWith(".json"));
 					for (var layerTypeId : layerTypes.keySet()) {
 						LBGLayerType.load(layerTypeId, this.resourceManager);
 					}
