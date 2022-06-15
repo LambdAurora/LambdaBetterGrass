@@ -14,7 +14,7 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.mixin.NativeImageAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.texture.NativeImage;
+import com.mojang.blaze3d.texture.NativeImage;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.resource.pack.metadata.ResourceMetadataReader;
@@ -94,11 +94,11 @@ public class LBGResourcePack implements ResourcePack {
 	}
 
 	@Override
-	public Collection<Identifier> findResources(ResourceType type, String namespace, String prefix, int maxDepth, Predicate<String> pathFilter) {
+	public Collection<Identifier> findResources(ResourceType type, String namespace, String prefix, Predicate<Identifier> predicate) {
 		if (type == ResourceType.SERVER_DATA) return Collections.emptyList();
 		var start = "assets/" + namespace + "/" + prefix;
 		return this.resources.keySet().stream()
-				.filter(s -> s.startsWith(start) && pathFilter.test(s))
+				.filter(s -> s.startsWith(start) && predicate.test(new Identifier(s)))
 				.map(LBGResourcePack::fromPath)
 				.collect(Collectors.toList());
 	}

@@ -27,10 +27,10 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 /**
@@ -54,7 +54,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
 		var mode = LambdaBetterGrass.get().config.getMode();
 
 		if (mode == LBGMode.OFF) {
@@ -163,7 +163,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
+	public void emitItemQuads(ItemStack stack, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
 		throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
 	}
 }

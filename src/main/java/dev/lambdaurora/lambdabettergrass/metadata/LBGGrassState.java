@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -78,16 +79,12 @@ public class LBGGrassState extends LBGState {
 	 */
 	private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
 		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-		if (resourceManager.containsResource(metadataResourceId)) {
-			try {
-				var metadataJson = JsonParser.parseReader(
-						new InputStreamReader(resourceManager.method_14486(metadataResourceId).getInputStream())
-				).getAsJsonObject();
+		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).open())) {
+			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
-				return new LBGMetadata(resourceManager, metadataId, metadataJson);
-			} catch (IOException e) {
-				// Ignore.
-			}
+			return new LBGMetadata(resourceManager, metadataId, metadataJson);
+		} catch (IOException e) {
+			// Ignore.
 		}
 		LambdaBetterGrass.get().warn("Could not load metadata `" + metadataId + "`.");
 		return null;

@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -63,8 +64,8 @@ public abstract class ModelLoaderMixin {
 					LBGState.reset();
 					LBGLayerType.reset();
 					var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
-							path -> path.endsWith(".json"));
-					for (var layerTypeId : layerTypes) {
+							path -> path.getPath().endsWith(".json"));
+					for (var layerTypeId : layerTypes.keySet()) {
 						LBGLayerType.load(layerTypeId, this.resourceManager);
 					}
 					this.lbg$firstLoad = false;
@@ -78,15 +79,11 @@ public abstract class ModelLoaderMixin {
 				// Find and load states metadata if not cached.
 				if (state == null) {
 					var stateResourceId = new Identifier(stateId.getNamespace(), stateId.getPath() + ".json");
-					if (this.resourceManager.containsResource(stateResourceId)) {
-						try {
-							var json = JsonParser.parseReader(
-									new InputStreamReader(this.resourceManager.method_14486(stateResourceId).getInputStream())
-							).getAsJsonObject();
-							state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
-						} catch (IOException e) {
-							// Ignore.
-						}
+					try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(stateResourceId).open())) {
+						var json = JsonParser.parseReader(reader).getAsJsonObject();
+						state = LBGState.getOrLoadMetadataState(stateId, this.resourceManager, json, this.variantMapDeserializationContext);
+					} catch (IOException e) {
+						// Ignore.
 					}
 				}
 

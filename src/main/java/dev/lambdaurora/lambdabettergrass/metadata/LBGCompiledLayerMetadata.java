@@ -26,11 +26,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -111,7 +111,7 @@ public class LBGCompiledLayerMetadata {
 	 * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads,
 	 * or 2 if the custom alternative model has emitted quads.
 	 */
-	public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier,
+	public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier,
 	                          RenderContext context) {
 		int success = 0;
 		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1

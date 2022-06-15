@@ -18,10 +18,10 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.BlockRenderView;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 /**
@@ -45,7 +45,7 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
 		if (!LambdaBetterGrass.get().hasBetterLayer()) {
 			// Don't touch the model.
 			super.emitBlockQuads(world, state, pos, randomSupplier, context);
@@ -81,7 +81,7 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
+	public void emitItemQuads(ItemStack stack, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
 		throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
 	}
 }
