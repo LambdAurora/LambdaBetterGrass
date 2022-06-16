@@ -25,10 +25,11 @@ import java.util.function.Function;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.3.0
  * @since 1.0.0
  */
 public abstract class LBGState {
+	public static final String PATH_PREFIX = "bettergrass/states/";
 	private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
 	private static final Object2ObjectMap<Identifier, LBGState> LBG_STATES = new Object2ObjectOpenHashMap<>();
 

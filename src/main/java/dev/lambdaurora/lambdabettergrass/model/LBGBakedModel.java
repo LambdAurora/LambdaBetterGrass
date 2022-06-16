@@ -37,7 +37,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.2.4
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {

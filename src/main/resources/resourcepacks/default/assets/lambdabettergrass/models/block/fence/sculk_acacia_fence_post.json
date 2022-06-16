@@ -1,0 +1,7 @@
+{
+  "parent": "lambdabettergrass:block/template/sculk_fence_post",
+  "textures": {
+    "texture": "lambdabettergrass:block/fence/sculk_acacia_fence_post",
+    "planks": "minecraft:block/acacia_planks"
+  }
+}

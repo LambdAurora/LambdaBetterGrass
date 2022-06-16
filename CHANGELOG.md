@@ -91,5 +91,13 @@ The first release of LambdaBetterGrass!
 - Made data files default every non-explicit layers to `{ layer: true }`.
 - \[meta] Fixed compatibility changes being outdated on mod pages.
 
+## 1.3.0
+
+- Added a way for layer types to request a render layer for blocks.
+- Updated to Minecraft 1.19.
+  - Added sculk vein layer type.
+  - Added bunch of blocks to the better snow system.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

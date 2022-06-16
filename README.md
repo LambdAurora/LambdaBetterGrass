@@ -2,7 +2,7 @@
 
 <!-- modrinth_exclude.start -->
 ![Java 17](https://img.shields.io/badge/language-Java%2017-9B599A.svg?style=flat-square) <!-- modrinth_exclude.end -->
-[![GitHub license](https://img.shields.io/github/license/LambdAurora/LambdaBetterGrass?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.18/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/LambdAurora/LambdaBetterGrass?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.19/LICENSE)
 ![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=flat-square)
 [![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/LambdaBetterGrass?label=version&style=flat-square)
@@ -33,6 +33,10 @@ Better snow with the optional included resource pack:
 Better "snow" with the optional included resource pack in lush caves (credits to cavebiomes by SuperCoder79):
 
 ![Optional better moss](images/better_moss.png)
+
+Better "snow" system used for sculk vein, here with the optional included resource pack for custom fences:
+
+![Optional better sculk vein](images/better_sculk_vein.png)
 
 Configuration screen:
 ![config screen](images/config_screen.png)
@@ -69,7 +73,7 @@ Just do `./gradlew shadowRemapJar` and everything should build just fine!
 
 ### For resource packs creators and developers
 
-Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/API.md).
+Please check out [this documentation](https://github.com/LambdAurora/LambdaBetterGrass/blob/1.19/documentation/API.md).
 
 ## 📖 Compatibility
 

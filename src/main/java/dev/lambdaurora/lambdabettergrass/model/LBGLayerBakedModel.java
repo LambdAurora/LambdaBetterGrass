@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model for layer method.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LBGLayerBakedModel extends ForwardingBakedModel {

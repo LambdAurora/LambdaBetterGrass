@@ -9,14 +9,13 @@
 
 package dev.lambdaurora.lambdabettergrass.util;
 
+import com.mojang.blaze3d.texture.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import com.mojang.blaze3d.texture.NativeImage;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
@@ -39,9 +38,6 @@ public enum LBGTextureGenerator {
 			var fallbackResource = resourceManager.getResourceOrThrow(FALLBACK_TEXTURE);
 
 			return NativeImage.read(fallbackResource.open());
-		} catch (FileNotFoundException e) {
-			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
-			return new NativeImage(16, 16, false);
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
@@ -61,9 +57,6 @@ public enum LBGTextureGenerator {
 			var nativeImageResource = resourceManager.getResourceOrThrow(path);
 
 			return NativeImage.read(nativeImageResource.open());
-		} catch (FileNotFoundException e) {
-			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Loading fallback texture instead.");
-			return getFallbackNativeImage(resourceManager);
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
 					+ ". Loading fallback texture instead.");

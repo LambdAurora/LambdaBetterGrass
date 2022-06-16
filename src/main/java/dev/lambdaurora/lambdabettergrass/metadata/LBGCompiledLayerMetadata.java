@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {

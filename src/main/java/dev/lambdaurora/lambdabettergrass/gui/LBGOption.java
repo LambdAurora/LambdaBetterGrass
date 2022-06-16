@@ -27,7 +27,7 @@ import java.util.function.Function;
  * A dummy option to add a button leading to LambdaBetterGrass' settings.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.3.0
  * @since 1.1.2
  */
 

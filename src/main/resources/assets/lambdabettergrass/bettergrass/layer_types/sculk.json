@@ -1,0 +1,8 @@
+{
+  "block": "minecraft:sculk_vein",
+  "model": "lambdabettergrass:block/sculky_layer",
+  "render_layer": {
+    "accepted": [ "cutout_mipped", "translucent", "tripwire" ],
+    "default": "cutout"
+  }
+}

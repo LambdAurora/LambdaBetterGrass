@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)

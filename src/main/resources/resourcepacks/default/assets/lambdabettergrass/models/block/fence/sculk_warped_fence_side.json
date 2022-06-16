@@ -1,0 +1,6 @@
+{
+  "parent": "lambdabettergrass:block/template/sculk_fence_side",
+  "textures": {
+    "texture": "lambdabettergrass:block/fence/sculk_warped_fence_side"
+  }
+}

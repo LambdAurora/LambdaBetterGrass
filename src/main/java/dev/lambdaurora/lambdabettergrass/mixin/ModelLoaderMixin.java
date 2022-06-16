@@ -26,7 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -65,13 +64,11 @@ public abstract class ModelLoaderMixin {
 					LBGLayerType.reset();
 					var layerTypes = this.resourceManager.findResources("bettergrass/layer_types",
 							path -> path.getPath().endsWith(".json"));
-					for (var layerTypeId : layerTypes.keySet()) {
-						LBGLayerType.load(layerTypeId, this.resourceManager);
-					}
+					layerTypes.forEach(LBGLayerType::load);
 					this.lbg$firstLoad = false;
 				}
 
-				var stateId = new Identifier(modelId.getNamespace(), "bettergrass/states/" + modelId.getPath());
+				var stateId = new Identifier(modelId.getNamespace(), LBGState.PATH_PREFIX + modelId.getPath());
 
 				// Get cached states metadata.
 				var state = LBGState.getMetadataState(stateId);

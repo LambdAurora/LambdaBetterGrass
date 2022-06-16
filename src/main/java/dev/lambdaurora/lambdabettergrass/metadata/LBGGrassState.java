@@ -31,7 +31,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {

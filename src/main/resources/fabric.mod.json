@@ -26,9 +26,11 @@
   "mixins": [
     "lambdabettergrass.mixins.json"
   ],
+  "accessWidener": "lambdabettergrass.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.7",
     "minecraft": ">=1.19",
+    "fabric-blockrenderlayer-v1": "*",
     "fabric-renderer-api-v1": "*",
     "fabric-resource-loader-v0": ">=0.4.7",
     "spruceui": ">=4.0.0",

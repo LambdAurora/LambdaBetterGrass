@@ -10,11 +10,11 @@
 package dev.lambdaurora.lambdabettergrass.resource;
 
 import com.google.common.collect.Sets;
+import com.mojang.blaze3d.texture.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.mixin.NativeImageAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import com.mojang.blaze3d.texture.NativeImage;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.resource.pack.metadata.ResourceMetadataReader;
@@ -98,8 +98,9 @@ public class LBGResourcePack implements ResourcePack {
 		if (type == ResourceType.SERVER_DATA) return Collections.emptyList();
 		var start = "assets/" + namespace + "/" + prefix;
 		return this.resources.keySet().stream()
-				.filter(s -> s.startsWith(start) && predicate.test(new Identifier(s)))
+				.filter(s -> s.startsWith(start))
 				.map(LBGResourcePack::fromPath)
+				.filter(id -> id != null && predicate.test(id))
 				.collect(Collectors.toList());
 	}
 
@@ -128,8 +129,8 @@ public class LBGResourcePack implements ResourcePack {
 	public void close() {
 	}
 
-	private static Identifier fromPath(String path) {
-		String[] split = path.split("/", 2);
-		return new Identifier(split[0], split[1]);
+	private static @Nullable Identifier fromPath(String path) {
+		String[] split = path.substring("assets/".length()).split("/", 2);
+		return Identifier.method_43902(split[0], split[1]);
 	}
 }

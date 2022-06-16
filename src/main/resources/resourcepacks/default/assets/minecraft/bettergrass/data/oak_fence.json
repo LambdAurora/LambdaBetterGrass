@@ -92,5 +92,52 @@
         }
       ]
     }
+  },
+  "sculk": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_oak_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_oak_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_oak_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_oak_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_oak_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
   }
 }

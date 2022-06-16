@@ -14,11 +14,14 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -34,7 +37,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.2.4
+ * @version 1.3.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -46,10 +49,13 @@ public class LBGLayerState extends LBGState {
 	}
 
 	private final Map<String, List<LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
+	private final Block block;
 
 	public LBGLayerState(Identifier id, ResourceManager resourceManager, JsonObject json,
 	                     ModelVariantMap.DeserializationContext deserializationContext) {
 		super(id);
+
+		this.block = Registry.BLOCK.get(new Identifier(id.getNamespace(), id.getPath().substring(PATH_PREFIX.length())));
 
 		if (json.has("variants")) {
 			var variants = json.getAsJsonObject("variants");
@@ -97,7 +103,7 @@ public class LBGLayerState extends LBGState {
 		}
 	}
 
-	private void putOrReplaceMetadata(String variant, Identifier metadataId, @Nullable LBGLayerType type, JsonObject metadataJson,
+	private void putOrReplaceMetadata(String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
 	                                  ModelVariantMap.DeserializationContext deserializationContext) {
 		var metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
 		var it = metadatas.iterator();
@@ -108,6 +114,10 @@ public class LBGLayerState extends LBGState {
 				it.remove();
 				break;
 			}
+		}
+
+		if (this.block != Blocks.AIR) {
+			type.apply(this.block);
 		}
 
 		metadatas.add(new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
