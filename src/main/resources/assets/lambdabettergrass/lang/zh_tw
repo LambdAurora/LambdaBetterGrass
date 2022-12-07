@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "本模組通過資源包來決定哪些方塊可以應用這些效果。",
+  "lambdabettergrass.menu.info.2": "也就是說，想在哪些方塊上啟用或者關閉這些功能，",
+  "lambdabettergrass.menu.info.3": "得在資源包中添加，修改或者刪除對應方塊的相關文件才行。",
+  "lambdabettergrass.menu.info.read_more": "欲知詳情請訪問：%s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass 配置",
+  "lambdabettergrass.menu.title.info": "本模組功能的實現方式",
+  "lambdabettergrass.option.better_snow": "更好的雪地",
+  "lambdabettergrass.option.mode": "更好的草地",
+  "lambdabettergrass.tooltip.better_snow": "啟用“更好的雪地”。\n若啟用該功能，某些與雪接壤的方塊會顯示被雪覆蓋的外觀，或者在方塊的底部顯示雪層，亦或者兩種效果皆有。比如柵欄和花。\n注：本功能同樣適用於其他類似雪的方塊，即分層的覆蓋性方塊，比如 Cinderscapes 模組中的“灰燼”，前提是提供對應方塊的相關文件。",
+  "lambdabettergrass.tooltip.mode": "啟用“更好的草地”。\n— %s 關閉“更好的草地”。\n— %s 方塊的各個面都會應用其頂部材質。效果與 OptiFine 中“更好的草地”的“流暢”選項類似。\n— %s 同一種方塊連接處的面會應用其頂部材質。效果與 OptiFine 中“更好的草地”的“高品質”選項類似。\n— %s 同一種方塊連接處的面會應用其頂部材質，並且相鄰的同一種方塊的側面，會根據方塊的所在位置應用額外的材質，實現頂部材質和側面材質的過渡。"
+}
