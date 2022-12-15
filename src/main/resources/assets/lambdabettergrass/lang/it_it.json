@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "La mod usa le resource pack per determinare quali blocchi sono affetti.",
+  "lambdabettergrass.menu.info.2": "Questo significa abilitare o disabilitare Better Grass/Snow sui blocchi",
+  "lambdabettergrass.menu.info.3": "può essere modificato con le resource pack.",
+  "lambdabettergrass.menu.info.read_more": "Leggi di più: %s",
+  "lambdabettergrass.menu.title": "Configurazione di LambdaBetterGrass",
+  "lambdabettergrass.menu.title.info": "Come funziona la mod?",
+  "lambdabettergrass.option.better_snow": "Neve Migliore",
+  "lambdabettergrass.option.mode": "Erba Migliore",
+  "lambdabettergrass.tooltip.better_snow": "Abilita la feature Neve Migliore.\nSe è attivato su alcuni blocchi potrebbe avere variazioni della neve o strati di neve aggiunti quando c'è della neve accanto.\nNota: questo funziona anche con blocchi simili alla neve che hanno i layers se i files sono presenti.",
+  "lambdabettergrass.tooltip.mode": "Attiva Erba Migliore.\n - %s disabilita erba migliore del tutto.\n - %s copierà la texture su titti i lati del blocco. Come la modalità Fast della OptiFine.\n - %s will connect the grass block textures like OptiFine's Fancy option.\n - %s Connetterà la texture e renderla più unita ai grass block circostanti"
+}
