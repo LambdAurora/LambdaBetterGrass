@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -17,7 +17,6 @@ import dev.lambdaurora.spruceui.util.Nameable;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.RenderLayer;
@@ -27,6 +26,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -108,12 +108,12 @@ public class LBGLayerType implements Nameable {
 		if (currentLayer != this.defaultRenderLayer && !this.acceptedRenderLayers.contains(currentLayer)) {
 			this.oldRenderLayers.putIfAbsent(block, currentLayer);
 
-			BlockRenderLayerMap.INSTANCE.putBlock(block, this.defaultRenderLayer);
+			BlockRenderLayerMap.put(this.defaultRenderLayer, block);
 		}
 	}
 
 	private void resetSelf() {
-		this.oldRenderLayers.forEach(BlockRenderLayerMap.INSTANCE::putBlock);
+		this.oldRenderLayers.forEach((block, renderLayer) -> BlockRenderLayerMap.put(renderLayer, block));
 	}
 
 	/**

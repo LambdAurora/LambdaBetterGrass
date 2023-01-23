@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -21,8 +21,6 @@ import dev.lambdaurora.spruceui.option.SpruceSimpleActionOption;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -30,17 +28,18 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 /**
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0
  */
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class SettingsScreen extends SpruceScreen {
-	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.18/documentation/API.md";
+	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.19/documentation/API.md";
 
 	private final LBGConfig config;
 	private final Screen parent;

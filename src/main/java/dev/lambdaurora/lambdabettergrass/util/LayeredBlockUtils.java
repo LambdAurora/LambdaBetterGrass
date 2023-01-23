@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -29,13 +29,12 @@ import java.util.stream.Collectors;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 1.2.2
+ * @version 1.4.0
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
 	private static final List<Direction> HORIZONTAL_DIRECTIONS = Arrays.stream(Direction.values())
-			.filter(dir -> dir.getAxis().isHorizontal())
-			.collect(Collectors.toList());
+			.filter(dir -> dir.getAxis().isHorizontal()).toList();
 
 	private LayeredBlockUtils() {
 		throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");

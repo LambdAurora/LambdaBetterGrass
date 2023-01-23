@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -43,7 +43,7 @@ public class VideoOptionsScreenMixin extends GameOptionsScreen {
 			method = "init",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;method_20408([Lnet/minecraft/client/option/Option;)V"
+					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;addEntries([Lnet/minecraft/client/option/Option;)V"
 			),
 			index = 0
 	)

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -11,21 +11,20 @@ package dev.lambdaurora.lambdabettergrass.util;
 
 import com.mojang.blaze3d.texture.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.io.IOException;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public enum LBGTextureGenerator {
 	; // No instantiation possible <3
 
 	/**
 	 * Represents the fallback texture to load if texture loading failed.
 	 */
-	private static final Identifier FALLBACK_TEXTURE = LambdaBetterGrass.mc("textures/block/transparent.png");
+	private static final Identifier FALLBACK_TEXTURE = LambdaBetterGrass.id("textures/block/transparent.png");
 
 	/**
 	 * Returns the fallback {@link NativeImage} instance.
