@@ -29,7 +29,7 @@ public class LBGResourcePack extends InMemoryResourcePack {
 	}
 
 	public Identifier dynamicallyPutImage(String name, NativeImage image) {
-		final var id = new Identifier(LambdaBetterGrass.NAMESPACE, "bettergrass/" + name);
+		final var id = new Identifier(LambdaBetterGrass.NAMESPACE, "block/bettergrass/" + name);
 
 		try {
 			this.putImage(new Identifier(id.getNamespace(), "textures/" + id.getPath() + ".png"), image);

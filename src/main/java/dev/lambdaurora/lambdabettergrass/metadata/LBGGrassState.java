@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -21,7 +21,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -31,7 +30,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -109,17 +108,10 @@ public class LBGGrassState extends LBGState {
 
 	@Override
 	public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-	                                                    Function<Identifier, UnbakedModel> modelGetter) {
+			Function<Identifier, UnbakedModel> modelGetter) {
 		var metadata = this.getMetadata(modelId);
 		if (metadata != null) {
-			var model = new LBGUnbakedModel(originalModel, metadata);
-            /*if (this.metadata == null && modelId.getVariant().equals("snowy=true")) {
-                LBGMetadata nonSnowyMetadata = this.getMetadata(
-                new ModelIdentifier(new Identifier(modelId.getNamespace(), modelId.getPath()), "snowy=false"));
-                if (nonSnowyMetadata != null)
-                    nonSnowyMetadata.snowyVariant = model;
-            }*/
-			return model;
+			return new LBGUnbakedModel(originalModel, metadata);
 		}
 		return null;
 	}

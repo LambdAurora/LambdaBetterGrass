@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "gen": "deno run --allow-read=datagen --allow-write=src/main/resources datagen/datagen.mjs"
+  }
+}

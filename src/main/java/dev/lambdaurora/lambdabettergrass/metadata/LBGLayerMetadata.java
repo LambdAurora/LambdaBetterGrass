@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -16,8 +16,8 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.io.StringReader;
 import java.util.function.Function;
@@ -26,20 +26,20 @@ import java.util.function.Function;
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.4.0
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
 	public final Identifier id;
 	public final LBGLayerType layerType;
 	private final boolean layerModel;
-	private final @Nullable Vec3f offset;
+	private final @Nullable Vector3f offset;
 	private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
 	private UnbakedModel alternateModel;
 	private final boolean hasAlternateModel;
 
 	public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-	                        ModelVariantMap.DeserializationContext deserializationContext) {
+			ModelVariantMap.DeserializationContext deserializationContext) {
 		this.id = id;
 		this.layerType = layerType;
 
@@ -53,7 +53,9 @@ public class LBGLayerMetadata {
 			var offsetJson = json.get("offset");
 			if (offsetJson.isJsonArray()) {
 				var offsetArray = offsetJson.getAsJsonArray();
-				this.offset = new Vec3f(offsetArray.get(0).getAsFloat(), offsetArray.get(1).getAsFloat(), offsetArray.get(2).getAsFloat());
+				this.offset = new Vector3f(
+						offsetArray.get(0).getAsFloat(), offsetArray.get(1).getAsFloat(), offsetArray.get(2).getAsFloat()
+				);
 			} else this.offset = null;
 		} else this.offset = null;
 
@@ -76,7 +78,7 @@ public class LBGLayerMetadata {
 		return this.layerModel;
 	}
 
-	public @Nullable Vec3f offset() {
+	public @Nullable Vector3f offset() {
 		return this.offset;
 	}
 
@@ -104,10 +106,10 @@ public class LBGLayerMetadata {
 	@Override
 	public String toString() {
 		return "LBGLayerMetadata{" +
-				"id=" + id +
-				", layerType=" + layerType +
-				", layerModel=" + layerModel +
-				", hasAlternateModel=" + hasAlternateModel +
+				"id=" + this.id +
+				", layerType=" + this.layerType +
+				", layerModel=" + this.layerModel +
+				", hasAlternateModel=" + this.hasAlternateModel +
 				'}';
 	}
 

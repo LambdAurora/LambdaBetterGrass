@@ -1,0 +1,143 @@
+{
+  "snow": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
+  },
+  "moss": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
+  },
+  "sculk": {
+    "layer": true,
+    "block_state": {
+      "multipart": [
+        {
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_post"
+          }
+        },
+        {
+          "when": {
+            "north": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side"
+          }
+        },
+        {
+          "when": {
+            "east": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
+            "y": 90
+          }
+        },
+        {
+          "when": {
+            "south": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
+            "y": 180
+          }
+        },
+        {
+          "when": {
+            "west": "true"
+          },
+          "apply": {
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
+            "y": 270
+          }
+        }
+      ]
+    }
+  }
+}

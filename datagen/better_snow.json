@@ -161,7 +161,17 @@
     },
     "anvil",
     "bamboo",
+    "bamboo_door",
+    {
+      "id": "bamboo_fence",
+      "waterloggable": true
+    },
+    "bamboo_fence_gate",
     "bamboo_sapling",
+    {
+      "id": "bamboo_trapdoor",
+      "waterloggable": true
+    },
     "bell",
     {
       "id": "big_dripleaf",

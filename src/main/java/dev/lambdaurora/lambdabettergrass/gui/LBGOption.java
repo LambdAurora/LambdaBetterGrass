@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -21,16 +21,16 @@ import net.minecraft.client.option.Option;
 import net.minecraft.text.Text;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * A dummy option to add a button leading to LambdaBetterGrass' settings.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.1.2
  */
-
 public final class LBGOption {
 	private static final String KEY = "LambdaBetterGrass";
 
@@ -48,10 +48,13 @@ public final class LBGOption {
 	private record DummyValueSet(Screen parent) implements Option.ValueSet<Unit> {
 		@Override
 		public Function<Option<Unit>, ClickableWidget> getButtonCreator(Option.TooltipSupplier<Unit> tooltipSupplier, GameOptions options,
-		                                                                int x, int y, int width) {
-			return option -> new ButtonWidget(x, y, width, 20, Text.translatable(KEY),
-					btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent))
-			);
+				int x, int y, int width, Consumer<Unit> consumer) {
+			return option -> ButtonWidget.builder(
+							Text.translatable(KEY), btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent))
+					)
+					.position(x, y)
+					.size(width, 20)
+					.build();
 		}
 
 		@Override

@@ -14,6 +14,7 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
+import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -49,6 +50,7 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
 	public final LBGConfig config = new LBGConfig(this);
 	private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
+	public final LBGResourceReloader resourceReloader = new LBGResourceReloader();
 	public LBGResourcePack resourcePack;
 
 	@Override
@@ -61,11 +63,12 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 
 		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).getRegisterTopResourcePackEvent()
 				.register(id("register_pack"), context -> {
-					this.log("Inject generated resource packs.");
+					this.log("Rebuilding resources and inject generated resource pack.");
 					context.addResourcePack(this.resourcePack = new LBGResourcePack(this));
+					this.resourceReloader.reload(context.resourceManager());
 				});
 
-		LBGState.registerType("grass", (id, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
+		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
 		LBGState.registerType("layer", LBGLayerState::new);
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -10,14 +10,17 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.block.Block;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelVariantMap;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.function.Function;
 
@@ -25,11 +28,12 @@ import java.util.function.Function;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 public abstract class LBGState {
-	public static final String PATH_PREFIX = "bettergrass/states/";
+	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final String PATH_PREFIX = "bettergrass/states";
 	private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
 	private static final Object2ObjectMap<Identifier, LBGState> LBG_STATES = new Object2ObjectOpenHashMap<>();
 
@@ -38,10 +42,6 @@ public abstract class LBGState {
 	public LBGState(Identifier id) {
 		this.id = id;
 		putState(id, this);
-	}
-
-	protected boolean matchVariant(String modelVariant, String dataVariant) {
-		return matchVariant(modelVariant.split(","), dataVariant.split(","));
 	}
 
 	/**
@@ -72,7 +72,7 @@ public abstract class LBGState {
 	}
 
 	public abstract @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-	                                                             Function<Identifier, UnbakedModel> modelGetter);
+			Function<Identifier, UnbakedModel> modelGetter);
 
 	protected static void putState(Identifier id, LBGState state) {
 		LBG_STATES.put(id, state);
@@ -99,25 +99,21 @@ public abstract class LBGState {
 		LBG_STATES_TYPE.put(type, stateProvider);
 	}
 
-	public static @Nullable LBGState getOrLoadMetadataState(Identifier id, ResourceManager resourceManager, JsonObject json,
-	                                                        ModelVariantMap.DeserializationContext deserializationContext) {
-		LBGState state = getMetadataState(id);
-		if (state != null)
-			return state;
-
+	public static void loadMetadataState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
+			ModelVariantMap.DeserializationContext deserializationContext) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
 
-		if (!LBG_STATES_TYPE.containsKey(type))
-			return null;
-
-		return LBG_STATES_TYPE.get(type).create(id, resourceManager, json, deserializationContext);
+		if (LBG_STATES_TYPE.containsKey(type))
+			LBG_STATES_TYPE.get(type).create(id, block, resourceManager, json, deserializationContext);
+		else
+			LOGGER.warn("Could not find type {} for metadata state {}.", type, id);
 	}
 
 	@FunctionalInterface
 	public interface LBGStateProvider {
-		LBGState create(Identifier id, ResourceManager resourceManager, JsonObject json,
-		                ModelVariantMap.DeserializationContext deserializationContext);
+		LBGState create(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
+				ModelVariantMap.DeserializationContext deserializationContext);
 	}
 }

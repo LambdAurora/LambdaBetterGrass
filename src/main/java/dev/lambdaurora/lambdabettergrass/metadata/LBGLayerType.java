@@ -22,9 +22,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
@@ -40,7 +40,7 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
@@ -142,7 +142,7 @@ public class LBGLayerType implements Nameable {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
 
 			var affectId = new Identifier(json.get("block").getAsString());
-			var block = Registry.BLOCK.get(affectId);
+			var block = Registries.BLOCK.get(affectId);
 
 			if (block == Blocks.AIR)
 				return;

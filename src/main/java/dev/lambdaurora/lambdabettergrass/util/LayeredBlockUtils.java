@@ -23,7 +23,6 @@ import net.minecraft.world.BlockRenderView;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents utilities about snow.
@@ -40,7 +39,8 @@ public final class LayeredBlockUtils {
 		throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");
 	}
 
-	public static boolean shouldGrassBeSnowy(BlockRenderView world, BlockPos pos, Identifier stateId, BlockState upState, boolean onlyPureSnow) {
+	public static boolean shouldGrassBeSnowy(BlockRenderView world, BlockPos pos, Identifier stateId, BlockState upState,
+			boolean onlyPureSnow) {
 		// Ignore blocks that are not rendered through the normal system.
 		if (upState.getRenderType() != BlockRenderType.MODEL)
 			return false;

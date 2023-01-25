@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 LambdAurora <email@lambdaurora.dev>
+ * Copyright © 2021-2023 LambdAurora <email@lambdaurora.dev>
  *
  * This file is part of LambdaBetterGrass.
  *
@@ -23,12 +23,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowyBlock;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
 
 import java.util.function.Supplier;
@@ -68,7 +68,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 			var upPos = pos.up();
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
-				var blockId = Registry.BLOCK.getId(up.getBlock());
+				var blockId = Registries.BLOCK.getId(up.getBlock());
 				var stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
 				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
 					((FabricBakedModel) this.metadata.getSnowyModelVariant())
@@ -139,7 +139,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 					if (up.isOf(Blocks.SNOW))
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyBlock) {
-						var blockId = Registry.BLOCK.getId(up.getBlock());
+						var blockId = Registries.BLOCK.getId(up.getBlock());
 						var stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
 						if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
 							return true;
