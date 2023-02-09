@@ -22,7 +22,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowyBlock;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
@@ -37,7 +36,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -160,10 +159,5 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		if (sprite != null)
 			quad.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
 		return sprite != null;
-	}
-
-	@Override
-	public void emitItemQuads(ItemStack stack, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
-		throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
 	}
 }

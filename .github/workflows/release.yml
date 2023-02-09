@@ -19,11 +19,21 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        run: ./gradlew build modrinth --parallel --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build modrinth curseforge --parallel --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+
+      - name: Upload release artifacts
+        uses: Roang-zero1/github-upload-release-artifacts-action@v2
+        with:
+          - args: "build/libs/lambdabettergrass-*.jar"
+
       - name: Synchronize Mod description
-        run: ./gradlew modrinthSyncBody --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: modrinthSyncBody --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.BlockRenderView;
@@ -78,10 +77,5 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 		}
 
 		super.emitBlockQuads(world, state, pos, randomSupplier, context);
-	}
-
-	@Override
-	public void emitItemQuads(ItemStack stack, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
-		throw new UnsupportedOperationException("LambdaBetterGrass models should never try to render as an item!");
 	}
 }
