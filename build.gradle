@@ -1,16 +1,17 @@
 plugins {
-	id 'org.quiltmc.loom' version '1.+'
+	id 'org.quiltmc.loom' version '1.0.+'
 	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.1.2'
 	id 'com.modrinth.minotaur' version '2.+'
+	id 'com.matthewprenger.cursegradle' version '1.4.+'
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
 
 group = project.maven_group
-version = "${project.mod_version}+${getMCVersionString()}"
+version = "${project.mod_version}+${project.minecraft_version}"
 archivesBaseName = project.archives_base_name
 Set<String[]> modules = [
 		["core", "crash_info"],
@@ -48,12 +49,66 @@ String getMCVersionString() {
 	return version[0] + '.' + version[1]
 }
 
+String getVersionType() {
+	if (isMCVersionNonRelease() || version.contains("-alpha.")) {
+		return "alpha"
+	} else if (version.contains("-beta.")) {
+		return "beta"
+	} else {
+		return "release"
+	}
+}
+
 String parseReadme() {
 	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
 
 	def readme = (String) file('README.md').text
-	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.17/$2)')
+	def lines = new ArrayList<>(Arrays.asList(readme.split("\n")))
+	def it = lines.iterator()
+
+	boolean shouldRemove = false;
+	while (it.hasNext()) {
+		def line = it.next();
+
+		if (line.equals("<!-- modrinth_exclude.long_start -->")) {
+			shouldRemove = true
+		}
+
+		if (shouldRemove) {
+			it.remove()
+		}
+
+		if (line.equals("<!-- modrinth_exclude.long_end -->")) {
+			shouldRemove = false
+		}
+	}
+
+	readme = lines.join("\n")
+	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.19.3/$2)')
 	return readme
+}
+
+String fetchChangelog() {
+	def changelogText = file('CHANGELOG.md').text
+	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
+	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
+	def matcher = changelogText =~ changelogRegex
+
+	if (matcher.find()) {
+		def changelogContent = matcher.group(1)
+
+		def changelogLines = changelogText.split('\n')
+		def linkRefRegex = ~'^\\[([A-z\\d _\\-/+.]+)]: '
+		for (int i = changelogLines.length - 1; i > 0; i--) {
+			def line = changelogLines[i]
+			if ((line =~ linkRefRegex).find())
+				changelogContent += '\n' + line
+			else break
+		}
+		return changelogContent
+	} else {
+		return null;
+	}
 }
 
 repositories {
@@ -131,6 +186,9 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
 	inputs.property 'version', project.version
 
+	filesMatching('fabric.mod.json') {
+		expand 'version': project.version
+	}
 	filesMatching('quilt.mod.json') {
 		expand 'version': project.version
 	}
@@ -155,7 +213,7 @@ shadowJar {
 
 	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
-remapJar.dependsOn(shadowJar)
+prepareRemapJar.dependsOn(shadowJar)
 
 modrinth {
 	projectId = project.modrinth_id
@@ -165,28 +223,14 @@ modrinth {
 	loaders = ["quilt"]
 	uploadFile = tasks.remapJar
 	dependencies = [
-			new ModDependency("P7dR8mSH", "required")
+			new ModDependency("qvIfYCYJ", "required")
 	]
 	syncBodyFrom = parseReadme()
 
 	// Changelog fetching
-	def changelogText = file('CHANGELOG.md').text.replaceAll('\\r\\n', '\n')
-	def regexVersion = ((String) project.mod_version).replaceAll('\\.', /\\./).replaceAll('\\+', '\\+')
-	def changelogRegex = ~"###? ${regexVersion}\\n\\n(( *- .+\\n)+)"
-	def matcher = changelogText =~ changelogRegex
+	def changelogContent = fetchChangelog()
 
-	if (matcher.find()) {
-		def changelogContent = matcher.group(1)
-
-		def changelogLines = changelogText.split('\n')
-		def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
-		for (int i = changelogLines.length - 1; i > 0; i--) {
-			def line = changelogLines[i]
-			if ((line =~ linkRefRegex).find())
-				changelogContent += '\n' + line
-			else break
-		}
-
+	if (changelogContent) {
 		changelog = changelogContent
 	} else {
 		afterEvaluate {
@@ -194,6 +238,50 @@ modrinth {
 		}
 	}
 }
+
+curseforge {
+	if (System.getenv("CURSEFORGE_TOKEN")) {
+		apiKey = System.getenv("CURSEFORGE_TOKEN")
+	}
+
+	project {
+		id = project.curseforge_id
+		releaseType = this.getVersionType()
+		addGameVersion project.minecraft_version
+		addGameVersion "Quilt"
+		addGameVersion "Java 17"
+		addGameVersion "Java 18"
+
+		// Changelog fetching
+		def changelogContent = fetchChangelog()
+
+		if (changelogContent) {
+			changelogType = "markdown"
+			changelog = "Changelog:\n\n${changelogContent}"
+		} else {
+			afterEvaluate {
+				uploadTask.setEnabled(false)
+			}
+		}
+
+		mainArtifact(remapJar) {
+			displayName = "LambdaBetterGrass ${project.mod_version} (${project.minecraft_version})"
+
+			relations {
+				requiredDependency "qsl"
+				optionalDependency "modmenu"
+				incompatible "optifabric"
+				incompatible "fabric-api"
+			}
+		}
+
+		afterEvaluate {
+			uploadTask.setGroup("publishing")
+			uploadTask.dependsOn("remapJar")
+		}
+	}
+}
+tasks.curseforge.setGroup("publishing")
 
 // Configure the maven publication.
 publishing {

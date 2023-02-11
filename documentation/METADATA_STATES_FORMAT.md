@@ -2,12 +2,18 @@
 
 LambdaBetterGrass metadata states files tells how the mod handles the block.
 
+Metadata state files are placed in the `assets/<namespace>/bettergrass/states/` directory,
+with `<namespace>` the namespace used by the block to handle (if the block identifier is `minecraft:podzol` then `<namespace>` will be `minecraft`).  
+Each state file is named after the block identifier and `.json` appended at the end,
+like resource pack block state files.
+For example, if the block identifier is `minecraft:podzol` then the file will be named `podzol.json`.
+
 ## Types
 
 There's multiple type of metadata states:
 
- - [`grass`][metadata_grass]
- - [`layer`][metadata_layer]
+ - [`grass`][metadata_grass] - for specifying how grass-like blocks connect to each other
+ - [`layer`][metadata_layer] - for specifying how layer-like (like snow, moss carpets, etc.) blocks should be treated on the targeted block
  
 The `type` field specifies the type used.
 
@@ -59,5 +65,5 @@ Not every variants need to have a metadata assigned.
 }
 ```
 
-[metadata_grass]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_GRASS_FORMAT.md "Grass Metadata Documentation"
-[metadata_layer]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/LAYER_METHOD.md "Layer Metadata Documentation"
+[metadata_grass]: ./METADATA_GRASS_FORMAT.md "Grass Metadata Documentation"
+[metadata_layer]: ./LAYER_METHOD.md "Layer Metadata Documentation"

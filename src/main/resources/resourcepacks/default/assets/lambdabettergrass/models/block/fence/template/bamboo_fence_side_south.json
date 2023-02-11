@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/bamboo_fence_side_south",
+  "textures": {
+    "particle": "#texture",
+    "original": "minecraft:block/bamboo_fence"
+  },
+  "elements": [
+    {
+      "name": "top_bar",
+      "from": [ 7, 12, 7 ],
+      "to": [ 9, 15, 16 ],
+      "faces": {
+        "east":  {"uv": [  4, 4, 13,  7 ], "texture": "#texture"},
+        "south": {"uv": [ 13, 4, 15,  7 ], "texture": "#original", "cullface": "south"},
+        "west":  {"uv": [  4, 4, 13,  7 ], "texture": "#texture"},
+        "up":    {"uv": [ 13, 7, 15, 16 ], "texture": "#top"},
+        "down":  {"uv": [ 13, 7, 15, 16 ], "texture": "#original"}
+      }
+    },
+    {
+      "name": "lower_bar",
+      "from": [ 7, 6, 7 ],
+      "to": [ 9, 9, 16 ],
+      "faces": {
+        "east":  {"uv": [  4, 7, 13, 10 ], "texture": "#texture"},
+        "south": {"uv": [ 13, 4, 15,  7 ], "texture": "#original", "cullface": "south"},
+        "west":  {"uv": [  4, 7, 13, 10 ], "texture": "#texture"},
+        "up":    {"uv": [ 13, 7, 15, 16 ], "texture": "#top"},
+        "down":  {"uv": [ 13, 7, 15, 16 ], "texture": "#original"}
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "south",
+      "origin": [ 0, 0, 0 ],
+      "color": 0,
+      "children": [ 0, 1 ]
+    }
+  ]
+}

@@ -77,4 +77,4 @@ The layer object contains the `textures` definition, the `masks` definition and 
 }
 ```
 
-[metadata_state]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md "Metadata State Documentation"
+[metadata_state]: ./METADATA_STATES_FORMAT.md "Metadata State Documentation"

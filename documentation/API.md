@@ -40,5 +40,5 @@ A mask texture tells which texture should be copied using its alpha channel.
 
 If at the specified pixel the alpha channel is equal to 255, then it uses the top texture, else it uses the side texture.
 
-[metadata_state]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md "Metadata State Documentation"
-[different types]: https://github.com/LambdAurora/LambdaBetterGrass/blob/1.17/documentation/METADATA_STATES_FORMAT.md#types "Metadata Types Documentation"
+[metadata_state]: ./METADATA_STATES_FORMAT.md "Metadata State Documentation"
+[different types]: ./METADATA_STATES_FORMAT.md#types "Metadata Types Documentation"

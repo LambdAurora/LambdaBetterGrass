@@ -1,7 +1,7 @@
 {
-  "parent": "lambdabettergrass:block/template/sculk_fence_post",
+  "parent": "lambdabettergrass:block/fence/template/bamboo_fence_post",
   "textures": {
-    "texture": "lambdabettergrass:block/fence/sculk_bamboo_fence_post",
-    "planks": "minecraft:block/birch_planks"
+    "texture": "lambdabettergrass:block/fence/sculk_bamboo_fence",
+    "top": "lambdabettergrass:block/fence/sculk_bamboo_fence"
   }
 }

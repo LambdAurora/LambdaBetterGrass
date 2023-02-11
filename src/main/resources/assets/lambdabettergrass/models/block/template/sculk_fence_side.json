@@ -4,7 +4,7 @@
   },
   "elements": [
     {
-      "__comment": "top_bar",
+      "name": "top_bar",
       "from": [ 7, 12, 0 ],
       "to": [ 9, 15, 9 ],
       "faces": {
@@ -16,7 +16,7 @@
       }
     },
     {
-      "__comment": "bottom_bar",
+      "name": "bottom_bar",
       "from": [ 7, 6, 0 ],
       "to": [ 9, 9, 9 ],
       "faces": {

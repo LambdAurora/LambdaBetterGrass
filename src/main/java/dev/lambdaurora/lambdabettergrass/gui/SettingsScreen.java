@@ -39,7 +39,7 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
  */
 @ClientOnly
 public class SettingsScreen extends SpruceScreen {
-	private static final String API_URL = "https://github.com/LambdAurora/LambdaBetterGrass/blob/1.19/documentation/API.md";
+	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
 
 	private final LBGConfig config;
 	private final Screen parent;
@@ -117,7 +117,7 @@ public class SettingsScreen extends SpruceScreen {
 		var widget = this.addDrawableChild(new SpruceLabelWidget(Position.of(this, 0, y),
 				text, this.width, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
-				Text.translatable("lambdabettergrass.menu.info.read_more", "[GitHub]").formatted(Formatting.GREEN),
+				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]").formatted(Formatting.GREEN),
 				this.width,
 				label -> Util.getOperatingSystem().open(API_URL), true);
 		readMore.setTooltip(Text.translatable("chat.link.open"));

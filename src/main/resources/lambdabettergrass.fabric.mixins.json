@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.lambdaurora.lambdabettergrass.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MainMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

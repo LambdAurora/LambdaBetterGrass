@@ -4,7 +4,7 @@
   },
   "elements": [
     {
-      "__comment": "center_post",
+      "name": "center_post",
       "from": [ 6, 0, 6 ],
       "to": [ 10, 16, 10 ],
       "faces": {

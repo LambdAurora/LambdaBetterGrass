@@ -13,7 +13,8 @@
             "north": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side"
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side_north",
+            "uvlock": false
           }
         },
         {
@@ -21,8 +22,8 @@
             "east": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
-            "y": 90
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side_east",
+            "uvlock": false
           }
         },
         {
@@ -30,8 +31,8 @@
             "south": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
-            "y": 180
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side_south",
+            "uvlock": false
           }
         },
         {
@@ -39,8 +40,8 @@
             "west": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side",
-            "y": 270
+            "model": "lambdabettergrass:block/fence/snowy_bamboo_fence_side_west",
+            "uvlock": false
           }
         }
       ]
@@ -60,7 +61,8 @@
             "north": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side"
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side_north",
+            "uvlock": false
           }
         },
         {
@@ -68,8 +70,8 @@
             "east": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
-            "y": 90
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side_east",
+            "uvlock": false
           }
         },
         {
@@ -77,8 +79,8 @@
             "south": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
-            "y": 180
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side_south",
+            "uvlock": false
           }
         },
         {
@@ -86,8 +88,8 @@
             "west": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side",
-            "y": 270
+            "model": "lambdabettergrass:block/fence/mossy_bamboo_fence_side_west",
+            "uvlock": false
           }
         }
       ]
@@ -107,7 +109,8 @@
             "north": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side"
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side_north",
+            "uvlock": false
           }
         },
         {
@@ -115,8 +118,8 @@
             "east": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
-            "y": 90
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side_east",
+            "uvlock": false
           }
         },
         {
@@ -124,8 +127,8 @@
             "south": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
-            "y": 180
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side_south",
+            "uvlock": false
           }
         },
         {
@@ -133,8 +136,8 @@
             "west": "true"
           },
           "apply": {
-            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side",
-            "y": 270
+            "model": "lambdabettergrass:block/fence/sculk_bamboo_fence_side_west",
+            "uvlock": false
           }
         }
       ]

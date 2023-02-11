@@ -99,5 +99,14 @@ The first release of LambdaBetterGrass!
   - Added bunch of blocks to the better snow system.
 - Updated [SpruceUI].
 
+## 1.4.0
+
+- Switched to [Quilt](https://quiltmc.org) to allow easier maintenance in the future due to the APIs.
+  Fabric mods work with Quilt.
+- Updated to Minecraft 1.19.3
+  - Added bunch of blocks to the better snow system.
+- Moved the default mycelium connection textures to the default built-in resource pack.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
