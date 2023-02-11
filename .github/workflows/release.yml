@@ -29,7 +29,9 @@ jobs:
       - name: Upload release artifacts
         uses: Roang-zero1/github-upload-release-artifacts-action@v2
         with:
-          - args: "build/libs/lambdabettergrass-*.jar"
+          args: "build/libs/lambdabettergrass-*.jar"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Synchronize Mod description
         uses: gradle/gradle-build-action@v2
