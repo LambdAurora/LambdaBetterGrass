@@ -112,6 +112,7 @@ The first release of LambdaBetterGrass!
 
 - Updated to Minecraft 1.19.4
   - Added bunch of blocks to the better snow system.
+- Added Traditional Chinese translations ([#79](https://github.com/LambdAurora/LambdaBetterGrass/pull/79)).
 - Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
