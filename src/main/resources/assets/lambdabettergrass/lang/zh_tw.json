@@ -1,0 +1,12 @@
+{
+    "lambdabettergrass.menu.info.1": "本模組使用資源包檔案決定那些方塊可以套用效果。",
+    "lambdabettergrass.menu.info.2": "也就是說，啟用或禁用更好的草地／雪地功能",
+    "lambdabettergrass.menu.info.3": "它需要修改資源包。",
+    "lambdabettergrass.menu.info.read_more": "獲取更多資訊：%s",
+    "lambdabettergrass.menu.title": "LambdaBetterGrass 設定",
+    "lambdabettergrass.menu.title.info": "模組的實現方式",
+    "lambdabettergrass.option.better_snow": "更好的雪地",
+    "lambdabettergrass.option.mode": "更好的草地",
+    "lambdabettergrass.tooltip.better_snow": "啟用更好的雪地功能。\n若啟用，當周圍有雪時，某些方塊會出現覆雪的變化或添加雪層。\n注：如果有正確的檔案存在，此功能也適用於其他具有層的類似雪的方塊。",
+    "lambdabettergrass.tooltip.mode": "啟用更好的草地功能\n - %s 關閉更好的草地功能。\n - %s 會將草地方塊頂部的材質套用到每個面上。類似於 OptiFine 中的流暢選項。\n - %s 連接草地的材質，類似於 OptiFine 中的精緻選項\n - %s 會連接草方塊材質並平滑附近草塊的邊緣材質。"
+  }
