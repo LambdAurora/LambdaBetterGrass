@@ -90,6 +90,7 @@
     "pink_tulip",
     "poppy",
     "red_tulip",
+    "torchflower",
     "white_tulip"
   ],
   "double_flower": [
@@ -190,7 +191,7 @@
     "birch_sapling",
     {
       "id": "birch_trapdoor",
-      "watterloggable": true
+      "waterloggable": true
     },
     {
       "id": "black_candle",
@@ -263,6 +264,17 @@
     },
     {
       "id": "chest",
+      "waterloggable": true
+    },
+    "cherry_door",
+    {
+      "id": "cherry_fence",
+      "waterloggable": true
+    },
+    "cherry_fence_gate",
+    "cherry_sapling",
+    {
+      "id": "cherry_trapdoor",
       "waterloggable": true
     },
     "chipped_anvil",
@@ -366,6 +378,10 @@
     },
     {
       "id": "dead_tube_coral_wall_fan",
+      "waterloggable": true
+    },
+    {
+      "id": "decorated_pot",
       "waterloggable": true
     },
     {
@@ -538,6 +554,35 @@
     {
       "id": "pink_candle",
       "waterloggable": true
+    },
+    {
+      "id": "pink_petals",
+      "data": {
+        "ash": {
+          "layer": true,
+          "offset": [
+            0,
+            0.001,
+            0
+          ]
+        },
+        "moss": {
+          "layer": true,
+          "offset": [
+            0,
+            0.001,
+            0
+          ]
+        },
+        "snow": {
+          "layer": true,
+          "offset": [
+            0,
+            0.001,
+            0
+          ]
+        }
+      }
     },
     {
       "id": "pointed_dripstone",

@@ -33,18 +33,18 @@
     "depends": [
       {
         "id": "minecraft",
-        "versions": "~1.19.3"
+        "versions": "~1.19.4"
       },
       {
         "id": "quilt_loader",
-        "versions": ">=0.17.6"
+        "versions": ">=0.17.11"
       },
       "quilt_block_extensions",
       "quilt_resource_loader",
       "fabric-renderer-api-v1",
       {
         "id": "spruceui",
-        "versions": ">=4.1.0"
+        "versions": ">=4.2.0"
       },
       {
         "id": "java",

@@ -108,5 +108,11 @@ The first release of LambdaBetterGrass!
 - Moved the default mycelium connection textures to the default built-in resource pack.
 - Updated [SpruceUI].
 
+## 1.5.0
+
+- Updated to Minecraft 1.19.4
+  - Added bunch of blocks to the better snow system.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -1,0 +1,6 @@
+{
+  "parent": "lambdabettergrass:block/template/snowy_fence_side",
+  "textures": {
+    "texture": "lambdabettergrass:block/fence/snowy_cherry_fence_side"
+  }
+}

@@ -117,7 +117,7 @@ public class SettingsScreen extends SpruceScreen {
 		var widget = this.addDrawableChild(new SpruceLabelWidget(Position.of(this, 0, y),
 				text, this.width, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
-				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]").formatted(Formatting.GREEN),
+				Text.translatable("lambdabettergrass.menu.info.read_more", null, "[lambdaurora.dev]").formatted(Formatting.GREEN),
 				this.width,
 				label -> Util.getOperatingSystem().open(API_URL), true);
 		readMore.setTooltip(Text.translatable("chat.link.open"));

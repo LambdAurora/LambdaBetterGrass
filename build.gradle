@@ -1,5 +1,5 @@
 plugins {
-	id 'org.quiltmc.loom' version '1.0.+'
+	id 'org.quiltmc.loom' version '1.1.+'
 	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'java-library'
 	id 'maven-publish'
@@ -146,18 +146,26 @@ dependencies {
 
 	modules.stream().map { "org.quiltmc.qsl.${it[0]}:${it[1]}:${project.qsl_version}+${project.minecraft_version}" }
 			.forEach {
-				modImplementation it
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
 			}
 	// Fabric API.
 	fabricModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
 			.forEach {
-				modImplementation it
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
 			}
 	runtimeModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
 			.forEach {
-				modLocalRuntime it
+				modImplementation(it) {
+					exclude module: "quilt-loader"
+				}
 			}
-	modLocalRuntime "org.quiltmc.qsl.entity:entity_events:${project.qsl_version}+${project.minecraft_version}"
+	modLocalRuntime("org.quiltmc.qsl.entity:entity_events:${project.qsl_version}+${project.minecraft_version}") {
+		exclude module: "quilt-loader"
+	}
 
 	include modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
 
@@ -213,7 +221,7 @@ shadowJar {
 
 	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
 }
-prepareRemapJar.dependsOn(shadowJar)
+remapJar.dependsOn(shadowJar)
 
 modrinth {
 	projectId = project.modrinth_id

@@ -2,7 +2,7 @@
   "type": "layer",
   "variants": {
     "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/birch_trapdoor"
+      "data": "minecraft:bettergrass/data/cherry_fence"
     }
   }
 }
