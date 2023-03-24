@@ -248,7 +248,7 @@ modrinth {
 
 	// If we don't have a MODRINTH_TOKEN, don't run the modrinth publish tasks.
 	if (!System.getenv("MODRINTH_TOKEN")) {
-        project.logger.warn('MODRINTH_TOKEN is not set! Disabled modrinth and modrinthSyncBody tasks.')
+        project.logger.debug('MODRINTH_TOKEN is not set! Disabled modrinth and modrinthSyncBody tasks.')
 		tasks.modrinth.setEnabled(false)
 		tasks.modrinthSyncBody.setEnabled(false)
 	}
@@ -258,7 +258,7 @@ curseforge {
 	if (System.getenv("CURSEFORGE_TOKEN")) {
 		apiKey = System.getenv("CURSEFORGE_TOKEN")
 	} else { // If we don't have a CURSEFORGE_TOKEN, don't run the curseforge publish tasks.
-        project.logger.warn('CURSEFORGE_TOKEN is not set! Disabled curseforge task.')
+        project.logger.debug('CURSEFORGE_TOKEN is not set! Disabled curseforge task.')
 		tasks.curseforge.setEnabled(false)
 	}
 
