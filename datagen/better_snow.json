@@ -96,6 +96,8 @@
   "double_flower": [
     "lilac",
     "peony",
+    "pitcher_crop",
+    "pitcher_plant",
     "rose_bush",
     "sunflower"
   ],
@@ -642,6 +644,7 @@
       "id": "small_dripleaf",
       "waterloggable": true
     },
+    "sniffer_egg",
     "spruce_door",
     {
       "id": "spruce_fence",
@@ -674,6 +677,7 @@
       "id": "tube_coral_wall_fan",
       "waterloggable": true
     },
+    "turtle_egg",
     "twisting_vines",
     "vine",
     "warped_door",

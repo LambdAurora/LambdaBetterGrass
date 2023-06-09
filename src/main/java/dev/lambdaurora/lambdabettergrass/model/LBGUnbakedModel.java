@@ -14,8 +14,8 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelBaker;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.resource.Material;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +54,7 @@ public class LBGUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public @Nullable BakedModel bake(ModelBaker baker, Function<SpriteIdentifier, Sprite> textureGetter,
+	public @Nullable BakedModel bake(ModelBaker baker, Function<Material, Sprite> textureGetter,
 			ModelBakeSettings rotationContainer, Identifier modelId) {
 		this.metadata.bakeTextures(textureGetter);
 

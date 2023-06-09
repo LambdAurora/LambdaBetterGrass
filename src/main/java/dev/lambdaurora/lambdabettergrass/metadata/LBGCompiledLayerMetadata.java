@@ -13,13 +13,15 @@ import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelBaker;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.resource.Material;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -87,7 +89,7 @@ public class LBGCompiledLayerMetadata {
 	 * @param rotationContainer the rotation container
 	 * @param modelId the model identifier
 	 */
-	public void bake(ModelBaker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+	public void bake(ModelBaker baker, Function<Material, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		if (this.unbakedModels.layerModel() != null) {
 			this.bakedLayerModel = this.unbakedModels.layerModel().bake(baker, textureGetter, rotationContainer, modelId);
 		}
@@ -127,7 +129,7 @@ public class LBGCompiledLayerMetadata {
 							vec.sub(offsetVec);
 							quad.pos(i, vec);
 						}
-						quad.material(RendererAccess.INSTANCE.getRenderer().materialFinder().disableAo(0, false).find());
+						quad.material(RendererAccess.INSTANCE.getRenderer().materialFinder().ambientOcclusion(TriState.FALSE).find());
 						return true;
 					});
 					pushed = true;

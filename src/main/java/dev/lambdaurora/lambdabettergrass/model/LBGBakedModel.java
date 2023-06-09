@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.5.1
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -181,7 +181,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	private static boolean spriteBake(MutableQuadView quad, LBGLayer layer, String texture) {
 		var sprite = layer.getBakedTexture(texture);
 		if (sprite != null)
-			quad.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+			quad.spriteBake(sprite, MutableQuadView.BAKE_LOCK_UV);
 		return sprite != null;
 	}
 }

@@ -33,7 +33,7 @@
     "depends": [
       {
         "id": "minecraft",
-        "versions": "1.19.4"
+        "versions": "~1.20"
       },
       {
         "id": "quilt_loader",
@@ -44,7 +44,7 @@
       "fabric-renderer-api-v1",
       {
         "id": "spruceui",
-        "versions": ">=4.2.0"
+        "versions": ">=5.0.0"
       },
       {
         "id": "java",
@@ -52,7 +52,7 @@
       },
       {
         "id": "modmenu",
-        "versions": ">=5.0.0",
+        "versions": ">=7.0.0",
         "optional": true
       }
     ],

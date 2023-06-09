@@ -15,13 +15,10 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
@@ -73,8 +70,7 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 	}
 
 	@Override
-	public void onEndResourcePackReload(MinecraftClient client, ResourceManager resourceManager, boolean first,
-			@Nullable Throwable error) {
+	public void onEndResourcePackReload(ClientResourceLoaderEvents.EndResourcePackReload.Context context) {
 		if (this.config.isDebug()) {
 			this.resourcePack.dumpTo(Path.of("debug/lbg_out"));
 		}

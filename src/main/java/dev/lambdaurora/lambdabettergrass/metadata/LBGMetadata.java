@@ -14,8 +14,8 @@ import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.resource.Material;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public class LBGMetadata {
 	public final Identifier id;
 
 	protected final ResourceManager resourceManager;
-	protected final List<SpriteIdentifier> textures = new ArrayList<>();
+	protected final List<Material> textures = new ArrayList<>();
 
 	private final List<LBGLayer> layers = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class LBGMetadata {
 	 *
 	 * @param textureGetter the texture getter
 	 */
-	public void bakeTextures(Function<SpriteIdentifier, Sprite> textureGetter) {
+	public void bakeTextures(Function<Material, Sprite> textureGetter) {
 		for (var layer : this.layers) {
 			layer.bakeTextures(textureGetter);
 		}
@@ -119,7 +119,7 @@ public class LBGMetadata {
 	/**
 	 * {@return the textures}
 	 */
-	public Collection<SpriteIdentifier> getTextures() {
+	public Collection<Material> getTextures() {
 		return this.textures;
 	}
 

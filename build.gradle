@@ -60,7 +60,7 @@ String getVersionType() {
 }
 
 String parseReadme() {
-	def linkRegex = /!\[([A-z_ ]+)]\((images\/[A-z.\/_]+)\)/
+	def linkRegex = /!\[([A-z._ ]+)]\((images\/[A-z.\/_]+)\)/
 
 	def readme = (String) file('README.md').text
 	def lines = new ArrayList<>(Arrays.asList(readme.split("\n")))
@@ -84,7 +84,7 @@ String parseReadme() {
 	}
 
 	readme = lines.join("\n")
-	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.19.3/$2)')
+	readme = readme.replaceAll(linkRegex, '![$1](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.20/$2)')
 	return readme
 }
 
