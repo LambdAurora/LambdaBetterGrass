@@ -33,11 +33,11 @@
     "depends": [
       {
         "id": "minecraft",
-        "versions": "~1.19.4"
+        "versions": "1.19.4"
       },
       {
         "id": "quilt_loader",
-        "versions": ">=0.17.11"
+        "versions": ">=0.18.10"
       },
       "quilt_block_extensions",
       "quilt_resource_loader",

@@ -14,7 +14,9 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayer;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
+import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
@@ -68,7 +70,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
 				var blockId = Registries.BLOCK.getId(up.getBlock());
-				var stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
+				var stateId = new Identifier(blockId.getNamespace(), blockId.getPath());
 				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
 					((FabricBakedModel) this.metadata.getSnowyModelVariant())
 							.emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
@@ -78,7 +80,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		}
 
 		context.pushTransform(quad -> {
-			if (quad.nominalFace().getAxis() != Direction.Axis.Y) {
+			if (canEditQuad(quad)) {
 				this.metadata.getLayer(quad.colorIndex()).ifPresent(layer -> {
 					if (mode == LBGMode.FASTEST) {
 						spriteBake(quad, layer, "connect");
@@ -114,6 +116,28 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		});
 		super.emitBlockQuads(world, state, pos, randomSupplier, context);
 		context.popTransform();
+	}
+
+	private static boolean canEditQuad(QuadView quad) {
+		if (quad.nominalFace().getAxis() == Direction.Axis.Y) return false;
+
+		if (testAll(i -> quad.y(i) > 1.f || quad.y(i) < 0.f)) return false;
+
+		if (quad.nominalFace().getAxis() == Direction.Axis.X) {
+			return !testAll(i -> quad.z(i) != 0) || !testAll(i -> quad.z(i) != 1);
+		} else if (quad.nominalFace().getAxis() == Direction.Axis.Z) {
+			return !testAll(i -> quad.x(i) != 0) || !testAll(i -> quad.x(i) != 1);
+		}
+
+		return true;
+	}
+
+	private static boolean testAll(Int2BooleanFunction tester) {
+		for (int i = 0; i < 4; i++) {
+			if (!tester.get(i)) return false;
+		}
+
+		return true;
 	}
 
 	private static boolean canFullyConnect(BlockRenderView world, BlockState self, BlockPos selfPos, Direction direction) {

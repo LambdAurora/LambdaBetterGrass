@@ -115,5 +115,10 @@ The first release of LambdaBetterGrass!
 - Added Traditional Chinese translations ([#79](https://github.com/LambdAurora/LambdaBetterGrass/pull/79)).
 - Updated [SpruceUI].
 
+### 1.5.1
+
+- Added Brazilian Portuguese translations ([#85](https://github.com/LambdAurora/LambdaBetterGrass/pull/85)).
+- Fixed several issues with custom resource packs with custom grass models ([#48](https://github.com/LambdAurora/LambdaBetterGrass/issues/48) and partially [#76](https://github.com/LambdAurora/LambdaBetterGrass/issues/76)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -1,6 +1,6 @@
 plugins {
-	id 'org.quiltmc.loom' version '1.1.+'
-	id 'org.quiltmc.gradle.licenser' version '1.1.+'
+	id 'org.quiltmc.loom' version '1.2.+'
+	id 'org.quiltmc.gradle.licenser' version '2.0.+'
 	id 'java-library'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.1.2'
