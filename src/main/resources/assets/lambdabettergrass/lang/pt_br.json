@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "O mod utiliza arquivos de pacotes de recursos para determinar quais blocos serão afetados.",
+  "lambdabettergrass.menu.info.2": "Isso significa que para ligar ou desligar a função de grama/neve melhorada",
+  "lambdabettergrass.menu.info.3": "em blocos específicos, ela deverá ser modificada com pacotes de recursos.",
+  "lambdabettergrass.menu.info.read_more": "Leia mais em: %s",
+  "lambdabettergrass.menu.title": "Config. de LambdaBetterGrass",
+  "lambdabettergrass.menu.title.info": "Como o mod funciona?",
+  "lambdabettergrass.option.better_snow": "Neve melhorada",
+  "lambdabettergrass.option.mode": "Grama melhorada",
+  "lambdabettergrass.tooltip.better_snow": "Ativa a função de neve melhorada.\nSe ativada, alguns blocos poderão ter uma variante nevada que pode ser usada e/ou uma camada de neve quando há neve por perto.\nNota: isso também funciona para outros blocos semelhantes à neve se os arquivos corretos estão presentes",
+  "lambdabettergrass.tooltip.mode": "Ativa a função de grama melhorada.\n - %s desativa a função de grama melhorada completamente.\n - %s copiará a textura do topo em todos os lados do bloco de grama. Similar à opção \"Rápida\" do OptiFine.\n - %s conectará as texturas do bloco de grama de forma similar à opção \"Detalhada\" do OptiFine.\n - %s conectará as texturas do bloco de grama e suavirizará as texturas de lado dos blocos de grama próximos."
+}
