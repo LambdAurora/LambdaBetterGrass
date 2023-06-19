@@ -32,3 +32,8 @@ jobs:
           arguments: modrinthSyncBody --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: ./build/libs/
