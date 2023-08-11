@@ -3,7 +3,6 @@
   "package": "dev.lambdaurora.lambdabettergrass.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ModelLoaderMixin",
     "VideoOptionsScreenMixin"
   ],
   "injectors": {

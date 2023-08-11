@@ -22,6 +22,7 @@ Set<String[]> modules = [
 		["gui", "tooltip"]
 ]
 Set<String> fabricModules = [
+		'fabric-model-loading-api-v1',
 		'fabric-renderer-api-v1',
 		'fabric-renderer-indigo'
 ]

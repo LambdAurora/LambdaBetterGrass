@@ -15,6 +15,9 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
@@ -32,7 +35,7 @@ import java.nio.file.Path;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.5.2
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLoaderEvents.EndResourcePackReload {
@@ -67,6 +70,30 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 
 		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
 		LBGState.registerType("layer", LBGLayerState::new);
+
+		ModelLoadingPlugin.register(pluginCtx -> {
+			pluginCtx.modifyModelOnLoad().register(ModelModifier.WRAP_PHASE, (model, context) -> {
+				if (context.id() instanceof ModelIdentifier modelId) {
+					if (!modelId.getVariant().equals("inventory")) {
+						var stateId = new Identifier(modelId.getNamespace(), modelId.getPath());
+
+						// Get cached states metadata.
+						var state = LBGState.getMetadataState(stateId);
+
+						// If states metadata found, search for corresponding metadata and if exists replace the model.
+						if (state != null) {
+							var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
+
+							if (newModel != null) {
+								return newModel;
+							}
+						}
+					}
+				}
+
+				return model;
+			});
+		});
 	}
 
 	@Override
