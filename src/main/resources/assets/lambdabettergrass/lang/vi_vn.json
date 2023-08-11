@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "Mod sử dụng các tệp gói tài nguyên để xác định khối nào bị ảnh hưởng.",
+  "lambdabettergrass.menu.info.2": "Điều này có nghĩa là bật hoặc tắt tính năng Cỏ/Tuyết tốt hơn trên các khối",
+  "lambdabettergrass.menu.info.3": "nó phải được sửa đổi với các gói tài nguyên.",
+  "lambdabettergrass.menu.info.read_more": "Đọc thêm tại: %s",
+  "lambdabettergrass.menu.title": "Cấu hình LambdaBetterGrass",
+  "lambdabettergrass.menu.title.info": "Mod hoạt động như thế nào?",
+  "lambdabettergrass.option.better_snow": "Tuyết tốt hơn",
+  "lambdabettergrass.option.mode": "Cỏ tốt hơn",
+  "lambdabettergrass.tooltip.better_snow": "Bật tính năng Tuyết tốt hơn.\nNếu được bật, một số khối có thể sử dụng biến thể có tuyết và/hoặc lớp tuyết được thêm vào khi có tuyết ở gần.\nLưu ý: tính năng này cũng hoạt động đối với các khối giống như tuyết khác có lớp nếu có đúng tệp .",
+  "lambdabettergrass.tooltip.mode": "Bật tính năng cỏ tốt hơn.\n - %s tắt hoàn toàn tính năng cỏ tốt hơn.\n - %s sẽ sao chép kết cấu trên cùng ở mọi mặt của khối cỏ. Tương tự như tùy chọn Nhanh của OptiFine.\n - %s sẽ kết nối kết cấu khối cỏ giống như tùy chọn Đẹp của OptiFine.\n - %s sẽ kết nối kết cấu khối cỏ và làm mịn kết cấu bên của các khối cỏ gần đó."
+}
