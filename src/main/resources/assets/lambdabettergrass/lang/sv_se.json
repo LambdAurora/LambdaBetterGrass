@@ -1,0 +1,12 @@
+{
+    "lambdabettergrass.menu.info.1": "Moden använder resurspaketfiler för att avgöra vilka block som påverkas.",
+    "lambdabettergrass.menu.info.2": "Detta innebär att för att aktivera eller inaktivera funktionen Bättre gräs/snö på block",
+    "lambdabettergrass.menu.info.3": "måste den modifieras med resurspaket.",
+    "lambdabettergrass.menu.info.read_more": "Läs mer på: %s",
+    "lambdabettergrass.menu.title": "LambdaBetterGrass-konfiguration",
+    "lambdabettergrass.menu.title.info": "Hur funkar moddet?",
+    "lambdabettergrass.option.better_snow": "Bättre Snö",
+    "lambdabettergrass.option.mode": "Bättre Gräs",
+    "lambdabettergrass.tooltip.better_snow": "Aktiverar den bättre snöfunktionen.\nOm aktiverat kan vissa block ha en snöig variant som används och/eller ett snölager lagts till när snö är i närheten.\nNotera: detta fungerar även för andra snöliknande block som har lager om rätt filer finns.",
+    "lambdabettergrass.tooltip.mode": "Aktiverar den bättre gräsfunktionen.\n - %s inaktiverar den bättre gräsfunktionen helt.\n - %s kommer att kopiera den övre strukturen på varje sida av gräsblocket. Liknar OptiFines snabba alternativ.\n - %s kommer att koppla ihop gräsblockstexturerna som OptiFines Fancy-alternativ.\n - %s kommer att koppla ihop gräsblockens texturer och jämna ut sidotexturerna på närliggande gräsblock."
+}
