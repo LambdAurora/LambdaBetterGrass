@@ -1,6 +1,6 @@
 {
-  "lambdabettergrass.menu.info.1": "Het mod gebruik bronpakket files to determine which blocks are affected.",
-  "lambdabettergrass.menu.info.2": "This means to enable or disable the Better Grass/Snow feature on blocks",
+  "lambdabettergrass.menu.info.1": "Het mod gebruik bronpakket bestanden om te bepalen welke blokken zijn aangetast.",
+  "lambdabettergrass.menu.info.2": "Deze beteken om inschakelen of uitschakelen van het Better Grass/Snow feature on blocks",
   "lambdabettergrass.menu.info.3": "it has to be modified with resource packs.",
   "lambdabettergrass.menu.info.read_more": "Read more at: %s",
   "lambdabettergrass.menu.title": "LambdaBetterGrass configuration",
