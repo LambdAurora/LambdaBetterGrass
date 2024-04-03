@@ -1,12 +1,12 @@
 {
-  "lambdabettergrass.menu.info.1": "Het mod gebruik bronpakket bestanden om te bepalen welke blokken zijn aangetast.",
-  "lambdabettergrass.menu.info.2": "Deze beteken om inschakelen of uitschakelen van het Better Grass/Snow feature on blocks",
-  "lambdabettergrass.menu.info.3": "it has to be modified with resource packs.",
-  "lambdabettergrass.menu.info.read_more": "Read more at: %s",
-  "lambdabettergrass.menu.title": "LambdaBetterGrass configuration",
-  "lambdabettergrass.menu.title.info": "How does the mod work?",
-  "lambdabettergrass.option.better_snow": "Better Snow",
-  "lambdabettergrass.option.mode": "Better Grass",
-  "lambdabettergrass.tooltip.better_snow": "Enables the better snow feature.\nIf enabled some blocks may have a snowy variation used and/or a snow layer added when snow is nearby.\nNote: this also works for other snow-like blocks which have layers if the correct files are present.",
-  "lambdabettergrass.tooltip.mode": "Enables the better grass feature.\n - %s disables the better grass feature entirely.\n - %s will copy the top texture on every side of the grass block. Similar to OptiFine's Fast option.\n - %s will connect the grass block textures like OptiFine's Fancy option.\n - %s will connect the grass block textures and smoothen the side textures of nearby grass blocks."
+  "lambdabettergrass.menu.info.1": "De mod gebruik bronpakket bestanden om te bepalen welke blokken zijn aangetast.",
+  "lambdabettergrass.menu.info.2": "Deze beteken het Betere Gras/Sneeuw functie op blokken moet worden in of uit geschakeld",
+  "lambdabettergrass.menu.info.3": "het moet worden aangepast met bronpakketten..",
+  "lambdabettergrass.menu.info.read_more": "Lees meer bij: %s",
+  "lambdabettergrass.menu.title": "LambdaBetterGrass configuratie",
+  "lambdabettergrass.menu.title.info": "Hoe werkt de mod?",
+  "lambdabettergrass.option.better_snow": "Betere Sneeuw",
+  "lambdabettergrass.option.mode": "Betere Gras",
+  "lambdabettergrass.tooltip.better_snow": "Schakelt de betere-sneeuw functie in.\nAls deze is ingeschakeld, kan bij sommige blokken een sneeuwvariant worden gebruikt en/of een sneeuwlaag worden toegevoegd als er sneeuw in de buurt is.\nOpmerking: dit werkt ook voor andere sneeuwachtige blokken die lagen hebben als de juiste bestanden aanwezig zijn.",
+  "lambdabettergrass.tooltip.mode": "Schakelt de betere-gras functie in.\n - %s schakelt de betere grasfunctie volledig uit.\n - %s kopieert de bovenste textuur aan elke kant van het grasblok. Vergelijkbaar met de snelle optie van OptiFine.\n - %s zal de grasbloktexturen verbinden zoals de Fraai optie van OptiFine.\n - %s zal de grasbloktexturen verbinden en de zijtexturen van nabijgelegen grasblokken gladder maken"
 }
