@@ -1,0 +1,6 @@
+[versions]
+# Gradle
+gradle-licenser = "2.1.+"
+
+[plugins]
+licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }

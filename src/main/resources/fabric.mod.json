@@ -12,7 +12,7 @@
     "sources": "https://github.com/LambdAurora/LambdaBetterGrass.git",
     "issues": "https://github.com/LambdAurora/LambdaBetterGrass/issues"
   },
-  "license": "MIT",
+  "license": "Lambda License",
   "icon": "assets/lambdabettergrass/icon.png",
   "environment": "client",
   "entrypoints": {
