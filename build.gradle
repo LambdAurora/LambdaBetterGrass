@@ -10,9 +10,12 @@ plugins {
 
 import com.modrinth.minotaur.dependencies.ModDependency
 
-group = project.maven_group
-version = "${project.mod_version}+${project.minecraft_version}"
-archivesBaseName = project.archives_base_name
+base.archivesName.set(project.property("archives_base_name") as String)
+
+def mcVersion = libs.versions.minecraft.get()
+def VERSION = project.property("mod_version") as String
+version = "$VERSION+$mcVersion"
+
 Set<String[]> modules = [
 		["core", "crash_info"],
 		["core", "lifecycle_events"],
@@ -35,25 +38,25 @@ Set<String> runtimeModules = [
 ]
 
 // This field defines the Java version your mod target.
-def targetJavaVersion = 17
+def targetJavaVersion = Integer.parseInt(project.property("java_version").toString())
 
-boolean isMCVersionNonRelease() {
-	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
-			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+boolean isMCVersionNonRelease(String mcVersion) {
+	return mcVersion.matches('^\\d\\dw\\d\\d[a-z]$')
+			|| mcVersion.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
 }
 
-String getMCVersionString() {
-	if (isMCVersionNonRelease()) {
-		return project.minecraft_version
+String getMCVersionString(String mcVersion) {
+	if (isMCVersionNonRelease(mcVersion)) {
+		return mcVersion
 	}
-	def version = project.minecraft_version.split('\\.')
+	def version = mcVersion.split('\\.')
 	return version[0] + '.' + version[1]
 }
 
-String getVersionType() {
-	if (isMCVersionNonRelease() || version.contains("-alpha.")) {
+String getVersionType(String mcVersion) {
+	if (isMCVersionNonRelease(mcVersion) || mcVersion.contains("-alpha.")) {
 		return "alpha"
-	} else if (version.contains("-beta.")) {
+	} else if (mcVersion.contains("-beta.")) {
 		return "beta"
 	} else {
 		return "release"
@@ -131,51 +134,54 @@ repositories {
 	}
 }
 
-configurations {
-	shadow
-	api.extendsFrom shadow
-}
-
 loom {
 	accessWidenerPath = file("src/main/resources/lambdabettergrass.accesswidener")
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${project.quilt_mappings}:intermediary-v2"
+	minecraft(libs.minecraft)
+	mappings "org.quiltmc:quilt-mappings:${mcVersion}+build.${project.quilt_mappings}:intermediary-v2"
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 
-	modules.stream().map { "org.quiltmc.qsl.${it[0]}:${it[1]}:${project.qsl_version}+${project.minecraft_version}" }
+	modules.stream().map { "org.quiltmc.qsl.${it[0]}:${it[1]}:${project.qsl_version}+${mcVersion}" }
 			.forEach {
 				modImplementation(it) {
 					exclude module: "quilt-loader"
 				}
 			}
 	// Fabric API.
-	fabricModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
+	fabricModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${mcVersion}" }
 			.forEach {
 				modImplementation(it) {
 					exclude module: "quilt-loader"
 				}
 			}
-	runtimeModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${project.minecraft_version}" }
+	runtimeModules.stream().map { "org.quiltmc.quilted-fabric-api:${it}:${project.fabric_api_version}-${mcVersion}" }
 			.forEach {
 				modImplementation(it) {
 					exclude module: "quilt-loader"
 				}
 			}
-	modLocalRuntime("org.quiltmc.qsl.entity:entity_events:${project.qsl_version}+${project.minecraft_version}") {
+	modLocalRuntime("org.quiltmc.qsl.entity:entity_events:${project.qsl_version}+${mcVersion}") {
 		exclude module: "quilt-loader"
 	}
 
-	include modImplementation("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	modImplementation(libs.spruceui)
 
-	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+	// Config
+	modCompileOnly(libs.modmenu) {
 		transitive = false
 	}
+	modLocalRuntime(libs.modmenu) {
+		transitive = false
+	}
+	implementation(libs.nightconfig.core)
+	implementation(libs.nightconfig.toml)
 
-	shadow 'com.electronwill.night-config:core:3.6.3'
-	shadow 'com.electronwill.night-config:toml:3.6.3'
+	// Bundling
+	include(libs.spruceui)
+	shadow(libs.nightconfig.core)
+	shadow(libs.nightconfig.toml)
 }
 
 java {
@@ -192,8 +198,8 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release.set(targetJavaVersion)
 }
 
-processResources {
-	inputs.property 'version', project.version
+tasks.processResources {
+	inputs.property("version", project.version)
 
 	filesMatching('fabric.mod.json') {
 		expand 'version': project.version
@@ -203,9 +209,9 @@ processResources {
 	}
 }
 
-jar {
-	from('LICENSE') {
-		rename { "${it}_${project.archivesBaseName}" }
+tasks.jar {
+	from("LICENSE") {
+		rename { "${it}_${base.archivesName.get()}" }
 	}
 }
 
@@ -213,21 +219,28 @@ license {
 	rule(file("metadata/HEADER"))
 }
 
-shadowJar {
-	dependsOn jar
-	configurations = [project.configurations.shadow]
-	destinationDirectory.set(file("${project.buildDir}/devlibs"))
-	archiveClassifier.set('dev')
+tasks.shadowJar {
+	dependsOn(tasks.jar)
+	configurations = [project.configurations["shadow"]]
+	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
+	archiveClassifier.set("dev")
 
-	relocate 'com.electronwill.nightconfig', 'dev.lambdaurora.lambdabettergrass.shadow.nightconfig'
+	relocate("com.electronwill.nightconfig", "dev.lambdaurora.lambdynlights.shadow.nightconfig")
+
+	from(rootProject.file("LICENSE")) {
+		rename { "${it}_${base.archivesName.get()}" }
+	}
 }
-remapJar.dependsOn(shadowJar)
+
+tasks.remapJar {
+	dependsOn(tasks.shadowJar)
+}
 
 modrinth {
 	projectId = project.modrinth_id
-	versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString()})"
-	gameVersions = [project.minecraft_version]
-	versionType = isMCVersionNonRelease() ? "beta" : "release"
+	versionName = "LambdaBetterGrass ${project.mod_version} (${getMCVersionString(mcVersion)})"
+	gameVersions = [mcVersion]
+	versionType = isMCVersionNonRelease(mcVersion) ? "beta" : "release"
 	loaders = ["quilt"]
 	uploadFile = tasks.remapJar
 	dependencies = [
@@ -248,7 +261,7 @@ modrinth {
 
 	// If we don't have a MODRINTH_TOKEN, don't run the modrinth publish tasks.
 	if (!System.getenv("MODRINTH_TOKEN")) {
-        project.logger.debug('MODRINTH_TOKEN is not set! Disabled modrinth and modrinthSyncBody tasks.')
+		project.logger.debug('MODRINTH_TOKEN is not set! Disabled modrinth and modrinthSyncBody tasks.')
 		tasks.modrinth.setEnabled(false)
 		tasks.modrinthSyncBody.setEnabled(false)
 	}
@@ -258,14 +271,14 @@ curseforge {
 	if (System.getenv("CURSEFORGE_TOKEN")) {
 		apiKey = System.getenv("CURSEFORGE_TOKEN")
 	} else { // If we don't have a CURSEFORGE_TOKEN, don't run the curseforge publish tasks.
-        project.logger.debug('CURSEFORGE_TOKEN is not set! Disabled curseforge task.')
+		project.logger.debug('CURSEFORGE_TOKEN is not set! Disabled curseforge task.')
 		tasks.curseforge.setEnabled(false)
 	}
 
 	project {
 		id = project.curseforge_id
-		releaseType = this.getVersionType()
-		addGameVersion project.minecraft_version
+		releaseType = this.getVersionType(mcVersion)
+		addGameVersion mcVersion
 		addGameVersion "Quilt"
 		addGameVersion "Java 17"
 		addGameVersion "Java 18"
@@ -283,7 +296,7 @@ curseforge {
 		}
 
 		mainArtifact(remapJar) {
-			displayName = "LambdaBetterGrass ${project.mod_version} (${project.minecraft_version})"
+			displayName = "LambdaBetterGrass ${project.mod_version} (${mcVersion})"
 
 			relations {
 				requiredDependency "qsl"

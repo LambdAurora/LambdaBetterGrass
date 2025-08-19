@@ -1,6 +1,26 @@
 [versions]
+minecraft = "1.20.1"
+
+# Dependencies
+spruceui = "6.2.1+1.20"
+modmenu = "7.2.2"
+
+# Configuration
+nightconfig = "3.8.1"
+
 # Gradle
 gradle-licenser = "2.1.+"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+
+# Dependencies
+spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+# Configuration
+nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }
+nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightconfig" }
 
 [plugins]
 licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }

@@ -20,17 +20,39 @@ jobs:
       - name: "Set up Gradle"
         uses: gradle/actions/setup-gradle@v3
       - name: "Build with Gradle"
-        run: ./gradlew build
-      - name: "Publish"
-        run: ./gradlew modrinth modrinthSyncBody --stacktrace
+        run: ./gradlew build packageModrinth --parallel --stacktrace
         env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_TOKEN: "dummy"
       - name: "Upload artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
           path: ./build/libs/
+      - name: "Upload Modrinth artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Modrinth
+          path: ./build/modrinth.zip
+          retention-days: 1
+
+  modrinth:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: "Download artifacts"
+        uses: actions/download-artifact@v4
+        with:
+          name: Modrinth
+          path: dist
+      - name: "Extract files"
+        run: unzip dist/modrinth.zip
+      - name: "Release on Modrinth"
+        uses: LambdAurora/modrinth_publish@v0.1.5
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project: "2Uev7LdA"
+          manifest: "manifest.json"
+          readme_file: "README.md"
 
   curseforge:
     runs-on: ubuntu-latest
