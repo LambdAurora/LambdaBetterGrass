@@ -1,0 +1,12 @@
+{
+  "lambdabettergrass.menu.info.1": "Mod ini menggunakan fail pek sumber untuk menentukan blok mana yang terjejas.",
+  "lambdabettergrass.menu.info.2": "Ini bermakna untuk mendayakan atau menyahdayakan ciri Rumput/Salji Lebih Baik pada blok",
+  "lambdabettergrass.menu.info.3": "ia perlu diubah suai dengan pek sumber.",
+  "lambdabettergrass.menu.info.read_more": "Baca lebih lanjut di: %s",
+  "lambdabettergrass.menu.title": "Konfigurasi LambdaBetterGrass",
+  "lambdabettergrass.menu.title.info": "Bagaimanakah mod ini berfungsi?",
+  "lambdabettergrass.option.better_snow": "Salji Lebih Baik",
+  "lambdabettergrass.option.mode": "Rumput Lebih Baik",
+  "lambdabettergrass.tooltip.better_snow": "Mendayakan ciri salji yang lebih baik.\nJika didayakan beberapa blok mungkin mempunyai variasi bersalji yang digunakan dan/atau lapisan salji ditambah apabila terdapat salji berdekatan.\nNota: ini juga berfungsi untuk blok seperti salji lain yang mempunyai lapisan jika fail yang betul wujud.",
+  "lambdabettergrass.tooltip.mode": "Mendayakan ciri rumput yang lebih baik.\n - %s menyahdayakan ciri rumput yang lebih baik sepenuhnya.\n - %s akan menyalin tekstur atas pada setiap sisi blok rumput. Sama seperti pilihan Pantas OptiFine.\n - %s akan menyambungkan tekstur blok rumput seperti pilihan Mewah OptiFine.\n - %s akan menyambungkan tekstur blok rumput dan melicinkan tekstur sisi blok rumput berdekatan."
+}
