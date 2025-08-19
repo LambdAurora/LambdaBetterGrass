@@ -1,0 +1,12 @@
+{
+    "lambdabettergrass.menu.info.1": "El mod fa servir arxius de paquets de textures per a determinar quins blocs estan afectats.",
+    "lambdabettergrass.menu.info.2": "Això implica que, per a activar o desactivar la funcionalitat Better Grass/Snow en blocs,",
+    "lambdabettergrass.menu.info.3": "cal modificar-la amb paquets de textures.",
+    "lambdabettergrass.menu.info.read_more": "Llegeix-ne més a: %s",
+    "lambdabettergrass.menu.title": "Configuració de LambdaBetterGrass",
+    "lambdabettergrass.menu.title.info": "Com funciona el mod?",
+    "lambdabettergrass.option.better_snow": "Millor neu",
+    "lambdabettergrass.option.mode": "Millor herba",
+    "lambdabettergrass.tooltip.better_snow": "Activa la funció de millor neu.\nSi està activa, alguns blocs tindran una variant nevada i/o se'ls afegirà una capa de neu quan en tinguin a la vora.\nNota: això també funciona per a altres blocs similars a la neu que tinguin capes, sempre que els fitxers correctes estiguin presents.",
+    "lambdabettergrass.tooltip.mode": "Activa la funció de millor herba.\n - %s desactiva del tot la funcionalitat.\n - %s replica la textura superior a tots els costats del bloc. Similar a la opció Ràpida/Fast d'OptiFine.\n - %s connecta les textures dels blocs d'herba, com l'opció Detallada/Fancy d'OptiFine.\n - %s connecta les textures dels blocs d'herba i suavitza les textures laterals dels blocs d'herba propers."
+  }
