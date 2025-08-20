@@ -10,6 +10,8 @@ nightconfig = "3.8.1"
 
 # Gradle
 gradle-licenser = "2.1.+"
+gradle-loom = "1.11.+"
+gradle-lambdamcdev = "1.3.+"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -24,3 +26,5 @@ nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref 
 
 [plugins]
 licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }
+loom = { id = "fabric-loom", version.ref = "gradle-loom" }
+lambdamcdev = { id = "dev.lambdaurora.mcdev", version.ref = "gradle-lambdamcdev" }
