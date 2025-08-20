@@ -1,5 +1,6 @@
 [versions]
 minecraft = "1.20.1"
+mappings-yalmm = "8"
 
 # Dependencies
 spruceui = "6.2.1+1.20"

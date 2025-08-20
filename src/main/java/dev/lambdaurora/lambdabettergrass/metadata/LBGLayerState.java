@@ -14,13 +14,13 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.render.model.json.ModelVariantMap;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -51,11 +51,11 @@ public class LBGLayerState extends LBGState {
 	private final Block block;
 
 	public LBGLayerState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-			ModelVariantMap.DeserializationContext deserializationContext) {
+			BlockModelDefinition.Context deserializationContext) {
 		super(id);
 		this.block = block;
 
-		deserializationContext.setStateFactory(block.getStateManager());
+		deserializationContext.setDefinition(block.getStateDefinition());
 
 		if (json.has("variants")) {
 			var variants = json.getAsJsonObject("variants");
@@ -73,9 +73,9 @@ public class LBGLayerState extends LBGState {
 	}
 
 	private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
-			ModelVariantMap.DeserializationContext deserializationContext) {
+			BlockModelDefinition.Context deserializationContext) {
 		var metadataId = Identifier.tryParse(json.get("data").getAsString());
-		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
+		var metadataResourceId = new Identifier(metadataId.namespace(), metadataId.path() + ".json");
 
 		LBGLayerType.forEach(type -> {
 			this.putOrReplaceMetadata(variant, metadataId, type, DEFAULT_METADATA_LAYER_JSON, deserializationContext);
@@ -104,7 +104,7 @@ public class LBGLayerState extends LBGState {
 	}
 
 	private void putOrReplaceMetadata(String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
-			ModelVariantMap.DeserializationContext deserializationContext) {
+			BlockModelDefinition.Context deserializationContext) {
 		var metadatas = this.metadatas.computeIfAbsent(variant, v -> new ArrayList<>());
 		var it = metadatas.iterator();
 		while (it.hasNext()) {
@@ -135,7 +135,7 @@ public class LBGLayerState extends LBGState {
 	@Override
 	public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
 			Function<Identifier, UnbakedModel> modelGetter) {
-		String[] modelVariant = modelId.getVariant().split(",");
+		String[] modelVariant = modelId.variant().split(",");
 
 		for (var entry : this.metadatas.entrySet()) {
 			if (entry.getKey().equals("*") || this.matchVariant(modelVariant, entry.getKey().split(","))) {

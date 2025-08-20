@@ -12,12 +12,12 @@ package dev.lambdaurora.lambdabettergrass.metadata;
 import com.google.gson.JsonObject;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.resource.Material;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class LBGMetadata {
 	 *
 	 * @param textureGetter the texture getter
 	 */
-	public void bakeTextures(Function<Material, Sprite> textureGetter) {
+	public void bakeTextures(Function<Material, TextureAtlasSprite> textureGetter) {
 		for (var layer : this.layers) {
 			layer.bakeTextures(textureGetter);
 		}

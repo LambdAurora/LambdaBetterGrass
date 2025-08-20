@@ -17,9 +17,9 @@ import dev.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.loader.api.ModContainer;
@@ -74,8 +74,8 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 		ModelLoadingPlugin.register(pluginCtx -> {
 			pluginCtx.modifyModelOnLoad().register(ModelModifier.WRAP_PHASE, (model, context) -> {
 				if (context.id() instanceof ModelIdentifier modelId) {
-					if (!modelId.getVariant().equals("inventory")) {
-						var stateId = new Identifier(modelId.getNamespace(), modelId.getPath());
+					if (!modelId.variant().equals("inventory")) {
+						var stateId = new Identifier(modelId.namespace(), modelId.path());
 
 						// Get cached states metadata.
 						var state = LBGState.getMetadataState(stateId);

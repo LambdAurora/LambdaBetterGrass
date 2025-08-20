@@ -17,14 +17,14 @@ import dev.lambdaurora.spruceui.util.Nameable;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.registry.Registries;
-import net.minecraft.resource.Resource;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.Resource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
@@ -44,12 +44,12 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
-	private static final Map<String, RenderLayer> NAMED_RENDER_LAYERS = new ImmutableMap.Builder<String, RenderLayer>()
-			.put("solid", RenderLayer.getSolid())
-			.put("cutout", RenderLayer.getCutout())
-			.put("cutout_mipped", RenderLayer.getCutoutMipped())
-			.put("translucent", RenderLayer.getTranslucent())
-			.put("tripwire", RenderLayer.getTripwire())
+	private static final Map<String, RenderType> NAMED_RENDER_LAYERS = new ImmutableMap.Builder<String, RenderType>()
+			.put("solid", RenderType.solid())
+			.put("cutout", RenderType.cutout())
+			.put("cutout_mipped", RenderType.cutoutMipped())
+			.put("translucent", RenderType.translucent())
+			.put("tripwire", RenderType.tripwire())
 			.build();
 	private static final List<LBGLayerType> LAYER_TYPES = new ArrayList<>();
 
@@ -57,17 +57,17 @@ public class LBGLayerType implements Nameable {
 	public final Block block;
 	public final Identifier modelId;
 	private final String name;
-	private final List<RenderLayer> acceptedRenderLayers;
-	private final RenderLayer defaultRenderLayer;
-	private final Reference2ReferenceMap<Block, RenderLayer> oldRenderLayers = new Reference2ReferenceOpenHashMap<>();
+	private final List<RenderType> acceptedRenderLayers;
+	private final RenderType defaultRenderLayer;
+	private final Reference2ReferenceMap<Block, RenderType> oldRenderLayers = new Reference2ReferenceOpenHashMap<>();
 
-	public LBGLayerType(Identifier id, Block block, Identifier modelId, List<RenderLayer> acceptedRenderLayers, RenderLayer defaultRenderLayer) {
+	public LBGLayerType(Identifier id, Block block, Identifier modelId, List<RenderType> acceptedRenderLayers, RenderType defaultRenderLayer) {
 		this.id = id;
 		this.block = block;
 		this.modelId = modelId;
 		this.acceptedRenderLayers = acceptedRenderLayers;
 		this.defaultRenderLayer = defaultRenderLayer;
-		String[] path = this.id.getPath().split("/");
+		String[] path = this.id.path().split("/");
 		this.name = path[path.length - 1];
 	}
 
@@ -103,7 +103,7 @@ public class LBGLayerType implements Nameable {
 			return;
 		}
 
-		var currentLayer = RenderLayers.getBlockLayer(block.getDefaultState());
+		var currentLayer = ItemBlockRenderTypes.getChunkRenderType(block.defaultState());
 
 		if (currentLayer != this.defaultRenderLayer && !this.acceptedRenderLayers.contains(currentLayer)) {
 			this.oldRenderLayers.putIfAbsent(block, currentLayer);
@@ -137,20 +137,20 @@ public class LBGLayerType implements Nameable {
 	}
 
 	public static void load(Identifier resourceId, Resource resource) {
-		var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
+		var id = new Identifier(resourceId.namespace(), resourceId.path().replace(".json", ""));
 		try (var reader = new InputStreamReader(resource.open())) {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
 
 			var affectId = new Identifier(json.get("block").getAsString());
-			var block = Registries.BLOCK.get(affectId);
+			var block = BuiltInRegistries.BLOCK.get(affectId);
 
 			if (block == Blocks.AIR)
 				return;
 
 			var modelId = new Identifier(json.get("model").getAsString());
 
-			var acceptedRenderLayers = new ReferenceArrayList<RenderLayer>();
-			RenderLayer defaultRenderLayer = null;
+			var acceptedRenderLayers = new ReferenceArrayList<RenderType>();
+			RenderType defaultRenderLayer = null;
 
 			if (json.has("render_layer")) {
 				var renderLayerData = json.getAsJsonObject("render_layer");
@@ -160,7 +160,7 @@ public class LBGLayerType implements Nameable {
 
 				for (var el : accepted) {
 					String name = el.getAsString();
-					RenderLayer layer = NAMED_RENDER_LAYERS.get(name);
+					RenderType layer = NAMED_RENDER_LAYERS.get(name);
 
 					if (layer != null) {
 						acceptedRenderLayers.add(layer);

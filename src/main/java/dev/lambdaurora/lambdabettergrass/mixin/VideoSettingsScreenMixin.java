@@ -11,13 +11,14 @@ package dev.lambdaurora.lambdabettergrass.mixin;
 
 import dev.lambdaurora.lambdabettergrass.gui.LBGOption;
 import dev.lambdaurora.spruceui.Tooltip;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.gui.screen.option.VideoOptionsScreen;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.Option;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.OptionsScreen;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.VideoSettingsScreen;
+import net.minecraft.network.chat.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,17 +26,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(VideoOptionsScreen.class)
-public class VideoOptionsScreenMixin extends GameOptionsScreen {
+@Mixin(VideoSettingsScreen.class)
+public class VideoSettingsScreenMixin extends OptionsSubScreen {
 	@Unique
-	private Option<?> lbg$option;
+	private OptionInstance<?> lbg$option;
 
-	public VideoOptionsScreenMixin(Screen parent, GameOptions gameOptions, Text title) {
+	public VideoSettingsScreenMixin(Screen parent, Options gameOptions, Text title) {
 		super(parent, gameOptions, title);
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void onConstruct(Screen parent, GameOptions gameOptions, CallbackInfo ci) {
+	private void onConstruct(Screen parent, Options options, CallbackInfo ci) {
 		this.lbg$option = LBGOption.getOption(this);
 	}
 
@@ -43,12 +44,12 @@ public class VideoOptionsScreenMixin extends GameOptionsScreen {
 			method = "init",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/widget/ButtonListWidget;addEntries([Lnet/minecraft/client/option/Option;)V"
+					target = "Lnet/minecraft/client/gui/components/OptionsList;addSmall([Lnet/minecraft/client/OptionInstance;)V"
 			),
 			index = 0
 	)
-	private Option<?>[] addOptionButton(Option<?>[] old) {
-		var options = new Option<?>[old.length + 1];
+	private OptionInstance<?>[] addOptionButton(OptionInstance<?>[] old) {
+		var options = new OptionInstance<?>[old.length + 1];
 		System.arraycopy(old, 0, options, 0, old.length);
 		options[options.length - 1] = this.lbg$option;
 		return options;

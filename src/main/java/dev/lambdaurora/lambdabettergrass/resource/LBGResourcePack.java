@@ -10,10 +10,11 @@
 package dev.lambdaurora.lambdabettergrass.resource;
 
 import com.google.common.collect.Sets;
-import com.mojang.blaze3d.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceType;
+import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.InMemoryResourcePack;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class LBGResourcePack extends InMemoryResourcePack {
 		final var id = new Identifier(LambdaBetterGrass.NAMESPACE, "block/bettergrass/" + name);
 
 		try {
-			this.putImage(new Identifier(id.getNamespace(), "textures/" + id.getPath() + ".png"), image);
+			this.putImage(new Identifier(id.namespace(), "textures/" + id.path() + ".png"), image);
 		} catch (IOException e) {
 			this.mod.warn("Could not put image {}.", id, e);
 		}
@@ -46,7 +47,7 @@ public class LBGResourcePack extends InMemoryResourcePack {
 	}
 
 	@Override
-	public String getName() {
+	public @NotNull String packId() {
 		return "LambdaBetterGrass generated resources";
 	}
 }

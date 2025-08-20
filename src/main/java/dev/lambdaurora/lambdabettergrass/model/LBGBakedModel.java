@@ -17,20 +17,19 @@ import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowyBlock;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.registry.Registries;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.world.BlockRenderView;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.function.Supplier;
 
@@ -55,7 +54,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
 		var mode = LambdaBetterGrass.get().config.getMode();
 
 		if (mode == LBGMode.OFF) {
@@ -65,15 +64,15 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		}
 
 		if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().hasBetterLayer()
-				&& state.getProperties().contains(Properties.SNOWY) && !state.get(Properties.SNOWY)) {
-			var upPos = pos.up();
+				&& state.getProperties().contains(BlockStateProperties.SNOWY) && !state.get(BlockStateProperties.SNOWY)) {
+			var upPos = pos.above();
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
-				var blockId = Registries.BLOCK.getId(up.getBlock());
-				var stateId = new Identifier(blockId.getNamespace(), blockId.getPath());
+				var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
+				var stateId = new Identifier(blockId.namespace(), blockId.path());
 				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
-					((FabricBakedModel) this.metadata.getSnowyModelVariant())
-							.emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
+					this.metadata.getSnowyModelVariant()
+							.emitBlockQuads(world, state.with(BlockStateProperties.SNOWY, true), pos, randomSupplier, context);
 					return;
 				}
 			}
@@ -88,8 +87,8 @@ public class LBGBakedModel extends ForwardingBakedModel {
 					}
 
 					Direction face = quad.nominalFace();
-					var right = face.rotateYClockwise();
-					var left = face.rotateYCounterclockwise();
+					var right = face.getClockWise();
+					var left = face.getCounterClockWise();
 
 					if (canFullyConnect(world, state, pos, face)) {
 						if (spriteBake(quad, layer, "connect"))
@@ -99,10 +98,10 @@ public class LBGBakedModel extends ForwardingBakedModel {
 					if (mode != LBGMode.FANCY)
 						return;
 
-					boolean rightMatch = canConnect(world, state, pos.down(), right)
-							|| (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.offset(right), face));
-					boolean leftMatch = canConnect(world, state, pos.down(), left)
-							|| (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.offset(left), face));
+					boolean rightMatch = canConnect(world, state, pos.below(), right)
+							|| (canConnect(world, state, pos, right) && canFullyConnect(world, state, pos.relative(right), face));
+					boolean leftMatch = canConnect(world, state, pos.below(), left)
+							|| (canConnect(world, state, pos, left) && canFullyConnect(world, state, pos.relative(left), face));
 
 					if (rightMatch && leftMatch)
 						spriteBake(quad, layer, "arch");
@@ -140,30 +139,30 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		return true;
 	}
 
-	private static boolean canFullyConnect(BlockRenderView world, BlockState self, BlockPos selfPos, Direction direction) {
-		return canConnect(world, self, selfPos, selfPos.offset(direction).down());
+	private static boolean canFullyConnect(BlockAndTintGetter world, BlockState self, BlockPos selfPos, Direction direction) {
+		return canConnect(world, self, selfPos, selfPos.relative(direction).below());
 	}
 
-	private static boolean canConnect(BlockRenderView world, BlockState self, BlockPos start, Direction direction) {
-		return canConnect(world, self, start, start.offset(direction));
+	private static boolean canConnect(BlockAndTintGetter world, BlockState self, BlockPos start, Direction direction) {
+		return canConnect(world, self, start, start.relative(direction));
 	}
 
-	private static boolean canConnect(BlockRenderView world, BlockState self, BlockPos selfPos, BlockPos adjacentPos) {
+	private static boolean canConnect(BlockAndTintGetter world, BlockState self, BlockPos selfPos, BlockPos adjacentPos) {
 		var adjacent = world.getBlockState(adjacentPos);
-		var upPos = adjacentPos.up();
+		var upPos = adjacentPos.above();
 		var up = world.getBlockState(upPos);
 
 		if (LambdaBetterGrass.get().hasBetterLayer() &&
-				self.getBlock() instanceof SnowyBlock) {
-			boolean selfSnowy = self.get(Properties.SNOWY);
+				self.getBlock() instanceof SnowyDirtBlock) {
+			boolean selfSnowy = self.get(BlockStateProperties.SNOWY);
 
 			if (selfSnowy) {
 				if (!up.isAir()) {
-					if (up.isOf(Blocks.SNOW))
+					if (up.is(Blocks.SNOW))
 						return true;
-					else if (adjacent.getBlock() instanceof SnowyBlock) {
-						var blockId = Registries.BLOCK.getId(up.getBlock());
-						var stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
+					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
+						var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
+						var stateId = new Identifier(blockId.namespace(), "bettergrass/states/" + blockId.path());
 						if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
 							return true;
 					}
@@ -171,7 +170,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 			}
 		}
 
-		return canConnect(self, adjacent) && (up.isAir() || !up.isSideSolidFullSquare(world, upPos, Direction.DOWN));
+		return canConnect(self, adjacent) && (up.isAir() || !up.isFaceSturdy(world, upPos, Direction.DOWN));
 	}
 
 	private static boolean canConnect(BlockState self, BlockState adjacent) {

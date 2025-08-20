@@ -14,20 +14,15 @@ import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelBaker;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.resource.Material;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.world.BlockRenderView;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -63,11 +58,11 @@ public class LBGCompiledLayerMetadata {
 
 	public void fetchModelDependencies(Collection<Identifier> ids) {
 		if (this.unbakedModels.layerModel() != null) {
-			ids.addAll(this.unbakedModels.layerModel().getModelDependencies());
+			ids.addAll(this.unbakedModels.layerModel().getDependencies());
 		}
 
 		if (this.unbakedModels.alternateModel() != null) {
-			ids.addAll(this.unbakedModels.alternateModel().getModelDependencies());
+			ids.addAll(this.unbakedModels.alternateModel().getDependencies());
 		}
 	}
 
@@ -89,7 +84,7 @@ public class LBGCompiledLayerMetadata {
 	 * @param rotationContainer the rotation container
 	 * @param modelId the model identifier
 	 */
-	public void bake(ModelBaker baker, Function<Material, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+	public void bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState rotationContainer, Identifier modelId) {
 		if (this.unbakedModels.layerModel() != null) {
 			this.bakedLayerModel = this.unbakedModels.layerModel().bake(baker, textureGetter, rotationContainer, modelId);
 		}
@@ -110,15 +105,15 @@ public class LBGCompiledLayerMetadata {
 	 * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads,
 	 * or 2 if the custom alternative model has emitted quads
 	 */
-	public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier,
+	public int emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
 			RenderContext context) {
 		int success = 0;
 		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
 				&& this.bakedLayerModel != null) {
-			final var downPos = pos.down();
+			final var downPos = pos.below();
 			final var downState = world.getBlockState(downPos);
-			if (downState.isSideSolidFullSquare(world, downPos, Direction.UP)) {
-				Vec3d offset = state.getModelOffset(world, pos);
+			if (downState.isFaceSturdy(world, downPos, Direction.UP)) {
+				Vec3 offset = state.getOffset(world, pos);
 				boolean pushed = false;
 				if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {
 					var offsetVec = new Vector3f((float) offset.x, (float) offset.y, (float) offset.z);

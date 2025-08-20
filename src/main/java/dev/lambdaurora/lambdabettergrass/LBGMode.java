@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdabettergrass;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.TextFormatting;
+import net.minecraft.network.chat.Text;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -25,15 +25,15 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public enum LBGMode implements Nameable {
-	OFF(SpruceTexts.OPTIONS_OFF, Formatting.RED),
-	FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, Formatting.GOLD),
-	FAST(SpruceTexts.OPTIONS_GENERIC_FAST, Formatting.YELLOW),
-	FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, Formatting.GREEN);
+	OFF(SpruceTexts.OPTIONS_OFF, TextFormatting.RED),
+	FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, TextFormatting.GOLD),
+	FAST(SpruceTexts.OPTIONS_GENERIC_FAST, TextFormatting.YELLOW),
+	FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, TextFormatting.GREEN);
 
 	private final Text text;
 
-	LBGMode(Text text, Formatting formatting) {
-		this.text = text.copy().formatted(formatting);
+	LBGMode(Text text, TextFormatting formatting) {
+		this.text = text.copy().withStyle(formatting);
 	}
 
 	/**

@@ -14,10 +14,10 @@ import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,7 +77,7 @@ public class LBGGrassState extends LBGState {
 	 * @return the metadata if loaded successfully, else {@code null}
 	 */
 	private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
-		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
+		var metadataResourceId = new Identifier(metadataId.namespace(), metadataId.path() + ".json");
 		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).open())) {
 			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
@@ -98,7 +98,7 @@ public class LBGGrassState extends LBGState {
 	public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
 		if (this.metadata != null)
 			return this.metadata;
-		String[] modelVariant = modelId.getVariant().split(",");
+		String[] modelVariant = modelId.variant().split(",");
 		for (var variant : this.metadatas.entrySet()) {
 			if (this.matchVariant(modelVariant, variant.getKey().split(",")))
 				return variant.getValue();

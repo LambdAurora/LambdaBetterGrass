@@ -11,15 +11,15 @@ package dev.lambdaurora.lambdabettergrass.util;
 
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockRenderView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,10 +39,10 @@ public final class LayeredBlockUtils {
 		throw new UnsupportedOperationException("LayeredBlockUtils only contains static definitions.");
 	}
 
-	public static boolean shouldGrassBeSnowy(BlockRenderView world, BlockPos pos, Identifier stateId, BlockState upState,
+	public static boolean shouldGrassBeSnowy(BlockAndTintGetter world, BlockPos pos, Identifier stateId, BlockState upState,
 			boolean onlyPureSnow) {
 		// Ignore blocks that are not rendered through the normal system.
-		if (upState.getRenderType() != BlockRenderType.MODEL)
+		if (upState.getRenderShape() != RenderShape.MODEL)
 			return false;
 
 		var state = LBGState.getMetadataState(stateId);
@@ -68,22 +68,22 @@ public final class LayeredBlockUtils {
 			}
 		});
 
-		return shouldTry[0] && getNearbySnowyBlocks(world, pos.up(), upState.getBlock(), onlyPureSnow) > 1;
+		return shouldTry[0] && getNearbySnowyBlocks(world, pos.above(), upState.getBlock(), onlyPureSnow) > 1;
 	}
 
 	@SuppressWarnings("unchecked")
 	private static <T extends Comparable<T>> String nameValue(Property<T> property, Comparable<?> value) {
-		return property.name((T) value);
+		return property.getName((T) value);
 	}
 
-	public static int getNearbySnowyBlocks(BlockRenderView world, BlockPos pos, Block type, boolean onlyPureSnow) {
+	public static int getNearbySnowyBlocks(BlockAndTintGetter world, BlockPos pos, Block type, boolean onlyPureSnow) {
 		return getNearbyLayeredBlocks(world, pos, Blocks.SNOW, type, onlyPureSnow);
 	}
 
-	public static int getNearbyLayeredBlocks(BlockRenderView world, BlockPos pos, Block layerBlock, Block type, boolean onlySourceBlock) {
+	public static int getNearbyLayeredBlocks(BlockAndTintGetter world, BlockPos pos, Block layerBlock, Block type, boolean onlySourceBlock) {
 		int nearbySnow = 0;
 		for (var direction : HORIZONTAL_DIRECTIONS) {
-			var offsetPos = pos.offset(direction);
+			var offsetPos = pos.relative(direction);
 			var block = world.getBlockState(offsetPos).getBlock();
 			if (block == type && !onlySourceBlock) {
 				if (getNearbyBlockLayers(world, offsetPos, layerBlock) > 1)
@@ -95,10 +95,10 @@ public final class LayeredBlockUtils {
 		return nearbySnow;
 	}
 
-	public static int getNearbyBlockLayers(BlockRenderView world, BlockPos pos, Block layerBlock) {
+	public static int getNearbyBlockLayers(BlockAndTintGetter world, BlockPos pos, Block layerBlock) {
 		int nearbySnow = 0;
 		for (var direction : HORIZONTAL_DIRECTIONS) {
-			if (world.getBlockState(pos.offset(direction)).getBlock() == layerBlock)
+			if (world.getBlockState(pos.relative(direction)).getBlock() == layerBlock)
 				nearbySnow++;
 		}
 		return nearbySnow;

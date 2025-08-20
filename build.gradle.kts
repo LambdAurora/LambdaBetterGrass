@@ -97,7 +97,11 @@ loom {
 
 dependencies {
 	minecraft(libs.minecraft)
-	mappings("org.quiltmc:quilt-mappings:${mcVersion}+build.${project.property("quilt_mappings")}:intermediary-v2")
+	@Suppress("UnstableApiUsage")
+	mappings(loom.layered {
+		officialMojangMappings()
+		mappings("dev.lambdaurora:yalmm:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
+	})
 	modImplementation("org.quiltmc:quilt-loader:${project.property("loader_version")}")
 
 	qslModules.asSequence().map { "org.quiltmc.qsl.${it.library}:${it.module}:${project.property("qsl_version")}+${mcVersion}" }

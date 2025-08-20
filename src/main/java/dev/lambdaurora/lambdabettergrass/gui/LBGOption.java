@@ -11,14 +11,13 @@ package dev.lambdaurora.lambdabettergrass.gui;
 
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.Option;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Text;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -34,9 +33,9 @@ import java.util.function.Function;
 public final class LBGOption {
 	private static final String KEY = "LambdaBetterGrass";
 
-	public static Option<Unit> getOption(Screen parent) {
-		return new Option<>(
-				KEY, Option.emptyTooltip(),
+	public static OptionInstance<Unit> getOption(Screen parent) {
+		return new OptionInstance<>(
+				KEY, OptionInstance.noTooltip(),
 				(title, object) -> title,
 				new DummyValueSet(parent),
 				Unit.INSTANCE,
@@ -45,20 +44,20 @@ public final class LBGOption {
 		);
 	}
 
-	private record DummyValueSet(Screen parent) implements Option.ValueSet<Unit> {
+	private record DummyValueSet(Screen parent) implements OptionInstance.ValueSet<Unit> {
 		@Override
-		public Function<Option<Unit>, ClickableWidget> getButtonCreator(Option.TooltipSupplier<Unit> tooltipSupplier, GameOptions options,
+		public Function<OptionInstance<Unit>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
 				int x, int y, int width, Consumer<Unit> consumer) {
-			return option -> ButtonWidget.builder(
-							Text.translatable(KEY), btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent))
+			return option -> Button.builder(
+							Text.translatable(KEY), btn -> Minecraft.getInstance().setScreen(new SettingsScreen(this.parent))
 					)
-					.position(x, y)
+					.pos(x, y)
 					.size(width, 20)
 					.build();
 		}
 
 		@Override
-		public Optional<Unit> validate(Unit value) {
+		public Optional<Unit> validateValue(Unit value) {
 			return Optional.of(Unit.INSTANCE);
 		}
 

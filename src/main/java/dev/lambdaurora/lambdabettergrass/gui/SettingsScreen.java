@@ -21,14 +21,15 @@ import dev.lambdaurora.spruceui.option.SpruceSimpleActionOption;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
-import net.minecraft.client.MinecraftClient;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.TextFormatting;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 /**
  * Represents the LambdaBetterGrass settings screen.
@@ -37,7 +38,7 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
  * @version 1.4.0
  * @since 1.0.0
  */
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
 
@@ -56,8 +57,8 @@ public class SettingsScreen extends SpruceScreen {
 		this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
 				amount -> {
 					this.config.setMode(this.config.getMode().next());
-					if (this.client != null && this.client.worldRenderer != null)
-						this.client.worldRenderer.reload();
+					if (this.client != null && this.client.levelRenderer != null)
+						this.client.levelRenderer.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
 				Text.translatable("lambdabettergrass.tooltip.mode",
@@ -70,21 +71,21 @@ public class SettingsScreen extends SpruceScreen {
 				this.config::hasBetterLayer,
 				betterSnow -> {
 					this.config.setBetterLayer(betterSnow);
-					if (this.client != null && this.client.worldRenderer != null)
-						this.client.worldRenderer.reload();
+					if (this.client != null && this.client.levelRenderer != null)
+						this.client.levelRenderer.allChanged();
 				},
 				Text.translatable("lambdabettergrass.tooltip.better_snow"),
 				true);
 
 		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
 			this.config.reset();
-			var client = MinecraftClient.getInstance();
-			this.init(client, client.getWindow().getScaledWidth(), client.getWindow().getScaledHeight());
+			var client = Minecraft.getInstance();
+			this.init(client, client.getWindow().getGuiScaledWidth(), client.getWindow().getGuiScaledHeight());
 		});
 	}
 
 	@Override
-	public void closeScreen() {
+	public void onClose() {
 		this.client.setScreen(this.parent);
 	}
 
@@ -93,39 +94,39 @@ public class SettingsScreen extends SpruceScreen {
 		super.init();
 		int buttonHeight = 20;
 
-		this.addDrawableChild(this.modeOption.createWidget(Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
+		this.addRenderableWidget(this.modeOption.createWidget(Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
 				200));
-		this.addDrawableChild(this.betterSnowOption.createWidget(Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200));
+		this.addRenderableWidget(this.betterSnowOption.createWidget(Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200));
 
 		this.buildLabels();
 
-		this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
-		this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
+		this.addRenderableWidget(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
+		this.addRenderableWidget(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
 				buttonHeight, SpruceTexts.GUI_DONE,
-				(buttonWidget) -> this.closeScreen()));
+				(buttonWidget) -> this.onClose()));
 	}
 
 	private void buildLabels() {
 		int y = this.height / 2;
 
 		var text = Text.literal("");
-		text.append(Text.translatable("lambdabettergrass.menu.title.info").formatted(Formatting.GOLD, Formatting.BOLD));
+		text.append(Text.translatable("lambdabettergrass.menu.title.info").withStyle(TextFormatting.GOLD, TextFormatting.BOLD));
 		text.append("\n");
 		text.append(Text.translatable("lambdabettergrass.menu.info.1")).append("\n");
 		text.append(Text.translatable("lambdabettergrass.menu.info.2")).append(" ");
 		text.append(Text.translatable("lambdabettergrass.menu.info.3")).append("\n");
-		var widget = this.addDrawableChild(new SpruceLabelWidget(Position.of(this, 0, y),
+		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 0, y),
 				text, this.width, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
-				Text.translatable("lambdabettergrass.menu.info.read_more", null, "[lambdaurora.dev]").formatted(Formatting.GREEN),
+				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]").withStyle(TextFormatting.GREEN),
 				this.width,
-				label -> Util.getOperatingSystem().open(API_URL), true);
+				label -> Util.getPlatform().openUri(API_URL), true);
 		readMore.setTooltip(Text.translatable("chat.link.open"));
-		this.addDrawableChild(readMore);
+		this.addRenderableWidget(readMore);
 	}
 
 	@Override
 	public void renderTitle(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		graphics.drawCenteredShadowedText(this.textRenderer, this.title, this.width / 2, 8, 16777215);
+		graphics.drawCenteredShadowedText(this.font, this.title, this.width / 2, 8, 16777215);
 	}
 }

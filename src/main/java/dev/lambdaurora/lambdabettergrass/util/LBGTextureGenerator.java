@@ -9,15 +9,16 @@
 
 package dev.lambdaurora.lambdabettergrass.util;
 
-import com.mojang.blaze3d.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
 
 import java.io.IOException;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public enum LBGTextureGenerator {
 	; // No instantiation possible <3
 
@@ -74,7 +75,7 @@ public enum LBGTextureGenerator {
 
 		for (int y = 0; y < result.getHeight(); y++) {
 			for (int x = 0; x < result.getWidth(); x++) {
-				result.setPixelColor(source.getWidth() - 1 - x, y, source.getPixelColor(x, y));
+				result.setPixelRGBA(source.getWidth() - 1 - x, y, source.getPixelRGBA(x, y));
 			}
 		}
 
@@ -116,14 +117,14 @@ public enum LBGTextureGenerator {
 		// Time to do AND operation
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				int sourceRGB = source.getPixelColor(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
-				int topRGB = top.getPixelColor(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
+				int sourceRGB = source.getPixelRGBA(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
+				int topRGB = top.getPixelRGBA(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
 
 				// If the mask pixel opacity is 255 (-1 because signed byte) use the top texture pixel color, else use the source pixel color.
-				if (mask.getPixelOpacity(getTrueCoordinate(width, mask.getWidth(), x), getTrueCoordinate(height, mask.getHeight(), y)) == -1)
-					output.setPixelColor(x, y, topRGB);
+				if (mask.getLuminanceOrAlpha(getTrueCoordinate(width, mask.getWidth(), x), getTrueCoordinate(height, mask.getHeight(), y)) == -1)
+					output.setPixelRGBA(x, y, topRGB);
 				else
-					output.setPixelColor(x, y, sourceRGB);
+					output.setPixelRGBA(x, y, sourceRGB);
 			}
 		}
 		return output;

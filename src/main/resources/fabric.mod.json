@@ -3,7 +3,7 @@
   "id": "lambdabettergrass",
   "name": "LambdaBetterGrass",
   "version": "${version}",
-  "description": "Adds actual better grass. But now on Quilt, so move there ;)",
+  "description": "Adds actual better grass.",
   "authors": [
     "LambdAurora"
   ],
@@ -16,16 +16,12 @@
   "icon": "assets/lambdabettergrass/icon.png",
   "environment": "client",
   "entrypoints": {
-    "preLaunch": [
-      "dev.lambdaurora.lambdabettergrass.MigrationNotice"
-    ]
   },
   "mixins": [
-    "lambdabettergrass.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.7",
-    "minecraft": ">=1.20",
+    "minecraft": "~1.20 <1.20.2-",
     "java": ">=17"
   },
   "recommends": {

@@ -10,13 +10,9 @@
 package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelBaker;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.resource.Material;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -40,8 +36,8 @@ public class LBGUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public Collection<Identifier> getModelDependencies() {
-		return this.baseModel.getModelDependencies();
+	public Collection<Identifier> getDependencies() {
+		return this.baseModel.getDependencies();
 	}
 
 	@Override
@@ -54,8 +50,8 @@ public class LBGUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public @Nullable BakedModel bake(ModelBaker baker, Function<Material, Sprite> textureGetter,
-			ModelBakeSettings rotationContainer, Identifier modelId) {
+	public @Nullable BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
+			ModelState rotationContainer, Identifier modelId) {
 		this.metadata.bakeTextures(textureGetter);
 
 		var model = new LBGBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, rotationContainer, modelId)), this.metadata);

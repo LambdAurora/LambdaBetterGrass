@@ -12,10 +12,10 @@ package dev.lambdaurora.lambdabettergrass.metadata;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.render.model.json.ModelVariantMap;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -39,7 +39,7 @@ public class LBGLayerMetadata {
 	private final boolean hasAlternateModel;
 
 	public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-			ModelVariantMap.DeserializationContext deserializationContext) {
+			BlockModelDefinition.Context deserializationContext) {
 		this.id = id;
 		this.layerType = layerType;
 
@@ -65,11 +65,11 @@ public class LBGLayerMetadata {
 			return;
 		}
 
-		var map = ModelVariantMap.fromJson(deserializationContext, new StringReader(json.get("block_state").toString()));
-		if (map.hasMultipartModel())
-			this.alternateModel = map.getMultipartModel();
+		var map = BlockModelDefinition.fromStream(deserializationContext, new StringReader(json.get("block_state").toString()));
+		if (map.isMultiPart())
+			this.alternateModel = map.getMultiPart();
 		else
-			this.variantModels.putAll(map.getVariantMap());
+			this.variantModels.putAll(map.getVariants());
 
 		this.hasAlternateModel = true;
 	}
@@ -93,7 +93,7 @@ public class LBGLayerMetadata {
 			if (this.alternateModel != null) {
 				alternateModel = this.alternateModel;
 			} else {
-				UnbakedModel alternateVariantModel = this.variantModels.get(modelId.getVariant());
+				UnbakedModel alternateVariantModel = this.variantModels.get(modelId.variant());
 				if (alternateVariantModel != null) {
 					alternateModel = alternateVariantModel;
 				}

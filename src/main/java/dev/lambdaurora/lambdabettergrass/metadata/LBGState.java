@@ -13,12 +13,12 @@ import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.block.Block;
-import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.render.model.json.ModelVariantMap;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -100,7 +100,7 @@ public abstract class LBGState {
 	}
 
 	public static void loadMetadataState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-			ModelVariantMap.DeserializationContext deserializationContext) {
+			BlockModelDefinition.Context deserializationContext) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
@@ -114,6 +114,6 @@ public abstract class LBGState {
 	@FunctionalInterface
 	public interface LBGStateProvider {
 		LBGState create(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-				ModelVariantMap.DeserializationContext deserializationContext);
+				BlockModelDefinition.Context deserializationContext);
 	}
 }

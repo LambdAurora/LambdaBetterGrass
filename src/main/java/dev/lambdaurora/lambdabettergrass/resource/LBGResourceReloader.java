@@ -13,11 +13,11 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerType;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import net.minecraft.client.render.model.json.ModelVariantMap;
-import net.minecraft.registry.Registries;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.Resource;
+import net.minecraft.resources.io.ResourceManager;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -37,17 +37,17 @@ public class LBGResourceReloader {
 		LBGState.reset();
 		LBGLayerType.reset();
 		var layerTypes = resourceManager.findResources("bettergrass/layer_types",
-				path -> path.getPath().endsWith(".json"));
+				path -> path.path().endsWith(".json"));
 		layerTypes.forEach(LBGLayerType::load);
 
 		this.loadStates(resourceManager);
 	}
 
 	private void loadStates(ResourceManager resourceManager) {
-		var variantMapDeserializationContext = new ModelVariantMap.DeserializationContext();
+		var blockModelDefinitionContext = new BlockModelDefinition.Context();
 
-		resourceManager.findResources(LBGState.PATH_PREFIX, id -> id.getPath().endsWith(".json"))
-				.forEach((id, resource) -> this.loadState(resourceManager, id, resource, variantMapDeserializationContext));
+		resourceManager.findResources(LBGState.PATH_PREFIX, id -> id.path().endsWith(".json"))
+				.forEach((id, resource) -> this.loadState(resourceManager, id, resource, blockModelDefinitionContext));
 	}
 
 	/**
@@ -56,16 +56,16 @@ public class LBGResourceReloader {
 	 * @param resourceManager the resource manager
 	 * @param id the resource identifier of the state
 	 * @param resource the resource
-	 * @param variantMapDeserializationContext the deserialization context of model variants
+	 * @param blockModelDefinitionContext the deserialization context of block model definitions
 	 */
 	private void loadState(ResourceManager resourceManager, Identifier id, Resource resource,
-			ModelVariantMap.DeserializationContext variantMapDeserializationContext) {
+			BlockModelDefinition.Context blockModelDefinitionContext) {
 		var stateId = new Identifier(
-				id.getNamespace(),
-				id.getPath().substring(LBGState.PATH_PREFIX.length() + 1, id.getPath().length() - ".json".length())
+				id.namespace(),
+				id.path().substring(LBGState.PATH_PREFIX.length() + 1, id.path().length() - ".json".length())
 		);
 
-		var block = Registries.BLOCK.getOrEmpty(stateId);
+		var block = BuiltInRegistries.BLOCK.getOptional(stateId);
 		if (block.isEmpty()) {
 			// The block doesn't exist, so we just ignore the state file.
 			return;
@@ -73,7 +73,7 @@ public class LBGResourceReloader {
 
 		try (var reader = new InputStreamReader(resource.open())) {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
-			LBGState.loadMetadataState(stateId, block.get(), resourceManager, json, variantMapDeserializationContext);
+			LBGState.loadMetadataState(stateId, block.get(), resourceManager, json, blockModelDefinitionContext);
 		} catch (IOException e) {
 			LOGGER.warn("Failed to load LambdaBetterGrass state {}.", stateId, e);
 		}
