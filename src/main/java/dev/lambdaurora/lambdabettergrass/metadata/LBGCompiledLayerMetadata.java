@@ -108,6 +108,7 @@ public class LBGCompiledLayerMetadata {
 	public int emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
 			RenderContext context) {
 		int success = 0;
+		var layerState = this.layerType.block.defaultState();
 		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
 				&& this.bakedLayerModel != null) {
 			final var downPos = pos.below();
@@ -124,12 +125,13 @@ public class LBGCompiledLayerMetadata {
 							vec.sub(offsetVec);
 							quad.pos(i, vec);
 						}
-						quad.material(RendererAccess.INSTANCE.getRenderer().materialFinder().ambientOcclusion(TriState.FALSE).find());
+						//quad.material(RendererAccess.INSTANCE.getRenderer().materialFinder().ambientOcclusion(TriState.FALSE).find());
 						return true;
 					});
 					pushed = true;
 				}
-				((FabricBakedModel) this.bakedLayerModel).emitBlockQuads(world, state, pos, randomSupplier, context);
+				context.bakedModelConsumer().accept(this.bakedLayerModel, layerState);
+				//this.bakedLayerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
 				success = 1;
 				if (pushed)
 					context.popTransform();

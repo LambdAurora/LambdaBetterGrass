@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.LBGMode;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import dev.lambdaurora.lambdabettergrass.metadata.LBGLayer;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
+import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -177,7 +177,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		return self == adjacent;
 	}
 
-	private static boolean spriteBake(MutableQuadView quad, LBGLayer layer, String texture) {
+	private static boolean spriteBake(MutableQuadView quad, LBGGrassLayer layer, String texture) {
 		var sprite = layer.getBakedTexture(texture);
 		if (sprite != null)
 			quad.spriteBake(sprite, MutableQuadView.BAKE_LOCK_UV);

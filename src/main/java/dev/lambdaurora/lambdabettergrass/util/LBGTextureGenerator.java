@@ -58,8 +58,7 @@ public enum LBGTextureGenerator {
 
 			return NativeImage.read(nativeImageResource.open());
 		} catch (IOException e) {
-			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
-					+ ". Loading fallback texture instead.");
+			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\" due to an exception, loading fallback texture instead.", e);
 			return getFallbackNativeImage(resourceManager);
 		}
 	}
@@ -94,7 +93,8 @@ public enum LBGTextureGenerator {
 	public static Identifier generateTexture(String target, NativeImage side, NativeImage top, NativeImage mask) {
 		var image = applyMask(side, top, mask);
 
-		return LambdaBetterGrass.get().resourcePack.dynamicallyPutImage(target, image);
+		final var id = new Identifier(LambdaBetterGrass.NAMESPACE, "block/bettergrass/" + target);
+		return LambdaBetterGrass.get().dynamicTextureManager.registerSprite(id, image);
 	}
 
 	/**

@@ -21,7 +21,6 @@ import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.function.Function;
@@ -82,10 +81,9 @@ public class LBGGrassState extends LBGState {
 			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
 			return new LBGMetadata(resourceManager, metadataId, metadataJson);
-		} catch (IOException e) {
-			// Ignore.
+		} catch (Exception e) {
+			LambdaBetterGrass.get().warn("Could not load metadata `" + metadataId + "`.", e);
 		}
-		LambdaBetterGrass.get().warn("Could not load metadata `" + metadataId + "`.");
 		return null;
 	}
 

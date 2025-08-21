@@ -13,23 +13,19 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import dev.lambdaurora.lambdabettergrass.resource.LBGResourcePack;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
+import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
-import org.quiltmc.qsl.resource.loader.api.client.ClientResourceLoaderEvents;
 import org.slf4j.Logger;
-
-import java.nio.file.Path;
 
 /**
  * Represents the LambdaBetterGrass mod.
@@ -38,35 +34,25 @@ import java.nio.file.Path;
  * @version 1.5.2
  * @since 1.0.0
  */
-public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLoaderEvents.EndResourcePackReload {
+public class LambdaBetterGrass implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdabettergrass";
 	public static final Logger LOGGER = LogUtils.getLogger();
-	/* Default masks */
-	public static final Identifier BETTER_GRASS_SIDE_CONNECT_MASK = id("bettergrass/mask/standard_block_side_connect.png");
-	public static final Identifier BETTER_GRASS_SIDE_BLEND_UP_MASK = id("bettergrass/mask/grass_block_side_blend_up.png");
-	public static final Identifier BETTER_GRASS_SIDE_ARCH_BLEND_MASK = id("bettergrass/mask/grass_block_side_arch_blend.png");
 
 	@ApiStatus.Internal
 	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
 	public final LBGConfig config = new LBGConfig(this);
 	private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
 	public final LBGResourceReloader resourceReloader = new LBGResourceReloader();
-	public LBGResourcePack resourcePack;
+	public final LBGDynamicTextureManager dynamicTextureManager = new LBGDynamicTextureManager();
 
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		this.log("Initializing LambdaBetterGrass...");
 		this.config.load();
 
-		ResourceLoader.registerBuiltinResourcePack(id("default"), mod, ResourcePackActivationType.DEFAULT_ENABLED);
-		ResourceLoader.registerBuiltinResourcePack(id("32x"), mod, ResourcePackActivationType.NORMAL);
-
-		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).getRegisterTopResourcePackEvent()
-				.register(id("register_pack"), context -> {
-					this.log("Rebuilding resources and inject generated resource pack.");
-					context.addResourcePack(this.resourcePack = new LBGResourcePack(this));
-					this.resourceReloader.reload(context.resourceManager());
-				});
+		var mod = FabricLoader.getInstance().getModContainer(NAMESPACE).orElseThrow();
+		ResourceManagerHelper.registerBuiltinResourcePack(id("default"), mod, ResourcePackActivationType.DEFAULT_ENABLED);
+		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), mod, ResourcePackActivationType.NORMAL);
 
 		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
 		LBGState.registerType("layer", LBGLayerState::new);
@@ -94,13 +80,6 @@ public class LambdaBetterGrass implements ClientModInitializer, ClientResourceLo
 				return model;
 			});
 		});
-	}
-
-	@Override
-	public void onEndResourcePackReload(ClientResourceLoaderEvents.EndResourcePackReload.Context context) {
-		if (this.config.isDebug()) {
-			this.resourcePack.dumpTo(Path.of("debug/lbg_out"));
-		}
 	}
 
 	/**

@@ -17,6 +17,7 @@ import dev.lambdaurora.spruceui.util.Nameable;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.UnbakedModel;
@@ -26,7 +27,6 @@ import net.minecraft.resources.io.Resource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -108,12 +108,12 @@ public class LBGLayerType implements Nameable {
 		if (currentLayer != this.defaultRenderLayer && !this.acceptedRenderLayers.contains(currentLayer)) {
 			this.oldRenderLayers.putIfAbsent(block, currentLayer);
 
-			BlockRenderLayerMap.put(this.defaultRenderLayer, block);
+			BlockRenderLayerMap.INSTANCE.putBlock(block, this.defaultRenderLayer);
 		}
 	}
 
 	private void resetSelf() {
-		this.oldRenderLayers.forEach((block, renderLayer) -> BlockRenderLayerMap.put(renderLayer, block));
+		this.oldRenderLayers.forEach(BlockRenderLayerMap.INSTANCE::putBlock);
 	}
 
 	/**

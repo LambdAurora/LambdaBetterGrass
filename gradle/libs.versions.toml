@@ -1,8 +1,11 @@
 [versions]
 minecraft = "1.20.1"
+fabric-loader = "0.16.14"
+fabric-api = "0.92.2+1.20.1"
 mappings-yalmm = "8"
 
 # Dependencies
+yumi-commons = "1.0.0-beta.1"
 spruceui = "6.2.1+1.20"
 modmenu = "7.2.2"
 
@@ -16,8 +19,11 @@ gradle-lambdamcdev = "1.3.+"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 # Dependencies
+yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }
 spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 

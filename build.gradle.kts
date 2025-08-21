@@ -1,7 +1,10 @@
 import com.modrinth.minotaur.dependencies.ModDependency
+import dev.lambdaurora.mcdev.api.McVersionLookup
+import dev.lambdaurora.mcdev.api.ModUtils
 
 plugins {
-	id("org.quiltmc.loom").version("1.2.+")
+	alias(libs.plugins.loom)
+	alias(libs.plugins.lambdamcdev)
 	alias(libs.plugins.licenser)
 	`java-library`
 	`maven-publish`
@@ -16,62 +19,8 @@ val mcVersion = libs.versions.minecraft.get()
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
-data class Module(val library: String, val module: String) {}
-
-val qslModules: Set<Module> = setOf(
-	Module("core", "crash_info"),
-	Module("core", "lifecycle_events"),
-	Module("core", "resource_loader"),
-	Module("block", "block_extensions"),
-	Module("gui", "screen"),
-	Module("gui", "tooltip")
-)
-val fabricModules = setOf(
-	"fabric-model-loading-api-v1",
-	"fabric-renderer-api-v1",
-	"fabric-renderer-indigo"
-)
-val runtimeModules = setOf(
-	"fabric-lifecycle-events-v1",
-	"fabric-key-binding-api-v1",
-	"fabric-rendering-v1",
-	"fabric-resource-loader-v0",
-	"fabric-screen-api-v1"
-)
-
 // This field defines the Java version your mod target.
 val targetJavaVersion = Integer.parseInt(project.property("java_version").toString())
-
-fun isMCVersionNonRelease(mcVersion: String): Boolean {
-	return mcVersion.matches(Regex("^\\d\\dw\\d\\d[a-z]$"))
-			|| mcVersion.matches(Regex("\\d+\\.\\d+-(pre|rc)(\\d+)"))
-}
-
-fun getMCVersionString(mcVersion: String): String {
-	if (isMCVersionNonRelease(mcVersion)) {
-		return mcVersion
-	}
-	val version = mcVersion.split(".")
-	return version[0] + "." + version[1]
-}
-
-fun getVersionType(mcVersion: String): String {
-	return if (isMCVersionNonRelease(mcVersion) || mcVersion.contains("-alpha.")) {
-		"alpha"
-	} else if (mcVersion.contains("-beta.")) {
-		"beta"
-	} else {
-		"release"
-	}
-}
-
-fun parseReadme(): String {
-	return ""
-}
-
-fun fetchChangelog(): String? {
-	return null
-}
 
 repositories {
 	mavenCentral()
@@ -102,31 +51,10 @@ dependencies {
 		officialMojangMappings()
 		mappings("dev.lambdaurora:yalmm:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
 	})
-	modImplementation("org.quiltmc:quilt-loader:${project.property("loader_version")}")
+	modImplementation(libs.fabric.loader)
+	modImplementation(libs.fabric.api)
 
-	qslModules.asSequence().map { "org.quiltmc.qsl.${it.library}:${it.module}:${project.property("qsl_version")}+${mcVersion}" }
-		.forEach {
-			modImplementation(it) {
-				exclude(module = "quilt-loader")
-			}
-		}
-	// Fabric API.
-	fabricModules.asSequence().map { "org.quiltmc.quilted-fabric-api:${it}:${project.property("fabric_api_version")}-${mcVersion}" }
-		.forEach {
-			modImplementation(it) {
-				exclude(module = "quilt-loader")
-			}
-		}
-	runtimeModules.asSequence().map { "org.quiltmc.quilted-fabric-api:${it}:${project.property("fabric_api_version")}-${mcVersion}" }
-		.forEach {
-			modImplementation(it) {
-				exclude(module = "quilt-loader")
-			}
-		}
-	modLocalRuntime("org.quiltmc.qsl.entity:entity_events:${project.property("qsl_version")}+${mcVersion}") {
-		exclude(module = "quilt-loader")
-	}
-
+	implementation(libs.yumi.commons.core)
 	modImplementation(libs.spruceui)
 
 	// Config
@@ -140,6 +68,7 @@ dependencies {
 	implementation(libs.nightconfig.toml)
 
 	// Bundling
+	include(libs.yumi.commons.core)
 	include(libs.spruceui)
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
@@ -199,18 +128,22 @@ tasks.remapJar {
 
 modrinth {
 	projectId.set(project.property("modrinth_id") as String)
-	versionName.set("LambdaBetterGrass $VERSION (${getMCVersionString(mcVersion)})")
-	versionType.set(if (isMCVersionNonRelease(mcVersion)) "beta" else "release")
+	versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
+	versionType.set(ModUtils.fetchVersionType(VERSION, mcVersion))
 	uploadFile.set(tasks.remapJar)
-	loaders.set(listOf("quilt"))
+	loaders.set(listOf("fabric", "quilt"))
 	gameVersions.set(listOf(mcVersion))
 	dependencies.set(listOf(
-		ModDependency("qvIfYCYJ", "required")
+		ModDependency("P7dR8mSH", "required") // Fabric API
 	))
-	syncBodyFrom.set(parseReadme())
+	syncBodyFrom.set(
+		ModUtils.parseReadme(
+			project, "https://raw.githubusercontent.com/LambdAurora/lovely_snails/1.20/\$2"
+		)
+	)
 
 	// Changelog fetching
-	val changelogContent = fetchChangelog()
+	val changelogContent = ModUtils.fetchChangelog(project, VERSION)
 
 	if (changelogContent != null) {
 		changelog.set(changelogContent)

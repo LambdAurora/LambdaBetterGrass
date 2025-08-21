@@ -10,6 +10,9 @@
 package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
+import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGLoadingGrassLayer;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -43,7 +46,7 @@ public class LBGMetadata {
 	protected final ResourceManager resourceManager;
 	protected final List<Material> textures = new ArrayList<>();
 
-	private final List<LBGLayer> layers = new ArrayList<>();
+	private final List<LBGGrassLayer> layers;
 
 	private int lastLayerIndex = 0;
 
@@ -56,25 +59,23 @@ public class LBGMetadata {
 		this.resourceManager = resourceManager;
 
 		/* JSON read */
+		var loadingLayers = new ArrayList<LBGLoadingGrassLayer>();
 		if (json.has("layers")) {
-			json.getAsJsonArray("layers").forEach(layer -> this.layers.add(new LBGLayer(this, layer.getAsJsonObject())));
+			json.getAsJsonArray("layers").forEach(
+					layer -> loadingLayers.add(LBGLoadingGrassLayer.CODEC.decode(JsonOps.INSTANCE, layer)
+							.result().orElseThrow().getFirst()
+					));
 		}
 
-		this.buildTextures();
-
-		/* Merge layers */
-		var parentLayers = new Int2ObjectArrayMap<LBGLayer>();
-		for (var layer : this.layers) {
-			if (!parentLayers.containsKey(layer.colorIndex)) {
-				parentLayers.put(layer.colorIndex, layer);
-			} else {
-				// Merge layer
-				LBGLayer.mergeLayers(parentLayers.get(layer.colorIndex), layer);
-			}
+		var layers = new Int2ObjectArrayMap<List<LBGLoadingGrassLayer>>();
+		for (var loadingLayer : loadingLayers) {
+			var list = layers.computeIfAbsent(loadingLayer.colorIndex(), ignored -> new ArrayList<>());
+			list.add(loadingLayer);
 		}
 
-		this.layers.clear();
-		this.layers.addAll(parentLayers.values());
+		this.layers = layers.values().stream()
+				.map(layer -> new LBGGrassLayer(resourceManager, this, layer))
+				.toList();
 	}
 
 	/**
@@ -84,11 +85,6 @@ public class LBGMetadata {
 	 */
 	protected int nextLayerIndex() {
 		return this.lastLayerIndex++;
-	}
-
-	private void buildTextures() {
-		for (var layer : this.layers)
-			layer.buildTextures();
 	}
 
 	/**
@@ -108,7 +104,7 @@ public class LBGMetadata {
 	 * @param colorIndex the color index
 	 * @return the optional layer
 	 */
-	public Optional<LBGLayer> getLayer(int colorIndex) {
+	public Optional<LBGGrassLayer> getLayer(int colorIndex) {
 		for (var layer : this.layers) {
 			if (layer.colorIndex == colorIndex)
 				return Optional.of(layer);
