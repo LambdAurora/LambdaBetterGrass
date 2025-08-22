@@ -126,5 +126,15 @@ The first release of LambdaBetterGrass!
 - Updated model injections to use Fabric API's new model loading API which should improve mod compatibility.
 - Added Vietnamese translations ([#90](https://github.com/LambdAurora/LambdaBetterGrass/pull/90)).
 
+## 1.6.0
+
+- Switched back to Fabric.
+- Refactored runtime texture generation injection to directly inject into the atlas instead of using a virtual resource pack.
+- Refactored configuration loading and saving to be more reliable and avoid corruption.
+- Added Swedish translations ([#94](https://github.com/LambdAurora/LambdaBetterGrass/pull/94)).
+- Added Catalan translations ([#104](https://github.com/LambdAurora/LambdaBetterGrass/pull/104)).
+- Added Malay translations ([#110](https://github.com/LambdAurora/LambdaBetterGrass/pull/110)).
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
