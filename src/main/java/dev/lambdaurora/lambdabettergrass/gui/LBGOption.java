@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdabettergrass.gui;
 
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
+import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
@@ -27,11 +28,11 @@ import java.util.function.Function;
  * A dummy option to add a button leading to LambdaBetterGrass' settings.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.1.2
  */
 public final class LBGOption {
-	private static final String KEY = "LambdaBetterGrass";
+	private static final String KEY = LambdaBetterGrass.NAMESPACE;
 
 	public static OptionInstance<Unit> getOption(Screen parent) {
 		return new OptionInstance<>(

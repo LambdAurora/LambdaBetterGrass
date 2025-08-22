@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
+	public static final Text MOD_NAME = Text.translatable(LambdaBetterGrass.NAMESPACE);
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
 	private static final Text VERSION;
 
@@ -71,7 +72,7 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	public SettingsScreen(@Nullable Screen parent) {
-		super(Text.translatable("lambdabettergrass.menu.title"));
+		super(Text.translatable("lambdabettergrass.menu.title", MOD_NAME));
 		this.config = LambdaBetterGrass.get().config;
 		this.parent = parent;
 

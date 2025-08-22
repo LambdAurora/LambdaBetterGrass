@@ -1,11 +1,14 @@
 {
 	"required": true,
 	"package": "dev.lambdaurora.lambdabettergrass.mixin",
+	"plugin": "dev.lambdaurora.lambdabettergrass.LBGMixinPlugin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
 		"ReloadableResourceManagerMixin",
 		"SpriteLoaderMixin",
-		"VideoSettingsScreenMixin"
+		"VideoSettingsScreenMixin",
+		"sodium.OldSodiumOptionsGuiMixin",
+		"sodium.SodiumOptionsGuiMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,9 +1,11 @@
 {
+	"lambdabettergrass": "LambdaBetterGrass",
 	"lambdabettergrass.menu.info.1": "The mod uses resource pack files to determine which blocks are affected.",
 	"lambdabettergrass.menu.info.2": "This means to enable or disable the Better Grass/Snow feature on blocks",
 	"lambdabettergrass.menu.info.3": "it has to be modified with resource packs.",
 	"lambdabettergrass.menu.info.read_more": "Read more at: %s",
-	"lambdabettergrass.menu.title": "LambdaBetterGrass configuration",
+	"lambdabettergrass.menu.sodium.tab": "%s",
+	"lambdabettergrass.menu.title": "%s configuration",
 	"lambdabettergrass.menu.title.info": "How does the mod work?",
 	"lambdabettergrass.option.better_snow": "Better Snow",
 	"lambdabettergrass.option.mode": "Better Grass",

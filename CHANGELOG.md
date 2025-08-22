@@ -131,6 +131,7 @@ The first release of LambdaBetterGrass!
 - Switched back to Fabric.
 - Refactored runtime texture generation injection to directly inject into the atlas instead of using a virtual resource pack.
 - Refactored configuration loading and saving to be more reliable and avoid corruption.
+- Added a configuration tab in Sodium's video settings.
 - Added Swedish translations ([#94](https://github.com/LambdAurora/LambdaBetterGrass/pull/94)).
 - Added Catalan translations ([#104](https://github.com/LambdAurora/LambdaBetterGrass/pull/104)).
 - Added Malay translations ([#110](https://github.com/LambdAurora/LambdaBetterGrass/pull/110)).
