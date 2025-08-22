@@ -23,6 +23,7 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,11 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		log(LOGGER, "Initializing LambdaBetterGrass...");
 		this.config.load();
 
-		ResourceManagerHelper.registerBuiltinResourcePack(id("default"), MOD, ResourcePackActivationType.DEFAULT_ENABLED);
+		ResourceManagerHelper.registerBuiltinResourcePack(
+				id("default"), MOD,
+				Text.translatable("lambdabettergrass.resourcepack.default", Text.translatable(NAMESPACE)),
+				ResourcePackActivationType.DEFAULT_ENABLED
+		);
 		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), MOD, ResourcePackActivationType.NORMAL);
 
 		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));

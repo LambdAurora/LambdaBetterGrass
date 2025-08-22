@@ -62,8 +62,8 @@ public class LBGMetadata {
 		var loadingLayers = new ArrayList<LBGLoadingGrassLayer>();
 		if (json.has("layers")) {
 			json.getAsJsonArray("layers").forEach(
-					layer -> loadingLayers.add(LBGLoadingGrassLayer.CODEC.decode(JsonOps.INSTANCE, layer)
-							.result().orElseThrow().getFirst()
+					layer -> loadingLayers.add(LBGLoadingGrassLayer.CODEC.parse(JsonOps.INSTANCE, layer)
+							.result().orElseThrow()
 					));
 		}
 

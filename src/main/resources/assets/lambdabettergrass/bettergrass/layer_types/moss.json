@@ -1,4 +1,5 @@
 {
-  "block": "minecraft:moss_carpet",
-  "model": "lambdabettergrass:block/mossy_layer"
+	"block": {
+		"Name": "minecraft:moss_carpet"
+	}
 }

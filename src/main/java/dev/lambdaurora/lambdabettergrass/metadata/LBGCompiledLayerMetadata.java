@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdabettergrass.metadata;
 
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +44,6 @@ public class LBGCompiledLayerMetadata {
 	public final LBGLayerType layerType;
 	private final @Nullable Vector3f offset;
 	public final LBGLayerMetadata.LayerUnbakedModels unbakedModels;
-	private BakedModel bakedLayerModel;
 	private BakedModel bakedAlternateModel;
 
 	public LBGCompiledLayerMetadata(LBGLayerType layerType, @Nullable Vector3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels) {
@@ -57,20 +57,12 @@ public class LBGCompiledLayerMetadata {
 	}
 
 	public void fetchModelDependencies(Collection<Identifier> ids) {
-		if (this.unbakedModels.layerModel() != null) {
-			ids.addAll(this.unbakedModels.layerModel().getDependencies());
-		}
-
 		if (this.unbakedModels.alternateModel() != null) {
 			ids.addAll(this.unbakedModels.alternateModel().getDependencies());
 		}
 	}
 
 	public void resolveParents(Function<Identifier, UnbakedModel> models) {
-		if (this.unbakedModels.layerModel() != null) {
-			this.unbakedModels.layerModel().resolveParents(models);
-		}
-
 		if (this.unbakedModels.alternateModel() != null) {
 			this.unbakedModels.alternateModel().resolveParents(models);
 		}
@@ -85,10 +77,6 @@ public class LBGCompiledLayerMetadata {
 	 * @param modelId the model identifier
 	 */
 	public void bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState rotationContainer, Identifier modelId) {
-		if (this.unbakedModels.layerModel() != null) {
-			this.bakedLayerModel = this.unbakedModels.layerModel().bake(baker, textureGetter, rotationContainer, modelId);
-		}
-
 		if (this.unbakedModels.alternateModel() != null) {
 			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, rotationContainer, modelId);
 		}
@@ -108,9 +96,10 @@ public class LBGCompiledLayerMetadata {
 	public int emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
 			RenderContext context) {
 		int success = 0;
-		var layerState = this.layerType.block.defaultState();
-		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
-				&& this.bakedLayerModel != null) {
+		var layerState = this.layerType.data.state();
+		var layerModel = this.layerType.getLayerModel();
+
+		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, layerState.getBlock(), state.getBlock(), false) > 1) {
 			final var downPos = pos.below();
 			final var downState = world.getBlockState(downPos);
 			if (downState.isFaceSturdy(world, downPos, Direction.UP)) {
@@ -118,10 +107,26 @@ public class LBGCompiledLayerMetadata {
 				boolean pushed = false;
 
 				final var materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
+				var offsetPos = new BlockPos.Mutable();
 				context.pushTransform(quad -> {
 					var originalMaterial = quad.material();
-					var material = materialFinder.copyFrom(originalMaterial).ambientOcclusion(TriState.of(this.bakedLayerModel.useAmbientOcclusion())).find();
+					var material = materialFinder.copyFrom(originalMaterial)
+							.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()))
+							.blendMode(BlendMode.fromRenderLayer(this.layerType.renderType))
+							.find();
 					quad.material(material);
+
+					var cullFace = quad.cullFace();
+					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {
+						offsetPos.setWithOffset(pos, cullFace);
+
+						if (Block.shouldRenderFace(layerState, world, pos, cullFace, offsetPos)) {
+							quad.cullFace(null);
+						} else {
+							return false;
+						}
+					}
+
 					return true;
 				});
 
@@ -138,7 +143,7 @@ public class LBGCompiledLayerMetadata {
 					});
 					pushed = true;
 				}
-				this.bakedLayerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
+				layerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
 				success = 1;
 				if (pushed)
 					context.popTransform();
@@ -146,9 +151,9 @@ public class LBGCompiledLayerMetadata {
 			}
 		}
 
-		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1
+		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, layerState.getBlock(), state.getBlock(), false) > 1
 				&& this.bakedAlternateModel != null) {
-			((FabricBakedModel) this.bakedAlternateModel).emitBlockQuads(world, state, pos, randomSupplier, context);
+			this.bakedAlternateModel.emitBlockQuads(world, state, pos, randomSupplier, context);
 			success = 2;
 		}
 

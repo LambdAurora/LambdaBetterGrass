@@ -20,13 +20,12 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.io.StringReader;
-import java.util.function.Function;
 
 /**
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
@@ -82,12 +81,7 @@ public class LBGLayerMetadata {
 		return this.offset;
 	}
 
-	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel, Function<Identifier, UnbakedModel> modelGetter) {
-		UnbakedModel layerModel = null;
-		if (this.layerModel) {
-			layerModel = this.layerType.getLayerModel(modelGetter);
-		}
-
+	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId) {
 		UnbakedModel alternateModel = null;
 		if (this.hasAlternateModel) {
 			if (this.alternateModel != null) {
@@ -100,7 +94,7 @@ public class LBGLayerMetadata {
 			}
 		}
 
-		return new LayerUnbakedModels(layerModel, alternateModel);
+		return new LayerUnbakedModels(alternateModel);
 	}
 
 	@Override
@@ -113,9 +107,9 @@ public class LBGLayerMetadata {
 				'}';
 	}
 
-	public record LayerUnbakedModels(@Nullable UnbakedModel layerModel, @Nullable UnbakedModel alternateModel) {
+	public record LayerUnbakedModels(@Nullable UnbakedModel alternateModel) {
 		public boolean isEmpty() {
-			return this.layerModel() == null && this.alternateModel() == null;
+			return this.alternateModel() == null;
 		}
 	}
 }

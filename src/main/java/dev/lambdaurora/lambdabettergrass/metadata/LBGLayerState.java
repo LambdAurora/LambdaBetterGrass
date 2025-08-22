@@ -20,7 +20,6 @@ import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -36,7 +35,7 @@ import java.util.function.Function;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -97,8 +96,7 @@ public class LBGLayerState extends LBGState {
 					}
 				}
 			} catch (IOException e) {
-				LOGGER.warn("Cannot load metadata file \"" + metadataId + "\" from layer state \"" + id
-						+ "\" (variant: \"" + variant + "\").", e);
+				LOGGER.warn("Cannot load metadata file \"{}\" from layer state \"{}\" (variant: \"{}\").", metadataId, id, variant, e);
 			}
 		}
 	}
@@ -114,10 +112,6 @@ public class LBGLayerState extends LBGState {
 				it.remove();
 				break;
 			}
-		}
-
-		if (this.block != Blocks.AIR) {
-			type.apply(this.block);
 		}
 
 		metadatas.add(new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
@@ -142,14 +136,11 @@ public class LBGLayerState extends LBGState {
 				var metadatas = new ArrayList<LBGCompiledLayerMetadata>();
 
 				entry.getValue().forEach(metadata -> {
-					var models = metadata.getCustomUnbakedModel(modelId, originalModel, modelGetter);
-					if (models.isEmpty())
-						return;
-
+					var models = metadata.getCustomUnbakedModel(modelId);
 					metadatas.add(new LBGCompiledLayerMetadata(metadata.layerType, metadata.offset(), models));
 				});
 
-				if (metadatas.size() != 0) {
+				if (!metadatas.isEmpty()) {
 					return new LBGLayerUnbakedModel(originalModel, metadatas);
 				}
 
