@@ -1,10 +1,10 @@
 {
-  "layers": [
-    {
-      "textures": {
-        "top": "cinderscapes:block/umbral_nylium",
-        "side": "cinderscapes:block/umbral_nylium_side"
-      }
-    }
-  ]
+	"layers": [
+		{
+			"textures": {
+				"top": "cinderscapes:block/umbral_nylium",
+				"side": "cinderscapes:block/umbral_nylium_side"
+			}
+		}
+	]
 }

@@ -1,10 +1,10 @@
 {
-  "snow": {
-    "layer": true,
-    "offset": [
-      0,
-      0.001,
-      0
-    ]
-  }
+	"snow": {
+		"layer": true,
+		"offset": [
+			0,
+			0.001,
+			0
+		]
+	}
 }

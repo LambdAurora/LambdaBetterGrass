@@ -1,8 +1,8 @@
 {
-  "type": "layer",
-  "variants": {
-    "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/on_ceiling"
-    }
-  }
+	"type": "layer",
+	"variants": {
+		"waterlogged=false": {
+			"data": "minecraft:bettergrass/data/on_ceiling"
+		}
+	}
 }

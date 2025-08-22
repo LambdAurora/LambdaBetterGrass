@@ -1,8 +1,8 @@
 {
-  "type": "layer",
-  "variants": {
-    "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/horn_coral"
-    }
-  }
+	"type": "layer",
+	"variants": {
+		"waterlogged=false": {
+			"data": "minecraft:bettergrass/data/horn_coral"
+		}
+	}
 }

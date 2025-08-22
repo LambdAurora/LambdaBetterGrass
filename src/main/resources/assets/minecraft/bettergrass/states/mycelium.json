@@ -1,11 +1,11 @@
 {
-  "type": "grass",
-  "variants": {
-    "snowy=false": {
-      "data": "minecraft:bettergrass/data/mycelium"
-    },
-    "snowy=true": {
-      "data": "minecraft:bettergrass/data/snowy_grass_block"
-    }
-  }
+	"type": "grass",
+	"variants": {
+		"snowy=false": {
+			"data": "minecraft:bettergrass/data/mycelium"
+		},
+		"snowy=true": {
+			"data": "minecraft:bettergrass/data/snowy_grass_block"
+		}
+	}
 }

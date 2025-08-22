@@ -1,14 +1,8 @@
-export const DECODER = new TextDecoder("utf-8");
-export const ENCODER = new TextEncoder();
-
-const better_snow = await Deno.readFile("datagen/better_snow.json")
-	.then(source => DECODER.decode(source))
+const better_snow = await Deno.readTextFile("datagen/better_snow.json")
 	.then(text => JSON.parse(text));
 
 class Identifier {
-	constructor(namespace, path) {
-		this.namespace = namespace;
-		this.path = path;
+	constructor(public readonly namespace: string, public readonly path: string) {
 	}
 
 	to_string() {
@@ -16,20 +10,20 @@ class Identifier {
 	}
 }
 
-function parse_id(raw_id) {
-	if (!raw_id.includes(':'))
-		return new Identifier('minecraft', raw_id);
+function parse_id(raw_id: string): Identifier {
+	if (!raw_id.includes(":"))
+		return new Identifier("minecraft", raw_id);
 	else {
-		let id = raw_id.split(':');
+		let id = raw_id.split(":");
 		return new Identifier(id[0], id[1]);
 	}
 }
 
-async function write_to_file(path, data) {
-	await Deno.writeFile(path, ENCODER.encode(JSON.stringify(data, null, 2)));
+async function write_to_file(path: string, data: string): Promise<void> {
+	await Deno.writeTextFile(path, JSON.stringify(data, null, "\t") + "\n");
 }
 
-function get_state_path(id) {
+function get_state_path(id: Identifier): string {
 	return `src/main/resources/assets/${id.namespace}/bettergrass/states/${id.path}.json`;
 }
 
@@ -39,7 +33,7 @@ function make_state_json(block, data_provider) {
 	let custom_data_id = undefined;
 	let waterloggable = false;
 
-	if (typeof block === 'string') {
+	if (typeof block === "string") {
 		id = parse_id(block);
 	} else {
 		id = parse_id(block.id);
@@ -49,19 +43,19 @@ function make_state_json(block, data_provider) {
 	}
 
 	let state_json = {
-		type: 'layer',
-		data: data_provider(custom_data_id !== undefined ? parse_id(custom_data_id) : id)
+		type: "layer",
+		data: data_provider(custom_data_id !== undefined ? parse_id(custom_data_id) : id),
 	};
 
 	if (waterloggable) {
 		state_json = {
-			type: 'layer',
+			type: "layer",
 			variants: {
-				'waterlogged=false': {
-					data: data_provider(id)
-				}
-			}
-		}
+				"waterlogged=false": {
+					data: data_provider(id),
+				},
+			},
+		};
 	}
 
 	return {id: id, path: get_state_path(id), json: state_json, data: data};

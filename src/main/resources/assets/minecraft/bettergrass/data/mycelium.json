@@ -1,10 +1,10 @@
 {
-  "layers": [
-    {
-      "textures": {
-        "top": "minecraft:block/mycelium_top",
-        "side": "minecraft:block/mycelium_side"
-      }
-    }
-  ]
+	"layers": [
+		{
+			"textures": {
+				"top": "minecraft:block/mycelium_top",
+				"side": "minecraft:block/mycelium_side"
+			}
+		}
+	]
 }

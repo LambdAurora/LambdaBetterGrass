@@ -1,10 +1,10 @@
 {
-  "layers": [
-    {
-      "textures": {
-        "top": "minecraft:block/podzol_top",
-        "side": "minecraft:block/podzol_side"
-      }
-    }
-  ]
+	"layers": [
+		{
+			"textures": {
+				"top": "minecraft:block/podzol_top",
+				"side": "minecraft:block/podzol_side"
+			}
+		}
+	]
 }

@@ -1,8 +1,8 @@
 {
-  "type": "layer",
-  "variants": {
-    "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/purple_candle"
-    }
-  }
+	"type": "layer",
+	"variants": {
+		"waterlogged=false": {
+			"data": "minecraft:bettergrass/data/purple_candle"
+		}
+	}
 }

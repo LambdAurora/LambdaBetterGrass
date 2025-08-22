@@ -1,8 +1,8 @@
 {
-  "type": "layer",
-  "variants": {
-    "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/sea_pickle"
-    }
-  }
+	"type": "layer",
+	"variants": {
+		"waterlogged=false": {
+			"data": "minecraft:bettergrass/data/sea_pickle"
+		}
+	}
 }

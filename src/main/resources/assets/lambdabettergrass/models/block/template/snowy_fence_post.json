@@ -1,7 +1,7 @@
 {
-  "parent": "lambdabettergrass:block/template/fence_post",
-  "textures": {
-    "particle": "#texture",
-    "top": "minecraft:block/snow"
-  }
+	"parent": "lambdabettergrass:block/template/fence_post",
+	"textures": {
+		"particle": "#texture",
+		"top": "minecraft:block/snow"
+	}
 }

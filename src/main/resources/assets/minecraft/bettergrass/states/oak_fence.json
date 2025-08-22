@@ -2,7 +2,7 @@
 	"type": "layer",
 	"variants": {
 		"waterlogged=false": {
-			"data": "minecraft:bettergrass/data/decorated_pot"
+			"data": "minecraft:bettergrass/data/oak_fence"
 		}
 	}
 }
