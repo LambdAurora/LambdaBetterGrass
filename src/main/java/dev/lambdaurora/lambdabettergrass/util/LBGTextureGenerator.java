@@ -15,12 +15,16 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
 public enum LBGTextureGenerator {
 	; // No instantiation possible <3
+
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|TextureGenerator");
 
 	/**
 	 * Represents the fallback texture to load if texture loading failed.
@@ -39,7 +43,7 @@ public enum LBGTextureGenerator {
 
 			return NativeImage.read(fallbackResource.open());
 		} catch (IOException e) {
-			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
+			LambdaBetterGrass.warn(LOGGER, "Could not load fallback texture `{}`!", FALLBACK_TEXTURE);
 			return new NativeImage(16, 16, false);
 		}
 	}
@@ -58,7 +62,7 @@ public enum LBGTextureGenerator {
 
 			return NativeImage.read(nativeImageResource.open());
 		} catch (IOException e) {
-			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\" due to an exception, loading fallback texture instead.", e);
+			LambdaBetterGrass.warn(LOGGER, "Could not load texture `{}` due to an exception, loading fallback texture instead.", path, e);
 			return getFallbackNativeImage(resourceManager);
 		}
 	}

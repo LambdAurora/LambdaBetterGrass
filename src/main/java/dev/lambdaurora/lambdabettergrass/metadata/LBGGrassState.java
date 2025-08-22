@@ -20,6 +20,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -29,10 +31,11 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|LBGGrassState");
 	private final LBGMetadata metadata;
 	private final Map<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
@@ -82,7 +85,7 @@ public class LBGGrassState extends LBGState {
 
 			return new LBGMetadata(resourceManager, metadataId, metadataJson);
 		} catch (Exception e) {
-			LambdaBetterGrass.get().warn("Could not load metadata `" + metadataId + "`.", e);
+			LambdaBetterGrass.warn(LOGGER, "Could not load metadata `{}`.", metadataId, e);
 		}
 		return null;
 	}

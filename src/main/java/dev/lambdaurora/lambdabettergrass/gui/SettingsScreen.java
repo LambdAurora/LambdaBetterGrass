@@ -35,12 +35,13 @@ import org.jetbrains.annotations.Nullable;
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
+	private static final Text VERSION;
 
 	private final LBGConfig config;
 	private final Screen parent;
@@ -48,6 +49,26 @@ public class SettingsScreen extends SpruceScreen {
 	private final SpruceOption modeOption;
 	private final SpruceOption betterSnowOption;
 	private final SpruceOption resetOption;
+
+	static {
+		String rawVersion = LambdaBetterGrass.VERSION;
+
+		if (rawVersion.endsWith("-local")) {
+			rawVersion = rawVersion.substring(0, rawVersion.length() - "-local".length());
+		}
+
+		var version = Text.literal('v' + rawVersion).withStyle(TextFormatting.GRAY);
+
+		if (rawVersion.matches("^.+-rc\\.\\d+\\+.+$")) {
+			version = version.append(Text.literal(" (Release Candidate)").withStyle(TextFormatting.GOLD));
+		}
+
+		/*if (LambdaBetterGrass.isDevMode()) {
+			version = version.append(Text.literal(" (dev)").withStyle(TextFormatting.RED));
+		}*/
+
+		VERSION = version;
+	}
 
 	public SettingsScreen(@Nullable Screen parent) {
 		super(Text.translatable("lambdabettergrass.menu.title"));
@@ -85,6 +106,12 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	@Override
+	public void removed() {
+		super.removed();
+		this.config.save();
+	}
+
+	@Override
 	public void onClose() {
 		this.client.setScreen(this.parent);
 	}
@@ -107,6 +134,15 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	private void buildLabels() {
+		this.addRenderableWidget(new SpruceLabelWidget(
+				Position.of(0, 8), this.title.copy().withStyle(TextFormatting.WHITE),
+				this.width, true
+		));
+		this.addRenderableWidget(new SpruceLabelWidget(
+				Position.of(this.width - 4 - this.font.width(VERSION), 8), VERSION,
+				this.width - 4
+		));
+
 		int y = this.height / 2;
 
 		var text = Text.literal("");
@@ -115,8 +151,8 @@ public class SettingsScreen extends SpruceScreen {
 		text.append(Text.translatable("lambdabettergrass.menu.info.1")).append("\n");
 		text.append(Text.translatable("lambdabettergrass.menu.info.2")).append(" ");
 		text.append(Text.translatable("lambdabettergrass.menu.info.3")).append("\n");
-		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 0, y),
-				text, this.width, true));
+		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 10, y),
+				text, this.width - 20, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
 				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]").withStyle(TextFormatting.GREEN),
 				this.width,
@@ -127,6 +163,5 @@ public class SettingsScreen extends SpruceScreen {
 
 	@Override
 	public void renderTitle(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		graphics.drawCenteredShadowedText(this.font, this.title, this.width / 2, 8, 16777215);
 	}
 }

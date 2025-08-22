@@ -46,7 +46,7 @@ public abstract class ReloadableResourceManagerMixin implements ResourceManager 
 			CallbackInfoReturnable<ReloadInstance> cir
 	) {
 		final var mod = LambdaBetterGrass.get();
-		mod.log("Rebuilding resources and inject generated resource pack.");
+		LambdaBetterGrass.log(LambdaBetterGrass.LOGGER, "Reloading resources...");
 		mod.dynamicTextureManager.reset();
 		mod.resourceReloader.reload(this.activeManager);
 		mod.dynamicTextureManager.finish();

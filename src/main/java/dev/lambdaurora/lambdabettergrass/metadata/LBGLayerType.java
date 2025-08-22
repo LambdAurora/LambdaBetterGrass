@@ -27,6 +27,8 @@ import net.minecraft.resources.io.Resource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,10 +42,11 @@ import java.util.function.Function;
  * Represents the layer types.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LBGLayerType implements Nameable {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|LBGLayerType");
 	private static final Map<String, RenderType> NAMED_RENDER_LAYERS = new ImmutableMap.Builder<String, RenderType>()
 			.put("solid", RenderType.solid())
 			.put("cutout", RenderType.cutout())
@@ -165,29 +168,35 @@ public class LBGLayerType implements Nameable {
 					if (layer != null) {
 						acceptedRenderLayers.add(layer);
 					} else {
-						LambdaBetterGrass.get().warn("Failed to find accepted render layer \"" + name + "\" for LBG layer type \"" + id + "\".");
+						LambdaBetterGrass.warn(
+								LOGGER, "Failed to find accepted render layer `{}` for LBG layer type `{}`.",
+								name, id
+						);
 					}
 				}
 
 				defaultRenderLayer = NAMED_RENDER_LAYERS.get(defaultLayer);
 
 				if (defaultRenderLayer == null) {
-					LambdaBetterGrass.get().warn("Failed to find default render layer \"" + defaultLayer + "\" for LBG layer type \"" + id + "\".");
+					LambdaBetterGrass.warn(
+							LOGGER, "Failed to find default render layer `{}` for LBG layer type `{}`.",
+							defaultLayer, id
+					);
 				}
 			}
 
 			LAYER_TYPES.add(new LBGLayerType(id, block, modelId, acceptedRenderLayers, defaultRenderLayer));
 		} catch (IOException | IllegalStateException e) {
-			LambdaBetterGrass.get().warn("Failed to load layer type \"" + id + "\".");
+			LambdaBetterGrass.warn(LOGGER, "Failed to load layer type `{}`.", id);
 		}
 	}
 
 	@Override
 	public String toString() {
 		return "LBGLayerType{" +
-				"id=" + id +
-				", block=" + block +
-				", modelId=" + modelId +
+				"id=" + this.id +
+				", block=" + this.block +
+				", modelId=" + this.modelId +
 				'}';
 	}
 }

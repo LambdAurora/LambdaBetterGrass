@@ -18,6 +18,8 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public class LBGGrassLayer {
+	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|LBGGrassLayer");
 	/**
 	 * Parent metadata.
 	 */
@@ -106,7 +109,7 @@ public class LBGGrassLayer {
 		try {
 			this.bakedSprites.put(name, textureGetter.apply(id));
 		} catch (NullPointerException e) {
-			LambdaBetterGrass.get().warn("Could not bake sprite `" + name + "` with id `" + id + "`!");
+			LambdaBetterGrass.warn(LOGGER, "Could not bake sprite `{}` with id `{}`!", name, id);
 
 			this.bakedSprites.put(name, textureGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ModelBakery.MISSING_MODEL_ID)));
 		}

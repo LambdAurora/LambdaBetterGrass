@@ -36,7 +36,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -116,6 +116,15 @@ public class LBGCompiledLayerMetadata {
 			if (downState.isFaceSturdy(world, downPos, Direction.UP)) {
 				Vec3 offset = state.getOffset(world, pos);
 				boolean pushed = false;
+
+				final var materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
+				context.pushTransform(quad -> {
+					var originalMaterial = quad.material();
+					var material = materialFinder.copyFrom(originalMaterial).ambientOcclusion(TriState.of(this.bakedLayerModel.useAmbientOcclusion())).find();
+					quad.material(material);
+					return true;
+				});
+
 				if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {
 					var offsetVec = new Vector3f((float) offset.x, (float) offset.y, (float) offset.z);
 					context.pushTransform(quad -> {
@@ -125,16 +134,15 @@ public class LBGCompiledLayerMetadata {
 							vec.sub(offsetVec);
 							quad.pos(i, vec);
 						}
-						//quad.material(RendererAccess.INSTANCE.getRenderer().materialFinder().ambientOcclusion(TriState.FALSE).find());
 						return true;
 					});
 					pushed = true;
 				}
-				context.bakedModelConsumer().accept(this.bakedLayerModel, layerState);
-				//this.bakedLayerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
+				this.bakedLayerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
 				success = 1;
 				if (pushed)
 					context.popTransform();
+				context.popTransform();
 			}
 		}
 

@@ -13,14 +13,15 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
+import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
@@ -31,12 +32,21 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.5.2
+ * @version 1.6.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
+	/**
+	 * The namespace of this mod, whose value is {@value}.
+	 */
 	public static final String NAMESPACE = "lambdabettergrass";
 	public static final Logger LOGGER = LogUtils.getLogger();
+
+	private static final ModContainer MOD = FabricLoader.getInstance().getModContainer(NAMESPACE).orElseThrow();
+	/**
+	 * The currently running version of LambdaBetterGrass.
+	 */
+	public static final String VERSION = MOD.getMetadata().getVersion().getFriendlyString();
 
 	@ApiStatus.Internal
 	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
@@ -47,12 +57,11 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		this.log("Initializing LambdaBetterGrass...");
+		log(LOGGER, "Initializing LambdaBetterGrass...");
 		this.config.load();
 
-		var mod = FabricLoader.getInstance().getModContainer(NAMESPACE).orElseThrow();
-		ResourceManagerHelper.registerBuiltinResourcePack(id("default"), mod, ResourcePackActivationType.DEFAULT_ENABLED);
-		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), mod, ResourcePackActivationType.NORMAL);
+		ResourceManagerHelper.registerBuiltinResourcePack(id("default"), MOD, ResourcePackActivationType.DEFAULT_ENABLED);
+		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), MOD, ResourcePackActivationType.NORMAL);
 
 		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
 		LBGState.registerType("layer", LBGLayerState::new);
@@ -83,30 +92,59 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	}
 
 	/**
-	 * Prints a message to the terminal.
+	 * Logs an informational message.
 	 *
-	 * @param info the message to print
+	 * @param logger the logger to use
+	 * @param msg the message to log
 	 */
-	public void log(String info) {
-		LOGGER.info("[LambdaBetterGrass] " + info);
+	public static void log(Logger logger, String msg) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambdaBetterGrass] " + msg;
+		}
+
+		logger.info(msg);
 	}
 
 	/**
-	 * Prints a warning message to the terminal.
+	 * Logs a warning message.
 	 *
-	 * @param info the message to print
+	 * @param logger the logger to use
+	 * @param msg the message to log
 	 */
-	public void warn(String info) {
-		LOGGER.warn("[LambdaBetterGrass] " + info);
+	public static void warn(Logger logger, String msg) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambdaBetterGrass] " + msg;
+		}
+
+		logger.warn(msg);
 	}
 
 	/**
-	 * Prints a warning message to the terminal.
+	 * Logs a warning message.
 	 *
-	 * @param info the message to print
+	 * @param logger the logger to use
+	 * @param msg the message to log
 	 */
-	public void warn(String info, Object... objects) {
-		LOGGER.warn("[LambdaBetterGrass] " + info, objects);
+	public static void warn(Logger logger, String msg, Object... args) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambdaBetterGrass] " + msg;
+		}
+
+		logger.warn(msg, args);
+	}
+
+	/**
+	 * Logs an error message.
+	 *
+	 * @param logger the logger to use
+	 * @param msg the message to log
+	 */
+	public static void error(Logger logger, String msg, Object... args) {
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			msg = "[LambdaBetterGrass] " + msg;
+		}
+
+		logger.error(msg, args);
 	}
 
 	/**
