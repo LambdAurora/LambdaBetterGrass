@@ -1,6 +1,9 @@
 import com.modrinth.minotaur.dependencies.ModDependency
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import dev.lambdaurora.mcdev.api.ModUtils
+import dev.lambdaurora.mcdev.api.ModVersionDependency
+import dev.lambdaurora.mcdev.task.packaging.PackageModrinthTask
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
 	alias(libs.plugins.loom)
@@ -10,12 +13,13 @@ plugins {
 	`maven-publish`
 	id("com.gradleup.shadow").version("8.3.3")
 	id("com.modrinth.minotaur").version("2.+")
-	id("com.matthewprenger.cursegradle").version("1.4.+")
+	id("net.darkhax.curseforgegradle").version("1.1.+")
 }
 
 base.archivesName.set(project.property("archives_base_name") as String)
 
 val mcVersion = libs.versions.minecraft.get()
+val compatibleMcVersions: Set<String> = setOf("1.20")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -126,27 +130,40 @@ tasks.remapJar {
 	dependsOn(tasks.shadowJar)
 }
 
+val README = ModUtils.parseReadme(
+	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.20/\$2"
+)
+val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
+
+val packageModrinth by tasks.registering(PackageModrinthTask::class) {
+	this.group = "publishing"
+	this.versionType.set(ModUtils.getVersionType(VERSION, mcVersion))
+	this.versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
+	this.gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
+	this.loaders.set(listOf("fabric", "quilt"))
+	this.dependencies.set(listOf(
+		ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED), // Fabric API
+	))
+	this.changelog.set(CHANGELOG_CONTENT)
+	this.readme.set(README)
+	this.files.setFrom(tasks.remapJar.get())
+}
+
 modrinth {
 	projectId.set(project.property("modrinth_id") as String)
 	versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	versionType.set(ModUtils.fetchVersionType(VERSION, mcVersion))
 	uploadFile.set(tasks.remapJar)
 	loaders.set(listOf("fabric", "quilt"))
-	gameVersions.set(listOf(mcVersion))
+	gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
 	dependencies.set(listOf(
 		ModDependency("P7dR8mSH", "required") // Fabric API
 	))
-	syncBodyFrom.set(
-		ModUtils.parseReadme(
-			project, "https://raw.githubusercontent.com/LambdAurora/lovely_snails/1.20/\$2"
-		)
-	)
+	syncBodyFrom.set(README)
 
 	// Changelog fetching
-	val changelogContent = ModUtils.fetchChangelog(project, VERSION)
-
-	if (changelogContent != null) {
-		changelog.set(changelogContent)
+	if (CHANGELOG_CONTENT != null) {
+		changelog.set(CHANGELOG_CONTENT)
 	} else {
 		afterEvaluate {
 			tasks.modrinth.get().isEnabled = false
@@ -161,52 +178,44 @@ modrinth {
 	}
 }
 
-/*curseforge {
-	if (System.getenv("CURSEFORGE_TOKEN") != null) {
-		apiKey = System.getenv("CURSEFORGE_TOKEN")
-	} else { // If we don't have a CURSEFORGE_TOKEN, don't run the curseforge publish tasks.
-		project.logger.debug("CURSEFORGE_TOKEN is not set! Disabled curseforge task.")
-		tasks.curseforge.get().isEnabled = false
+tasks.register<TaskPublishCurseForge>("curseforge") {
+	this.group = "publishing"
+
+	val token = System.getenv("CURSEFORGE_TOKEN")
+	if (token != null) {
+		this.apiToken = token
+	} else {
+		this.isEnabled = false
+		return@register
 	}
 
-	project {
-		id = project.curseforge_id
-		releaseType = this.getVersionType(mcVersion)
-		addGameVersion(mcVersion)
-		addGameVersion("Quilt")
-		addGameVersion("Java 17")
-		addGameVersion("Java 18")
+	// Changelog fetching
+	var changelogContent = CHANGELOG_CONTENT
 
-		// Changelog fetching
-		val changelogContent = fetchChangelog()
-
-		if (changelogContent) {
-			changelogType = "markdown"
-			changelog = "Changelog:\n\n${changelogContent}"
-		} else {
-			afterEvaluate {
-				uploadTask.setEnabled(false)
-			}
-		}
-
-		mainArtifact(remapJar) {
-			displayName = "LambdaBetterGrass $VERSION (${mcVersion})"
-
-			relations {
-				requiredDependency("qsl")
-				optionalDependency("modmenu")
-				incompatible("optifabric")
-				incompatible("fabric-api")
-			}
-		}
-
-		afterEvaluate {
-			uploadTask.setGroup("publishing")
-			uploadTask.dependsOn("remapJar")
-		}
+	if (changelogContent != null) {
+		changelogContent = "Changelog:\n\n${changelogContent}"
+	} else {
+		this.isEnabled = false
+		return@register
 	}
+
+	val mainFile = upload(project.property("curseforge_id"), tasks.remapJar.get())
+	mainFile.releaseType = ModUtils.fetchVersionType(VERSION, mcVersion)
+	mainFile.addGameVersion(McVersionLookup.getCurseForgeEquivalent(mcVersion))
+	compatibleMcVersions.stream()
+		.map { McVersionLookup.getCurseForgeEquivalent(it) }
+		.forEach { mainFile.addGameVersion(it) }
+	mainFile.addModLoader("Fabric", "Quilt")
+	mainFile.addJavaVersion("Java 17", "Java 18", "Java 19", "Java 20", "Java 21", "Java 22")
+
+	mainFile.displayName = "LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
+	mainFile.addRequirement("fabric-api")
+	mainFile.addOptional("modmenu")
+	mainFile.addIncompatibility("optifabric")
+
+	mainFile.changelogType = "markdown"
+	mainFile.changelog = changelogContent
 }
-tasks.curseforge.setGroup("publishing")*/
 
 // Configure the maven publication.
 publishing {
