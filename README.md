@@ -2,11 +2,11 @@
 
 <!-- modrinth_exclude.start -->
 ![Java 17](https://img.shields.io/badge/language-Java%2017-9115ff.svg?style=flat-square) <!-- modrinth_exclude.end -->
-[![GitHub license](https://img.shields.io/badge/license-Lambda%20License-c7136d?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.19/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Lambda%20License-c7136d?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.20/LICENSE)
 ![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=flat-square)
 [![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/LambdaBetterGrass?label=version&style=flat-square)
-[![Modrinth](https://img.shields.io/modrinth/v/lambdabettergrass?logo=modrinth&label=Modrinth&color=00ae5d&style=flat-square)](https://modrinth.com/mod/lambdynamiclights)
+[![Modrinth](https://img.shields.io/modrinth/v/lambdabettergrass?logo=modrinth&label=Modrinth&color=00ae5d&style=flat-square)](https://modrinth.com/mod/lambdabettergrass)
 [![CurseForge](http://cf.way2muchnoise.eu/title/400322.svg)](https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass)
 <!-- modrinth_exclude.end -->
 
