@@ -97,7 +97,7 @@ public enum LBGTextureGenerator {
 	public static Identifier generateTexture(String target, NativeImage side, NativeImage top, NativeImage mask) {
 		var image = applyMask(side, top, mask);
 
-		final var id = new Identifier(LambdaBetterGrass.NAMESPACE, "block/bettergrass/" + target);
+		final var id = LambdaBetterGrass.id("block/bettergrass/" + target);
 		return LambdaBetterGrass.get().dynamicTextureManager.registerSprite(id, image);
 	}
 

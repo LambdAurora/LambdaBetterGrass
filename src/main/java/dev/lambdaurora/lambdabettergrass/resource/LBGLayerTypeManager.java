@@ -53,7 +53,7 @@ public final class LBGLayerTypeManager {
 
 		return this.get(id).or(() -> {
 			if (!rawId.contains(":") && id.namespace().equals(Identifier.DEFAULT_NAMESPACE)) {
-				return this.get(new Identifier(LambdaBetterGrass.NAMESPACE, id.path()));
+				return this.get(LambdaBetterGrass.id(id.path()));
 			} else {
 				return Optional.empty();
 			}
