@@ -108,8 +108,10 @@ public class LBGGrassState extends LBGState {
 	}
 
 	@Override
-	public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter) {
+	public @Nullable UnbakedModel getCustomUnbakedModel(
+			ModelIdentifier modelId, UnbakedModel originalModel,
+			Function<Identifier, UnbakedModel> modelGetter
+	) {
 		var metadata = this.getMetadata(modelId);
 		if (metadata != null) {
 			return new LBGUnbakedModel(originalModel, metadata);

@@ -71,7 +71,11 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		);
 		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), MOD, ResourcePackActivationType.NORMAL);
 
-		LBGState.registerType("grass", (id, block, resourceManager, json, deserializationContext) -> new LBGGrassState(id, resourceManager, json));
+		LBGState.registerType(
+				"grass",
+				(id, block, resourceManager, json, deserializationContext) ->
+						new LBGGrassState(id, resourceManager, json)
+		);
 		LBGState.registerType("layer", LBGLayerState::new);
 
 		ModelLoadingPlugin.register(pluginCtx -> {

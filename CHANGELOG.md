@@ -137,7 +137,7 @@ The first release of LambdaBetterGrass!
   - Render types are not needed anymore either, the correct render type is applied on the quads who need them.
   - Layer types can now define which blocks it should match against.
   - Layers are still having issues with Iris' shaderpacks making them wavy on plants.
-- Added chorus plants to the better snow system.
+- Added chorus plants, and many more missing blocks to the better snow system.
 - Added glow lichen as a layer type.
 - Added a configuration tab in Sodium's video settings.
 - Added Swedish translations ([#94](https://github.com/LambdAurora/LambdaBetterGrass/pull/94)).

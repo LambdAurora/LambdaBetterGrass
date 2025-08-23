@@ -22,9 +22,9 @@ import org.jetbrains.annotations.NotNull;
  * @param blendUp the blend-up mask identifier
  * @param arch the arch mask identifier
  *
+ * @author LambdAurora
  * @version 2.0.0
  * @since 2.0.0
- * @author LambdAurora
  */
 public record LBGGrassMasks(
 		@NotNull Identifier connect,
@@ -47,6 +47,10 @@ public record LBGGrassMasks(
 	 * {@return the masks identifiers suffixed with the {@code .png} extension}
 	 */
 	public LBGGrassMasks withPngSuffix() {
-		return new LBGGrassMasks(this.connect.withSuffix(".png"), this.blendUp.withSuffix(".png"), this.arch.withSuffix(".png"));
+		return new LBGGrassMasks(
+				this.connect.withSuffix(".png"),
+				this.blendUp.withSuffix(".png"),
+				this.arch.withSuffix(".png")
+		);
 	}
 }

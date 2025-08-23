@@ -34,7 +34,7 @@ import java.util.function.Function;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -47,8 +47,6 @@ public class LBGMetadata {
 	protected final List<Material> textures = new ArrayList<>();
 
 	private final List<LBGGrassLayer> layers;
-
-	private int lastLayerIndex = 0;
 
 	protected UnbakedModel snowyVariant = null;
 	protected Consumer<BakedModel> snowyModelVariantProvider = null;
@@ -76,15 +74,6 @@ public class LBGMetadata {
 		this.layers = layers.values().stream()
 				.map(layer -> new LBGGrassLayer(resourceManager, this, layer))
 				.toList();
-	}
-
-	/**
-	 * Returns the next layer index to assign and increments the internal layer index counter.
-	 *
-	 * @return the next layer index
-	 */
-	protected int nextLayerIndex() {
-		return this.lastLayerIndex++;
 	}
 
 	/**

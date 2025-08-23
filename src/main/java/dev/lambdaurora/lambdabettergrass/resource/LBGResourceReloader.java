@@ -58,8 +58,10 @@ public class LBGResourceReloader {
 	 * @param resource the resource
 	 * @param blockModelDefinitionContext the deserialization context of block model definitions
 	 */
-	private void loadState(ResourceManager resourceManager, Identifier id, Resource resource,
-			BlockModelDefinition.Context blockModelDefinitionContext) {
+	private void loadState(
+			ResourceManager resourceManager, Identifier id, Resource resource,
+			BlockModelDefinition.Context blockModelDefinitionContext
+	) {
 		var stateId = new Identifier(
 				id.namespace(),
 				id.path().substring(LBGState.PATH_PREFIX.length() + 1, id.path().length() - ".json".length())

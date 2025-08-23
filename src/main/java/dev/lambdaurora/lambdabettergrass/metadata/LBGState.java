@@ -71,8 +71,10 @@ public abstract class LBGState {
 		return true;
 	}
 
-	public abstract @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter);
+	public abstract @Nullable UnbakedModel getCustomUnbakedModel(
+			ModelIdentifier modelId, UnbakedModel originalModel,
+			Function<Identifier, UnbakedModel> modelGetter
+	);
 
 	protected static void putState(Identifier id, LBGState state) {
 		LBG_STATES.put(id, state);
@@ -99,8 +101,10 @@ public abstract class LBGState {
 		LBG_STATES_TYPE.put(type, stateProvider);
 	}
 
-	public static void loadMetadataState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-			BlockModelDefinition.Context deserializationContext) {
+	public static void loadMetadataState(
+			Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
+			BlockModelDefinition.Context deserializationContext
+	) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
@@ -113,7 +117,9 @@ public abstract class LBGState {
 
 	@FunctionalInterface
 	public interface LBGStateProvider {
-		LBGState create(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-				BlockModelDefinition.Context deserializationContext);
+		LBGState create(
+				Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
+				BlockModelDefinition.Context deserializationContext
+		);
 	}
 }

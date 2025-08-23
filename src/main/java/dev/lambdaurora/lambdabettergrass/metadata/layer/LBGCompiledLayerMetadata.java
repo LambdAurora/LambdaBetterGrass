@@ -79,7 +79,9 @@ public class LBGCompiledLayerMetadata {
 	 * @param modelState the model state
 	 * @param modelId the model identifier
 	 */
-	public void bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState modelState, Identifier modelId) {
+	public void bake(
+			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState modelState, Identifier modelId
+	) {
 		if (this.unbakedModels.alternateModel() != null) {
 			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, modelState, modelId);
 		}

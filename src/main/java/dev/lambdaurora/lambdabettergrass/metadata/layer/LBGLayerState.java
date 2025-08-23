@@ -49,8 +49,10 @@ public class LBGLayerState extends LBGState {
 
 	private final Map<String, Map<LBGLayerType, LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
 
-	public LBGLayerState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-			BlockModelDefinition.Context deserializationContext) {
+	public LBGLayerState(
+			Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
+			BlockModelDefinition.Context deserializationContext
+	) {
 		super(id);
 
 		deserializationContext.setDefinition(block.getStateDefinition());
@@ -70,8 +72,10 @@ public class LBGLayerState extends LBGState {
 		}
 	}
 
-	private void loadVariant(String variant, JsonObject json, ResourceManager resourceManager,
-			BlockModelDefinition.Context deserializationContext) {
+	private void loadVariant(
+			String variant, JsonObject json, ResourceManager resourceManager,
+			BlockModelDefinition.Context deserializationContext
+	) {
 		var metadataId = Identifier.tryParse(json.get("data").getAsString());
 		var metadataResourceId = metadataId.withSuffix(".json");
 
@@ -91,7 +95,9 @@ public class LBGLayerState extends LBGState {
 						continue;
 
 					if (entry.getValue().isJsonObject()) {
-						this.putOrReplaceMetadata(variant, metadataId, type.get(), entry.getValue().getAsJsonObject(), deserializationContext);
+						this.putOrReplaceMetadata(
+								variant, metadataId, type.get(), entry.getValue().getAsJsonObject(), deserializationContext
+						);
 					}
 				}
 			} catch (IOException e) {
@@ -100,8 +106,10 @@ public class LBGLayerState extends LBGState {
 		}
 	}
 
-	private void putOrReplaceMetadata(String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
-			BlockModelDefinition.Context deserializationContext) {
+	private void putOrReplaceMetadata(
+			String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
+			BlockModelDefinition.Context deserializationContext
+	) {
 		var metadatas = this.metadatas.computeIfAbsent(variant, v -> new HashMap<>());
 		metadatas.put(type, new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
 	}
@@ -114,8 +122,10 @@ public class LBGLayerState extends LBGState {
 	}
 
 	@Override
-	public @Nullable UnbakedModel getCustomUnbakedModel(ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter) {
+	public @Nullable UnbakedModel getCustomUnbakedModel(
+			ModelIdentifier modelId, UnbakedModel originalModel,
+			Function<Identifier, UnbakedModel> modelGetter
+	) {
 		String[] modelVariant = modelId.variant().split(",");
 
 		for (var entry : this.metadatas.entrySet()) {

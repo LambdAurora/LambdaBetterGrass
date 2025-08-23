@@ -122,16 +122,24 @@ public class SettingsScreen extends SpruceScreen {
 		super.init();
 		int buttonHeight = 20;
 
-		this.addRenderableWidget(this.modeOption.createWidget(Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
-				200));
-		this.addRenderableWidget(this.betterSnowOption.createWidget(Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200));
+		this.addRenderableWidget(this.modeOption.createWidget(
+				Position.of(this, this.width / 2 - 205, this.height / 4 - buttonHeight),
+				200
+		));
+		this.addRenderableWidget(this.betterSnowOption.createWidget(
+				Position.of(this.width / 2 + 5, this.height / 4 - buttonHeight), 200
+		));
 
 		this.buildLabels();
 
-		this.addRenderableWidget(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
-		this.addRenderableWidget(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
+		this.addRenderableWidget(this.resetOption.createWidget(
+				Position.of(this, this.width / 2 - 155, this.height - 29), 150
+		));
+		this.addRenderableWidget(new SpruceButtonWidget(
+				Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
 				buttonHeight, SpruceTexts.GUI_DONE,
-				(buttonWidget) -> this.onClose()));
+				(buttonWidget) -> this.onClose()
+		));
 	}
 
 	private void buildLabels() {
@@ -155,7 +163,8 @@ public class SettingsScreen extends SpruceScreen {
 		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 10, y),
 				text, this.width - 20, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
-				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]").withStyle(TextFormatting.GREEN),
+				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]")
+						.withStyle(TextFormatting.GREEN),
 				this.width,
 				label -> Util.getPlatform().openUri(API_URL), true);
 		readMore.setTooltip(Text.translatable("chat.link.open"));

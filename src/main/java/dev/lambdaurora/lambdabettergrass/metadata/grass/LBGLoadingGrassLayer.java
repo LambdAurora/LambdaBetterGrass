@@ -23,9 +23,9 @@ import java.util.Optional;
  * @param textures the textures used for this grass layer
  * @param masks the masks used for this grass layer
  *
+ * @author LambdAurora
  * @version 2.0.0
  * @since 2.0.0
- * @author LambdAurora
  */
 public record LBGLoadingGrassLayer(int colorIndex, @NotNull Textures textures, @NotNull LBGGrassMasks masks) {
 	public static final Codec<LBGLoadingGrassLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(

@@ -53,7 +53,9 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(
+			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context
+	) {
 		var mode = LambdaBetterGrass.get().config.getMode();
 
 		if (mode == LBGMode.OFF) {
@@ -137,15 +139,21 @@ public class LBGBakedModel extends ForwardingBakedModel {
 		return true;
 	}
 
-	private static boolean canFullyConnect(BlockAndTintGetter world, BlockState self, BlockPos selfPos, Direction direction) {
+	private static boolean canFullyConnect(
+			BlockAndTintGetter world, BlockState self, BlockPos selfPos, Direction direction
+	) {
 		return canConnect(world, self, selfPos, selfPos.relative(direction).below());
 	}
 
-	private static boolean canConnect(BlockAndTintGetter world, BlockState self, BlockPos start, Direction direction) {
+	private static boolean canConnect(
+			BlockAndTintGetter world, BlockState self, BlockPos start, Direction direction
+	) {
 		return canConnect(world, self, start, start.relative(direction));
 	}
 
-	private static boolean canConnect(BlockAndTintGetter world, BlockState self, BlockPos selfPos, BlockPos adjacentPos) {
+	private static boolean canConnect(
+			BlockAndTintGetter world, BlockState self, BlockPos selfPos, BlockPos adjacentPos
+	) {
 		var adjacent = world.getBlockState(adjacentPos);
 		var upPos = adjacentPos.above();
 		var up = world.getBlockState(upPos);

@@ -38,9 +38,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The data generator of LambdaBetterGrass.
+ *
+ * @author LambdAurora
+ * @version 2.0.0
+ * @since 2.0.0
+ */
 public class LBGDataGen implements DataGeneratorEntrypoint {
+	private static final Identifier BED_DATA = new Identifier("bettergrass/data/bed");
 	private static final Identifier BUTTON_DATA = new Identifier("bettergrass/data/button");
+	private static final Identifier CAKE_DATA = new Identifier("bettergrass/data/cake");
+	private static final Identifier CANDLE_DATA = new Identifier("bettergrass/data/candle");
 	private static final Identifier FLOWER_DATA = new Identifier("bettergrass/data/flower");
+	private static final Identifier GLASS_PANE_DATA = new Identifier("bettergrass/data/glass_pane");
+	private static final Identifier LANTERN_DATA = new Identifier("bettergrass/data/lantern");
+	private static final Identifier TORCH_DATA = new Identifier("bettergrass/data/torch");
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -73,12 +86,25 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 							final var id = entry.key().value();
 							final var block = entry.value();
 
-							if (block instanceof ButtonBlock) {
+							if (block instanceof BedBlock) {
+								context.addSimpleLayerState(id, BED_DATA);
+							} else if (block instanceof ButtonBlock) {
 								context.addSimpleLayerState(id, BUTTON_DATA);
-							} else if (block instanceof FlowerBlock) {
+							} else if (block instanceof CakeBlock || block instanceof CandleCakeBlock) {
+								context.addSimpleLayerState(id, CANDLE_DATA);
+							} else if (block instanceof CandleBlock) {
+								context.addWaterloggedSimpleLayerState(id, CANDLE_DATA);
+							} else if (block instanceof FlowerBlock || block instanceof TallFlowerBlock) {
 								context.addSimpleLayerState(id, FLOWER_DATA);
+							} else if (block instanceof StainedGlassPaneBlock) {
+								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
+							} else if (block instanceof LanternBlock) {
+								context.addWaterloggedSimpleLayerState(id, LANTERN_DATA);
+							} else if (block instanceof TorchBlock) {
+								context.addSimpleLayerState(id, TORCH_DATA);
 							} else if (block instanceof DoorBlock
 									|| block instanceof FenceGateBlock
+									|| block instanceof FungusBlock
 									|| block instanceof MushroomBlock
 									|| block instanceof SaplingBlock
 									|| block instanceof TallGrassBlock) {
@@ -87,7 +113,8 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 							} else if (block instanceof TrapDoorBlock) {
 								context.addEmptyLayerData(id);
 								context.addLayerStateWithSimpleCondition(id, "half=top,waterlogged=false");
-							} else if (block instanceof FenceBlock
+							} else if (block instanceof BaseCoralPlantTypeBlock
+									|| block instanceof FenceBlock
 									|| block instanceof WallBlock) {
 								context.addEmptyLayerData(id);
 								context.addWaterloggedSimpleLayerState(id);
@@ -129,18 +156,26 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 		}
 
 		public void addLayerStateWithSimpleCondition(Identifier id, String condition) {
+			this.addLayerStateWithSimpleCondition(id, id.withPrefix("bettergrass/data/"), condition);
+		}
+
+		public void addLayerStateWithSimpleCondition(Identifier id, Identifier dataId, String condition) {
 			var state = new JsonObject();
 			state.addProperty("type", "layer");
 			var variants = new JsonObject();
 			state.add("variants", variants);
 			var variant = new JsonObject();
 			variants.add(condition, variant);
-			variant.addProperty("data", id.withPrefix("bettergrass/data/").toString());
+			variant.addProperty("data", dataId.toString());
 			this.addState(id, state);
 		}
 
 		public void addWaterloggedSimpleLayerState(Identifier id) {
 			this.addLayerStateWithSimpleCondition(id, "waterlogged=false");
+		}
+
+		public void addWaterloggedSimpleLayerState(Identifier id, Identifier dataId) {
+			this.addLayerStateWithSimpleCondition(id, dataId, "waterlogged=false");
 		}
 	}
 

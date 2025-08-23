@@ -13,6 +13,7 @@ import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class LBGLayerUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public Collection<Identifier> getDependencies() {
+	public @NotNull Collection<Identifier> getDependencies() {
 		Set<Identifier> ids = new HashSet<>(this.baseModel.getDependencies());
 		this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
 		return ids;
@@ -48,10 +49,12 @@ public class LBGLayerUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public @Nullable BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
-			ModelState rotationContainer, Identifier modelId) {
-		this.metadatas.forEach(metadata -> metadata.bake(baker, textureGetter, rotationContainer, modelId));
-		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, rotationContainer, modelId)),
+	public @Nullable BakedModel bake(
+			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
+			ModelState modelState, Identifier modelId
+	) {
+		this.metadatas.forEach(metadata -> metadata.bake(baker, textureGetter, modelState, modelId));
+		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, modelState, modelId)),
 				this.metadatas
 		);
 	}

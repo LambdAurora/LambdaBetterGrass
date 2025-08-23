@@ -163,7 +163,9 @@ public record LBGGrassLayerTextures(
 		private NativeImage blendUpMirroredMaskTexture;
 		private NativeImage archMaskTexture;
 
-		private ResolutionContext(ResourceManager resourceManager, LBGLoadingGrassLayer.Textures textureIds, LBGGrassMasks masks) {
+		private ResolutionContext(
+				ResourceManager resourceManager, LBGLoadingGrassLayer.Textures textureIds, LBGGrassMasks masks
+		) {
 			this.resourceManager = resourceManager;
 			this.textureIds = textureIds;
 			this.masks = masks;

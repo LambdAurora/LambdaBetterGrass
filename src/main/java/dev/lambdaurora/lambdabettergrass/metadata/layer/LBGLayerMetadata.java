@@ -37,8 +37,10 @@ public class LBGLayerMetadata {
 	private UnbakedModel alternateModel;
 	private final boolean hasAlternateModel;
 
-	public LBGLayerMetadata(Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-			BlockModelDefinition.Context deserializationContext) {
+	public LBGLayerMetadata(
+			Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
+			BlockModelDefinition.Context deserializationContext
+	) {
 		this.id = id;
 		this.layerType = layerType;
 
