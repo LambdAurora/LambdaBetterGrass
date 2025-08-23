@@ -79,7 +79,7 @@ Please check out [this documentation](https://lambdaurora.dev/projects/lambdabet
 
 ## 📖 Compatibility
 
-- [Sodium] is compatible only with [Indium] present.
+- [Sodium] is compatible.
 - Canvas is compatible.
 - Continuity is compatible.
 - OptiFabric is obviously incompatible.
@@ -114,4 +114,3 @@ GitHub
 [Fabric API]: https://modrinth.com/mod/fabric-api "Fabric API Modrinth page"
 [ModMenu]: https://modrinth.com/mod/modmenu "Mod Menu Modrinth page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
-[Indium]: https://modrinth.com/mod/indium "Indium Modrinth page"
