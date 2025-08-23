@@ -149,7 +149,7 @@ public record LBGGrassLayerTextures(
 	}
 
 	private static Identifier getTexturePath(Identifier id) {
-		return new Identifier(id.namespace(), "textures/" + id.path() + ".png");
+		return id.withPath(path -> "textures/" + path + ".png");
 	}
 
 	private static final class ResolutionContext implements AutoCloseable {

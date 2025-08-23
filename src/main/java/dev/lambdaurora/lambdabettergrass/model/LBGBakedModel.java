@@ -23,7 +23,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -37,7 +36,7 @@ import java.util.function.Supplier;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 1.5.1
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends ForwardingBakedModel {
@@ -69,8 +68,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
 				var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
-				var stateId = new Identifier(blockId.namespace(), blockId.path());
-				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
+				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, blockId, up, false)) {
 					this.metadata.getSnowyModelVariant()
 							.emitBlockQuads(world, state.with(BlockStateProperties.SNOWY, true), pos, randomSupplier, context);
 					return;
@@ -162,7 +160,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
 						var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
-						var stateId = new Identifier(blockId.namespace(), "bettergrass/states/" + blockId.path());
+						var stateId = blockId.withPrefix("bettergrass/states/");
 						if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
 							return true;
 					}
