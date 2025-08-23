@@ -7,7 +7,7 @@
  * see the LICENSE file.
  */
 
-package dev.lambdaurora.lambdabettergrass.metadata;
+package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -25,7 +25,7 @@ import java.io.StringReader;
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 1.6.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class LBGLayerMetadata {

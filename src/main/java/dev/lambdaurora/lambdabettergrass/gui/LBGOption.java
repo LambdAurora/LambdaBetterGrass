@@ -28,7 +28,7 @@ import java.util.function.Function;
  * A dummy option to add a button leading to LambdaBetterGrass' settings.
  *
  * @author LambdAurora
- * @version 1.6.0
+ * @version 2.0.0
  * @since 1.1.2
  */
 public final class LBGOption {

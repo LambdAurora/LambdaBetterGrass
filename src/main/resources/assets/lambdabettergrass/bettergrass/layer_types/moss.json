@@ -1,5 +1,9 @@
 {
 	"block": {
 		"Name": "minecraft:moss_carpet"
-	}
+	},
+	"match": [
+		"minecraft:moss_carpet",
+		"minecraft:moss_block"
+	]
 }

@@ -23,8 +23,8 @@ import java.util.Optional;
  * @param textures the textures used for this grass layer
  * @param masks the masks used for this grass layer
  *
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  * @author LambdAurora
  */
 public record LBGLoadingGrassLayer(int colorIndex, @NotNull Textures textures, @NotNull LBGGrassMasks masks) {

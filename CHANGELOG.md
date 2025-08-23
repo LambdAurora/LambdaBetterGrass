@@ -126,11 +126,19 @@ The first release of LambdaBetterGrass!
 - Updated model injections to use Fabric API's new model loading API which should improve mod compatibility.
 - Added Vietnamese translations ([#90](https://github.com/LambdAurora/LambdaBetterGrass/pull/90)).
 
-## 1.6.0
+## 2.0.0
 
 - Switched back to Fabric.
 - Refactored runtime texture generation injection to directly inject into the atlas instead of using a virtual resource pack.
 - Refactored configuration loading and saving to be more reliable and avoid corruption.
+- Reworked layer type format and rendering.
+  - Layer types now specify a block state to display.
+  - Custom models are not needed anymore, culling works as intended. This means layers will better adapt to resource packs.
+  - Render types are not needed anymore either, the correct render type is applied on the quads who need them.
+  - Layer types can now define which blocks it should match against.
+  - Layers are still having issues with Iris' shaderpacks making them wavy on plants.
+- Added chorus plants to the better snow system.
+- Added glow lichen as a layer type.
 - Added a configuration tab in Sodium's video settings.
 - Added Swedish translations ([#94](https://github.com/LambdAurora/LambdaBetterGrass/pull/94)).
 - Added Catalan translations ([#104](https://github.com/LambdAurora/LambdaBetterGrass/pull/104)).

@@ -1,12 +1,12 @@
 {
 	"block": {
-		"Name": "minecraft:sculk_vein",
+		"Name": "minecraft:glow_lichen",
 		"Properties": {
 			"down": "true"
 		}
 	},
 	"match": {
-		"block": "minecraft:sculk_vein",
+		"block": "minecraft:glow_lichen",
 		"properties": {
 			"down": "true"
 		}

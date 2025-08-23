@@ -1,5 +1,6 @@
 {
 	"block": {
 		"Name": "minecraft:snow"
-	}
+	},
+	"match": "#minecraft:snow"
 }

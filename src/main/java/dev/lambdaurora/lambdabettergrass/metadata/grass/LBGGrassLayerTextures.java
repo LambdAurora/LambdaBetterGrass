@@ -20,6 +20,18 @@ import java.io.Closeable;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * Represents the textures of a better grass layer model.
+ *
+ * @param connect the connecting texture
+ * @param blendUp the blending up texture
+ * @param blendUpMirrored the mirrored blending up texture
+ * @param arch the arching texture
+ *
+ * @author LambdAurora
+ * @version 2.0.0
+ * @since 2.0.0
+ */
 public record LBGGrassLayerTextures(
 		@NotNull Texture connect,
 		@NotNull Texture blendUp,
@@ -127,7 +139,7 @@ public record LBGGrassLayerTextures(
 			String name, Function<ResolutionContext, NativeImage> maskGetter, Optional<Identifier> override
 	) {
 		if (override.isPresent()) {
-			return new FromDiskTexture(resourceManager, getTexturePath(override.get()));
+			return new FromDiskTexture(resourceManager, override.get());
 		} else {
 			final var id = LambdaBetterGrass.id("block/bettergrass/" + name);
 			final var image = LBGTextureGenerator.applyMask(context.getSideTexture(), context.getTopTexture(), maskGetter.apply(context));
@@ -259,7 +271,7 @@ public record LBGGrassLayerTextures(
 		@Override
 		public NativeImage getImage() {
 			if (this.cached == null) {
-				this.cached = LBGTextureGenerator.getNativeImage(this.resourceManager, this.id);
+				this.cached = LBGTextureGenerator.getNativeImage(this.resourceManager, getTexturePath(this.id));
 			}
 
 			return this.cached;

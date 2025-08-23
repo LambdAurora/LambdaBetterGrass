@@ -2,7 +2,7 @@
 	"type": "layer",
 	"variants": {
 		"down=false,waterlogged=false": {
-			"data": "minecraft:bettergrass/data/glow_lichen"
+			"data": "minecraft:bettergrass/data/sculk_vein"
 		}
 	}
 }

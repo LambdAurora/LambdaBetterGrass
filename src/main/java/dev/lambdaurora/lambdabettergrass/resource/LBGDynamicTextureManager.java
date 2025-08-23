@@ -23,8 +23,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Represents the dynamic texture manager of LambdaBetterGrass to handle any runtime-generated textures.
  *
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  * @author LambdAurora
  */
 public class LBGDynamicTextureManager {

@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass.model;
 
-import dev.lambdaurora.lambdabettergrass.metadata.LBGCompiledLayerMetadata;
+import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.Identifier;

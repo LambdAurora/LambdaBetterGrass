@@ -11,7 +11,6 @@ package dev.lambdaurora.lambdabettergrass.resource;
 
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerType;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,19 +26,20 @@ import java.io.InputStreamReader;
  * Represents the LambdaBetterGrass resource reloader.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.0.0
  * @since 1.4.0
  */
 public class LBGResourceReloader {
 	private static final Logger LOGGER = LogUtils.getLogger();
+	private final LBGLayerTypeManager layerTypeManager;
+
+	public LBGResourceReloader(LBGLayerTypeManager layerTypeManager) {
+		this.layerTypeManager = layerTypeManager;
+	}
 
 	public void reload(ResourceManager resourceManager) {
 		LBGState.reset();
-		LBGLayerType.reset();
-		var layerTypes = resourceManager.findResources("bettergrass/layer_types",
-				path -> path.path().endsWith(".json"));
-		layerTypes.forEach(LBGLayerType::load);
-
+		this.layerTypeManager.load(resourceManager);
 		this.loadStates(resourceManager);
 	}
 

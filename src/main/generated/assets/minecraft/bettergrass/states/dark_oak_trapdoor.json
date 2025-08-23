@@ -1,7 +1,7 @@
 {
 	"type": "layer",
 	"variants": {
-		"waterlogged=false": {
+		"half=top,waterlogged=false": {
 			"data": "minecraft:bettergrass/data/dark_oak_trapdoor"
 		}
 	}

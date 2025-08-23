@@ -22,8 +22,8 @@ import java.util.Set;
  * LambdaBetterGrass mixin plugin for conditional mixins.
  *
  * @author LambdAurora
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public class LBGMixinPlugin implements IMixinConfigPlugin {
 	private final Object2BooleanMap<String> conditionalMixins = new Object2BooleanOpenHashMap<>();

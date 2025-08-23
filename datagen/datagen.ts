@@ -19,7 +19,7 @@ function parse_id(raw_id: string): Identifier {
 	}
 }
 
-async function write_to_file(path: string, data: string): Promise<void> {
+async function write_to_file(path: string, data: any): Promise<void> {
 	await Deno.writeTextFile(path, JSON.stringify(data, null, "\t") + "\n");
 }
 
@@ -27,7 +27,21 @@ function get_state_path(id: Identifier): string {
 	return `src/main/resources/assets/${id.namespace}/bettergrass/states/${id.path}.json`;
 }
 
-function make_state_json(block, data_provider) {
+interface StateJson {
+	type: "layer";
+	data?: string;
+	variants?: Record<string, { data?: string }>;
+}
+
+interface BlockData {
+	readonly id: string;
+	readonly data: unknown;
+	readonly custom_data_id?: string;
+	readonly waterloggable?: boolean;
+}
+type Block = string | BlockData;
+
+function make_state_json(block: Block, data_provider: (id: Identifier) => string) {
 	let id;
 	let data = undefined;
 	let custom_data_id = undefined;
@@ -42,7 +56,7 @@ function make_state_json(block, data_provider) {
 		waterloggable = block.waterloggable !== undefined ? block.waterloggable : false;
 	}
 
-	let state_json = {
+	let state_json: StateJson = {
 		type: "layer",
 		data: data_provider(custom_data_id !== undefined ? parse_id(custom_data_id) : id),
 	};
@@ -61,15 +75,17 @@ function make_state_json(block, data_provider) {
 	return {id: id, path: get_state_path(id), json: state_json, data: data};
 }
 
-function get_data_path(id) {
+function get_data_path(id: Identifier): string {
 	return `src/main/resources/assets/${id.namespace}/bettergrass/data/${id.path}.json`;
 }
 
-function make_data_json(options) {
+function make_data_json(options?: any): any {
 	return Object.assign({}, options);
 }
 
-function get_group_data(raw) {
+type GroupData = Block[] | {entries: Block[], data: object};
+
+function get_group_data(raw: GroupData) {
 	let entries;
 	let data = make_data_json();
 	if (raw instanceof Array) {
@@ -86,16 +102,16 @@ function get_group_data(raw) {
 
 for (const [group, group_raw_data] of Object.entries(better_snow)) {
 	if (group === "global") {
-		for (let block of group_raw_data) {
-			let state_data = make_state_json(block, id => `${id.namespace}:bettergrass/data/${id.path}`);
-			let data_path = get_data_path(state_data.id);
+		for (const block of (group_raw_data as Block[])) {
+			const state_data = make_state_json(block, id => `${id.namespace}:bettergrass/data/${id.path}`);
+			const data_path = get_data_path(state_data.id);
 
 			await Promise.all([write_to_file(state_data.path, state_data.json), write_to_file(data_path, make_data_json(state_data.data))]);
 
 			console.log(`Wrote better snow data for ${state_data.id.to_string()}.`);
 		}
 	} else {
-		const group_data = get_group_data(group_raw_data);
+		const group_data = get_group_data(group_raw_data as GroupData);
 		const data_id = `minecraft:bettergrass/data/${group}`;
 
 		console.log(`Writing better snow data for group ${group} (${group_data.entries.length} entries)...`);

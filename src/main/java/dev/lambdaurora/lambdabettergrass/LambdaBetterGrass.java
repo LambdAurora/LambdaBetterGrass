@@ -11,9 +11,10 @@ package dev.lambdaurora.lambdabettergrass;
 
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
-import dev.lambdaurora.lambdabettergrass.metadata.LBGLayerState;
+import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
+import dev.lambdaurora.lambdabettergrass.resource.LBGLayerTypeManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
@@ -33,7 +34,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 1.6.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -53,7 +54,9 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
 	public final LBGConfig config = new LBGConfig(this);
 	private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
-	public final LBGResourceReloader resourceReloader = new LBGResourceReloader();
+
+	public final LBGLayerTypeManager layerTypeManager = new LBGLayerTypeManager();
+	public final LBGResourceReloader resourceReloader = new LBGResourceReloader(layerTypeManager);
 	public final LBGDynamicTextureManager dynamicTextureManager = new LBGDynamicTextureManager();
 
 	@Override

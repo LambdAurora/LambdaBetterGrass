@@ -21,6 +21,9 @@
 		],
 		"modmenu": [
 			"dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu"
+		],
+		"fabric-datagen": [
+			"dev.lambdaurora.lambdabettergrass.resource.LBGDataGen"
 		]
 	},
 	"accessWidener": "lambdabettergrass.accesswidener",

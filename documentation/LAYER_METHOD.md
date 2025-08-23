@@ -12,16 +12,19 @@ A layer type is defined by a JSON file in `assets/<namespace>/bettergrass/layer_
 
 The layer type format is very simple:
 
- - `block` - The identifier of the layered block (like `minecraft:snow`).
- - `model` - A model path to use as layer.
- 
+- `block` - The block state of the layered block.
+  - `Name` - The identifier of the layered block (like `minecraft:snow`).
+  - `Properties` (optional) - The properties of the layered block (like `{"down":"true"}` for sculk veins).
+
 #### Example
 
 From `assets/lambdabettergrass/bettergrass/layer_types/snow.json`
+
 ```json
 {
-  "block": "minecraft:snow",
-  "model": "lambdabettergrass:block/snowy_layer"
+	"block": {
+		"Name": "minecraft:snow"
+	}
 }
 ```
 
@@ -34,9 +37,10 @@ When a block uses the `layer` method, it uses the metadata file determine by the
 The root object will contain fields for each layer type to override.
 
 Each layer type object contain:
- - `layer` - True if the mod should add the layer model.
- - `offset` (optional) - A 3-component array representing the XYZ offset of the original model. Doesn't apply if a custom model is provided.
- - `block_state` (optional) - A custom block state to provide a custom model of the block state, useful to provide snowy variations for example.
+
+- `layer` - True if the mod should add the layer model.
+- `offset` (optional) - A 3-component array representing the XYZ offset of the original model. Doesn't apply if a custom model is provided.
+- `block_state` (optional) - A custom block state to provide a custom model of the block state, useful to provide snowy variations for example.
 
 Layer metadata files from different resource packs are merged.
 
@@ -53,25 +57,27 @@ LambdaBetterGrass will use the rules of resource pack A for "snow" and "ash", an
 #### Lilac
 
 In `assets/minecraft/bettergrass/states/lilac.json`:
+
 ```json
 {
-  "type": "layer",
-  "data": "minecraft:bettergrass/data/lilac"
+	"type": "layer",
+	"data": "minecraft:bettergrass/data/lilac"
 }
 ```
 
 In `assets/minecraft/bettergrass/data/lilac.json`:
+
 ```json
 {
-  "snow": {
-    "layer": true
-  },
-  "moss": {
-    "layer": true
-  },
-  "ash": {
-    "layer": true
-  }
+	"snow": {
+		"layer": true
+	},
+	"moss": {
+		"layer": true
+	},
+	"ash": {
+		"layer": true
+	}
 }
 ```
 
@@ -81,8 +87,8 @@ In `assets/minecraft/bettergrass/states/brewing_stand.json`:
 
 ```json
 {
-  "type": "layer",
-  "data": "minecraft:bettergrass/data/brewing_stand"
+	"type": "layer",
+	"data": "minecraft:bettergrass/data/brewing_stand"
 }
 ```
 
@@ -90,134 +96,136 @@ In `assets/minecraft/bettergrass/data/brewing_stand.json`:
 
 ```json
 {
-  "snow": {
-    "layer": true,
-    "offset": [
-      0,
-      0.001,
-      0
-    ]
-  },
-  "moss": {
-    "layer": true
-  },
-  "ash": {
-    "layer": true
-  }
+	"snow": {
+		"layer": true,
+		"offset": [
+			0,
+			0.001,
+			0
+		]
+	},
+	"moss": {
+		"layer": true
+	},
+	"ash": {
+		"layer": true
+	}
 }
 ```
 
 #### Oak fence
 
 In `assets/minecraft/bettergrass/states/oak_fence.json`:
+
 ```json
 {
-  "type": "layer",
-  "variants": {
-    "waterlogged=false": {
-      "data": "minecraft:bettergrass/data/oak_fence"
-    }
-  }
+	"type": "layer",
+	"variants": {
+		"waterlogged=false": {
+			"data": "minecraft:bettergrass/data/oak_fence"
+		}
+	}
 }
 ```
 
 In `assets/minecraft/bettergrass/data/oak_fence.json` from the default extension resource pack (only overrides snow and moss layers):
+
 ```json
 {
-  "snow": {
-    "layer": true,
-    "block_state": {
-      "multipart": [
-        {
-          "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_oak_fence_post"
-          }
-        },
-        {
-          "when": {
-            "north": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side"
-          }
-        },
-        {
-          "when": {
-            "east": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-            "y": 90
-          }
-        },
-        {
-          "when": {
-            "south": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-            "y": 180
-          }
-        },
-        {
-          "when": {
-            "west": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
-            "y": 270
-          }
-        }
-      ]
-    }
-  },
-  "moss": {
-    "layer": true,
-    "block_state": {
-      "multipart": [
-        {
-          "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_oak_fence_post"
-          }
-        },
-        {
-          "when": {
-            "north": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side"
-          }
-        },
-        {
-          "when": {
-            "east": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
-            "y": 90
-          }
-        },
-        {
-          "when": {
-            "south": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
-            "y": 180
-          }
-        },
-        {
-          "when": {
-            "west": "true"
-          },
-          "apply": {
-            "model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
-            "y": 270
-          }
-        }
-      ]
-    }
-  }
+	"snow": {
+		"layer": true,
+		"block_state": {
+			"multipart": [
+				{
+					"apply": {
+						"model": "lambdabettergrass:block/fence/snowy_oak_fence_post"
+					}
+				},
+				{
+					"when": {
+						"north": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/snowy_oak_fence_side"
+					}
+				},
+				{
+					"when": {
+						"east": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+						"y": 90
+					}
+				},
+				{
+					"when": {
+						"south": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+						"y": 180
+					}
+				},
+				{
+					"when": {
+						"west": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/snowy_oak_fence_side",
+						"y": 270
+					}
+				}
+			]
+		}
+	},
+	"moss": {
+		"layer": true,
+		"block_state": {
+			"multipart": [
+				{
+					"apply": {
+						"model": "lambdabettergrass:block/fence/mossy_oak_fence_post"
+					}
+				},
+				{
+					"when": {
+						"north": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/mossy_oak_fence_side"
+					}
+				},
+				{
+					"when": {
+						"east": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+						"y": 90
+					}
+				},
+				{
+					"when": {
+						"south": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+						"y": 180
+					}
+				},
+				{
+					"when": {
+						"west": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/mossy_oak_fence_side",
+						"y": 270
+					}
+				}
+			]
+		}
+	}
 }
 ```
 

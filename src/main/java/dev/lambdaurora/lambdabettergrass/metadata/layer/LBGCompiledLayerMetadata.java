@@ -7,9 +7,8 @@
  * see the LICENSE file.
  */
 
-package dev.lambdaurora.lambdabettergrass.metadata;
+package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
-import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
@@ -37,17 +36,21 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 1.6.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
 	public final LBGLayerType layerType;
+	private final boolean hasLayer;
 	private final @Nullable Vector3f offset;
 	public final LBGLayerMetadata.LayerUnbakedModels unbakedModels;
 	private BakedModel bakedAlternateModel;
 
-	public LBGCompiledLayerMetadata(LBGLayerType layerType, @Nullable Vector3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels) {
+	public LBGCompiledLayerMetadata(
+			LBGLayerType layerType, boolean hasLayer, @Nullable Vector3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels
+	) {
 		this.layerType = layerType;
+		this.hasLayer = hasLayer;
 		this.offset = offset;
 		this.unbakedModels = unbakedModels;
 	}
@@ -90,19 +93,23 @@ public class LBGCompiledLayerMetadata {
 	 * @param pos the block position
 	 * @param randomSupplier the random supplier
 	 * @param context the render context
-	 * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads,
-	 * or 2 if the custom alternative model has emitted quads
+	 * @return {@code 0} if no custom models have emitted quads, {@code 1} if only the layer model has emitted quads,
+	 * or {@code 2} if the custom alternative model has emitted quads
 	 */
 	public int emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
 			RenderContext context) {
 		int success = 0;
 		var layerState = this.layerType.data.state();
-		var layerModel = this.layerType.getLayerModel();
 
-		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, layerState.getBlock(), state.getBlock(), false) > 1) {
+		if (this.hasLayer) {
 			final var downPos = pos.below();
 			final var downState = world.getBlockState(downPos);
-			if (downState.isFaceSturdy(world, downPos, Direction.UP)) {
+
+			if (downState.isFaceSturdy(world, downPos, Direction.UP)
+					&& this.layerType.getNearbyLayeredBlocks(world, pos, state.getBlock(), false) > 1
+			) {
+				var layerModel = this.layerType.getLayerModel();
+
 				Vec3 offset = state.getOffset(world, pos);
 				boolean pushed = false;
 
@@ -111,10 +118,13 @@ public class LBGCompiledLayerMetadata {
 				context.pushTransform(quad -> {
 					var originalMaterial = quad.material();
 					var material = materialFinder.copyFrom(originalMaterial)
-							.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()))
-							.blendMode(BlendMode.fromRenderLayer(this.layerType.renderType))
-							.find();
-					quad.material(material);
+							.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()));
+
+					if (material.blendMode() == BlendMode.DEFAULT) {
+						material = material.blendMode(BlendMode.fromRenderLayer(this.layerType.renderType));
+					}
+
+					quad.material(material.find());
 
 					var cullFace = quad.cullFace();
 					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {
@@ -151,7 +161,7 @@ public class LBGCompiledLayerMetadata {
 			}
 		}
 
-		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, layerState.getBlock(), state.getBlock(), false) > 1
+		if (this.layerType.getNearbyLayeredBlocks(world, pos, state.getBlock(), false) > 1
 				&& this.bakedAlternateModel != null) {
 			this.bakedAlternateModel.emitBlockQuads(world, state, pos, randomSupplier, context);
 			success = 2;

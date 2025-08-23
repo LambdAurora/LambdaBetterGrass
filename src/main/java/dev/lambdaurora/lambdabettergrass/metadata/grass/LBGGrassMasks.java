@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
  * @param blendUp the blend-up mask identifier
  * @param arch the arch mask identifier
  *
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  * @author LambdAurora
  */
 public record LBGGrassMasks(

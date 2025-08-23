@@ -284,6 +284,8 @@
 			"id": "cobbled_deepslate_wall",
 			"waterloggable": true
 		},
+		"chorus_flower",
+		"chorus_plant",
 		{
 			"id": "cobblestone_wall",
 			"waterloggable": true
@@ -398,7 +400,6 @@
 			"id": "diorite_wall",
 			"waterloggable": true
 		},
-		"end_rod",
 		{
 			"id": "end_stone_brick_wall",
 			"waterloggable": true
@@ -663,7 +664,6 @@
 		"sugar_cane",
 		"sweet_berry_bush",
 		"tall_grass",
-		"tripwire",
 		"tripwire_hook",
 		{
 			"id": "tube_coral",

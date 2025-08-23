@@ -10,7 +10,7 @@
 package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import dev.lambdaurora.lambdabettergrass.metadata.LBGCompiledLayerMetadata;
+import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;

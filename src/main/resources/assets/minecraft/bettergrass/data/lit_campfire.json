@@ -4,5 +4,8 @@
 	},
 	"moss": {
 		"layer": false
+	},
+	"glow_lichen": {
+		"layer": false
 	}
 }

@@ -48,6 +48,12 @@ loom {
 	accessWidenerPath.set(file("src/main/resources/lambdabettergrass.accesswidener"))
 }
 
+fabricApi {
+	configureDataGeneration() {
+		client = true
+	}
+}
+
 dependencies {
 	minecraft(libs.minecraft)
 	@Suppress("UnstableApiUsage")
