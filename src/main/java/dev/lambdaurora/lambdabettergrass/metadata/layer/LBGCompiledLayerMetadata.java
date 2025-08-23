@@ -76,12 +76,12 @@ public class LBGCompiledLayerMetadata {
 	 *
 	 * @param baker the model baker
 	 * @param textureGetter the texture getter
-	 * @param rotationContainer the rotation container
+	 * @param modelState the model state
 	 * @param modelId the model identifier
 	 */
-	public void bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState rotationContainer, Identifier modelId) {
+	public void bake(ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState modelState, Identifier modelId) {
 		if (this.unbakedModels.alternateModel() != null) {
-			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, rotationContainer, modelId);
+			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, modelState, modelId);
 		}
 	}
 
@@ -96,8 +96,9 @@ public class LBGCompiledLayerMetadata {
 	 * @return {@code 0} if no custom models have emitted quads, {@code 1} if only the layer model has emitted quads,
 	 * or {@code 2} if the custom alternative model has emitted quads
 	 */
-	public int emitBlockQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
-			RenderContext context) {
+	public int emitBlockQuads(
+			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context
+	) {
 		int success = 0;
 		var layerState = this.layerType.data.state();
 

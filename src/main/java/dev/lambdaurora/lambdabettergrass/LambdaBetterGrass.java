@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdabettergrass;
 
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
-import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
+import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGLayerTypeManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
