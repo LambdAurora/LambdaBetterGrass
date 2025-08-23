@@ -157,9 +157,9 @@ public class SettingsScreen extends SpruceScreen {
 		var text = Text.literal("");
 		text.append(Text.translatable("lambdabettergrass.menu.title.info").withStyle(TextFormatting.GOLD, TextFormatting.BOLD));
 		text.append("\n");
-		text.append(Text.translatable("lambdabettergrass.menu.info.1")).append("\n");
-		text.append(Text.translatable("lambdabettergrass.menu.info.2")).append(" ");
-		text.append(Text.translatable("lambdabettergrass.menu.info.3")).append("\n");
+		text.append(Text.translatable("lambdabettergrass.menu.info.1").withStyle(TextFormatting.WHITE)).append("\n");
+		text.append(Text.translatable("lambdabettergrass.menu.info.2").withStyle(TextFormatting.WHITE)).append(" ");
+		text.append(Text.translatable("lambdabettergrass.menu.info.3").withStyle(TextFormatting.WHITE)).append("\n");
 		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 10, y),
 				text, this.width - 20, true));
 		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),

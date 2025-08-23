@@ -133,7 +133,7 @@ The first release of LambdaBetterGrass!
 - Refactored configuration loading and saving to be more reliable and avoid corruption.
 - Reworked layer type format and rendering.
   - Layer types now specify a block state to display.
-  - Custom models are not needed anymore, culling works as intended. This means layers will better adapt to resource packs.
+  - Custom models are not needed anymore, culling works as intended. This means layers will better adapt to resource packs. Fixes a part of [#76](https://github.com/LambdAurora/LambdaBetterGrass/issues/76).
   - Render types are not needed anymore either, the correct render type is applied on the quads who need them.
   - Layer types can now define which blocks it should match against.
   - Layers are still having issues with Iris' shaderpacks making them wavy on plants.
@@ -143,6 +143,7 @@ The first release of LambdaBetterGrass!
 - Added Swedish translations ([#94](https://github.com/LambdAurora/LambdaBetterGrass/pull/94)).
 - Added Catalan translations ([#104](https://github.com/LambdAurora/LambdaBetterGrass/pull/104)).
 - Added Malay translations ([#110](https://github.com/LambdAurora/LambdaBetterGrass/pull/110)).
+- Fixed snowy grass not always properly connecting when better snow is active.
 - Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI

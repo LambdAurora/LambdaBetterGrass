@@ -64,7 +64,6 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
-	implementation(libs.yumi.commons.core)
 	modImplementation(libs.spruceui)
 
 	// Config
@@ -78,7 +77,6 @@ dependencies {
 	implementation(libs.nightconfig.toml)
 
 	// Bundling
-	include(libs.yumi.commons.core)
 	include(libs.spruceui)
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
@@ -107,6 +105,8 @@ tasks.processResources {
 	filesMatching("quilt.mod.json") {
 		expand("version" to inputs.properties["version"])
 	}
+
+	exclude(".cache/**")
 }
 
 tasks.jar {

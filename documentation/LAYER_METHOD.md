@@ -15,6 +15,13 @@ The layer type format is very simple:
 - `block` - The block state of the layered block.
   - `Name` - The identifier of the layered block (like `minecraft:snow`).
   - `Properties` (optional) - The properties of the layered block (like `{"down":"true"}` for sculk veins).
+- `match` - A list of blocks to match.
+
+The match can either be a single value or a list of values,
+where a value can be:
+- a string of a block identifier;
+- a string prefixed with `#` and a tag identifier;
+- a block `{ "block": "<block id>", "properties": {}}` to match a specific block state.
 
 #### Example
 
@@ -24,6 +31,26 @@ From `assets/lambdabettergrass/bettergrass/layer_types/snow.json`
 {
 	"block": {
 		"Name": "minecraft:snow"
+	},
+	"match": "#minecraft:snow"
+}
+```
+
+From `assets/lambdabettergrass/bettergrass/layer_types/sculk.json`
+
+```json
+{
+	"block": {
+		"Name": "minecraft:sculk_vein",
+		"Properties": {
+			"down": "true"
+		}
+	},
+	"match": {
+		"block": "minecraft:sculk_vein",
+		"properties": {
+			"down": "true"
+		}
 	}
 }
 ```

@@ -20,27 +20,27 @@ The main issue is that it's too rough even at Fancy settings.
 That's why I made my own mod to fix this issue and provide an alternative to one of the OptiFine features on the Fabric ecosystem!
 Grass blocks will now connect, and the nearby grass blocks will be smoothed.
 
-![pack.png with better grass](images/pack.png)
+![pack.png with better grass](assets/pack.png)
 
-![Mountain with better grass on grass and snowy grass](images/better_grass.png)
+![Mountain with better grass on grass and snowy grass](assets/better_grass.png)
 
-![Warped forest with better grass](images/better_grass_warped_forest.png)
+![Warped forest with better grass](assets/better_grass_warped_forest.png)
 
-![Better snow](images/better_snow.png)
+![Better snow](assets/better_snow.png)
 
 Better snow with the optional included resource pack:
-![Optional better snow](images/better_snow_resource_pack.png)
+![Optional better snow](assets/better_snow_resource_pack.png)
 
 Better "snow" with the optional included resource pack in lush caves (credits to cavebiomes by SuperCoder79):
 
-![Optional better moss](images/better_moss.png)
+![Optional better moss](assets/better_moss.png)
 
 Better "snow" system used for sculk vein, here with the optional included resource pack for custom fences:
 
-![Optional better sculk vein](images/better_sculk_vein.png)
+![Optional better sculk vein](assets/better_sculk_vein.png)
 
 Configuration screen:
-![Config screen](images/config_screen.png)
+![Config screen](assets/config_screen.png)
 
 Searching other mods to replace OptiFine? [Check out this list!](https://optifine.alternatives.lambdaurora.dev/)
 

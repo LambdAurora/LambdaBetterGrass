@@ -168,8 +168,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
 						var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
-						var stateId = blockId.withPrefix("bettergrass/states/");
-						if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
+						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, blockId, up, true))
 							return true;
 					}
 				}

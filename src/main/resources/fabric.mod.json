@@ -3,7 +3,7 @@
 	"id": "lambdabettergrass",
 	"name": "LambdaBetterGrass",
 	"version": "${version}",
-	"description": "Adds actual better grass and actual better snow. All of that while being customizable!",
+	"description": "Adds actual better grass and better snow while being customizable!",
 	"authors": [
 		"LambdAurora"
 	],
@@ -44,5 +44,16 @@
 	},
 	"breaks": {
 		"optifabric": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass",
+				"modmenu.discord": "https://discord.lambdaurora.dev/",
+				"modmenu.github_releases": "https://github.com/LambdAurora/LambdaBetterGrass/releases",
+				"modmenu.modrinth": "https://modrinth.com/mod/lambdabettergrass",
+				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev"
+			}
+		}
 	}
 }
