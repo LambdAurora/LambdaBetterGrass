@@ -78,7 +78,7 @@ public enum LBGTextureGenerator {
 
 		for (int y = 0; y < result.getHeight(); y++) {
 			for (int x = 0; x < result.getWidth(); x++) {
-				result.setPixelRGBA(source.getWidth() - 1 - x, y, source.getPixelRGBA(x, y));
+				result.setPixel(source.getWidth() - 1 - x, y, source.getPixel(x, y));
 			}
 		}
 
@@ -121,14 +121,14 @@ public enum LBGTextureGenerator {
 		// Time to do AND operation
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				int sourceRGB = source.getPixelRGBA(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
-				int topRGB = top.getPixelRGBA(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
+				int sourceRGB = source.getPixel(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
+				int topRGB = top.getPixel(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
 
 				// If the mask pixel opacity is 255 (-1 because signed byte) use the top texture pixel color, else use the source pixel color.
 				if (mask.getLuminanceOrAlpha(getTrueCoordinate(width, mask.getWidth(), x), getTrueCoordinate(height, mask.getHeight(), y)) == -1)
-					output.setPixelRGBA(x, y, topRGB);
+					output.setPixel(x, y, topRGB);
 				else
-					output.setPixelRGBA(x, y, sourceRGB);
+					output.setPixel(x, y, sourceRGB);
 			}
 		}
 		return output;

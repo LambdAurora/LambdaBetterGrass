@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdabettergrass.resource;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.Resource;
@@ -26,7 +25,7 @@ import java.io.InputStreamReader;
  * Represents the LambdaBetterGrass resource reloader.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.4.0
  */
 public class LBGResourceReloader {
@@ -44,10 +43,8 @@ public class LBGResourceReloader {
 	}
 
 	private void loadStates(ResourceManager resourceManager) {
-		var blockModelDefinitionContext = new BlockModelDefinition.Context();
-
 		resourceManager.findResources(LBGState.PATH_PREFIX, id -> id.path().endsWith(".json"))
-				.forEach((id, resource) -> this.loadState(resourceManager, id, resource, blockModelDefinitionContext));
+				.forEach((id, resource) -> this.loadState(resourceManager, id, resource));
 	}
 
 	/**
@@ -56,11 +53,9 @@ public class LBGResourceReloader {
 	 * @param resourceManager the resource manager
 	 * @param id the resource identifier of the state
 	 * @param resource the resource
-	 * @param blockModelDefinitionContext the deserialization context of block model definitions
 	 */
 	private void loadState(
-			ResourceManager resourceManager, Identifier id, Resource resource,
-			BlockModelDefinition.Context blockModelDefinitionContext
+			ResourceManager resourceManager, Identifier id, Resource resource
 	) {
 		var stateId = Identifier.of(
 				id.namespace(),
@@ -75,7 +70,7 @@ public class LBGResourceReloader {
 
 		try (var reader = new InputStreamReader(resource.open())) {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
-			LBGState.loadMetadataState(stateId, block.get(), resourceManager, json, blockModelDefinitionContext);
+			LBGState.loadMetadataState(stateId, block.get(), resourceManager, json);
 		} catch (IOException e) {
 			LOGGER.warn("Failed to load LambdaBetterGrass state {}.", stateId, e);
 		}

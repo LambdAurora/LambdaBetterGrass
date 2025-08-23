@@ -9,8 +9,10 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -28,6 +30,7 @@ import org.joml.Vector3f;
 
 import java.util.Collection;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -89,16 +92,18 @@ public class LBGCompiledLayerMetadata {
 	/**
 	 * Emits the block quads.
 	 *
+	 * @param quadEmitter the quad emitter
 	 * @param world the world
 	 * @param state the block state
 	 * @param pos the block position
 	 * @param randomSupplier the random supplier
-	 * @param context the render context
 	 * @return {@code 0} if no custom models have emitted quads, {@code 1} if only the layer model has emitted quads,
 	 * or {@code 2} if the custom alternative model has emitted quads
 	 */
 	public int emitBlockQuads(
-			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context
+			QuadEmitter quadEmitter,
+			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
+			Predicate<@Nullable Direction> cullTest
 	) {
 		int success = 0;
 		var layerState = this.layerType.data.state();
@@ -112,12 +117,12 @@ public class LBGCompiledLayerMetadata {
 			) {
 				var layerModel = this.layerType.getLayerModel();
 
-				Vec3 offset = state.getOffset(world, pos);
+				Vec3 offset = state.getOffset(pos);
 				boolean pushed = false;
 
-				final var materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
+				final var materialFinder = Renderer.get().materialFinder();
 				var offsetPos = new BlockPos.Mutable();
-				context.pushTransform(quad -> {
+				quadEmitter.pushTransform(quad -> {
 					var originalMaterial = quad.material();
 					var material = materialFinder.copyFrom(originalMaterial)
 							.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()));
@@ -132,7 +137,7 @@ public class LBGCompiledLayerMetadata {
 					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {
 						offsetPos.setWithOffset(pos, cullFace);
 
-						if (Block.shouldRenderFace(layerState, world, pos, cullFace, offsetPos)) {
+						if (Block.shouldRenderFace(layerState, world.getBlockState(offsetPos), cullFace)) {
 							quad.cullFace(null);
 						} else {
 							return false;
@@ -144,7 +149,7 @@ public class LBGCompiledLayerMetadata {
 
 				if (offset.x != 0.0D || offset.y != 0.0D || offset.z != 0.0D) {
 					var offsetVec = new Vector3f((float) offset.x, (float) offset.y, (float) offset.z);
-					context.pushTransform(quad -> {
+					quadEmitter.pushTransform(quad -> {
 						Vector3f vec = null;
 						for (int i = 0; i < 4; i++) {
 							vec = quad.copyPos(i, vec);
@@ -155,17 +160,17 @@ public class LBGCompiledLayerMetadata {
 					});
 					pushed = true;
 				}
-				layerModel.emitBlockQuads(world, layerState, pos, randomSupplier, context);
+				layerModel.emitBlockQuads(quadEmitter, world, layerState, pos, randomSupplier, cullTest);
 				success = 1;
 				if (pushed)
-					context.popTransform();
-				context.popTransform();
+					quadEmitter.popTransform();
+				quadEmitter.popTransform();
 			}
 		}
 
 		if (this.layerType.getNearbyLayeredBlocks(world, pos, state.getBlock(), false) > 1
 				&& this.bakedAlternateModel != null) {
-			this.bakedAlternateModel.emitBlockQuads(world, state, pos, randomSupplier, context);
+			this.bakedAlternateModel.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
 			success = 2;
 		}
 

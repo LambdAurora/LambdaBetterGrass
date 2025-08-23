@@ -11,30 +11,33 @@ package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
-import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.DelegateBakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
  * Represents the LambdaBetterGrass baked model for layer method.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.1.0
  * @since 1.0.0
  */
-public class LBGLayerBakedModel extends ForwardingBakedModel {
+public class LBGLayerBakedModel extends DelegateBakedModel {
 	private final List<LBGCompiledLayerMetadata> metadatas;
 
 	public LBGLayerBakedModel(BakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
-		this.wrapped = baseModel;
+		super(baseModel);
 		this.metadatas = metadatas;
 	}
 
@@ -45,21 +48,23 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 
 	@Override
 	public void emitBlockQuads(
-			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context
+			QuadEmitter quadEmitter,
+			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
+			Predicate<@Nullable Direction> cullTest
 	) {
 		if (!LambdaBetterGrass.get().hasBetterLayer()) {
 			// Don't touch the model.
-			super.emitBlockQuads(world, state, pos, randomSupplier, context);
+			super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
 			return;
 		}
 
 		for (var metadata : this.metadatas) {
-			int success = metadata.emitBlockQuads(world, state, pos, randomSupplier, context);
+			int success = metadata.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
 			if (success != 0) {
 				if (success == 1) {
 					final Vector3f offset = metadata.offset();
 					if (offset != null) {
-						context.pushTransform(quad -> {
+						quadEmitter.pushTransform(quad -> {
 							Vector3f vec = null;
 							for (int i = 0; i < 4; i++) {
 								vec = quad.copyPos(i, vec);
@@ -69,15 +74,15 @@ public class LBGLayerBakedModel extends ForwardingBakedModel {
 							return true;
 						});
 					}
-					super.emitBlockQuads(world, state, pos, randomSupplier, context);
+					super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
 					if (offset != null) {
-						context.popTransform();
+						quadEmitter.popTransform();
 					}
 				}
 				return;
 			}
 		}
 
-		super.emitBlockQuads(world, state, pos, randomSupplier, context);
+		super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
 	}
 }

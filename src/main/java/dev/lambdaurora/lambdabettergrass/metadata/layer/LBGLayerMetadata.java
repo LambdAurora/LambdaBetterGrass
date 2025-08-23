@@ -13,9 +13,13 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -33,13 +37,12 @@ public class LBGLayerMetadata {
 	public final LBGLayerType layerType;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
+	private final Object2ObjectMap<String, UnbakedBlockStateModel> variantModels = new Object2ObjectOpenHashMap<>();
 	private UnbakedModel alternateModel;
 	private final boolean hasAlternateModel;
 
 	public LBGLayerMetadata(
-			Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-			BlockModelDefinition.Context deserializationContext
+			Identifier id, @Nullable LBGLayerType layerType, JsonObject json, StateDefinition<Block, BlockState> stateDefinition
 	) {
 		this.id = id;
 		this.layerType = layerType;
@@ -66,11 +69,12 @@ public class LBGLayerMetadata {
 			return;
 		}
 
-		var map = BlockModelDefinition.fromStream(deserializationContext, new StringReader(json.get("block_state").toString()));
-		if (map.isMultiPart())
-			this.alternateModel = map.getMultiPart();
+		var map = BlockModelDefinition.fromStream(new StringReader(json.get("block_state").toString()));
+		map.instantiate(stateDefinition, id.toString());
+		if (map.getMultiPart() != null)
+			this.alternateModel = map.getMultiPart().instantiate(stateDefinition);
 		else
-			this.variantModels.putAll(map.getVariants());
+			this.variantModels.putAll(map.getMultiVariants());
 
 		this.hasAlternateModel = true;
 	}

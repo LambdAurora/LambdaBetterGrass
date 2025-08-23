@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
@@ -28,7 +27,7 @@ import java.util.function.Function;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public abstract class LBGState {
@@ -102,15 +101,14 @@ public abstract class LBGState {
 	}
 
 	public static void loadMetadataState(
-			Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-			BlockModelDefinition.Context deserializationContext
+			Identifier id, Block block, ResourceManager resourceManager, JsonObject json
 	) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
 
 		if (LBG_STATES_TYPE.containsKey(type))
-			LBG_STATES_TYPE.get(type).create(id, block, resourceManager, json, deserializationContext);
+			LBG_STATES_TYPE.get(type).create(id, block, resourceManager, json);
 		else
 			LOGGER.warn("Could not find type {} for metadata state {}.", type, id);
 	}
@@ -118,8 +116,7 @@ public abstract class LBGState {
 	@FunctionalInterface
 	public interface LBGStateProvider {
 		LBGState create(
-				Identifier id, Block block, ResourceManager resourceManager, JsonObject json,
-				BlockModelDefinition.Context deserializationContext
+				Identifier id, Block block, ResourceManager resourceManager, JsonObject json
 		);
 	}
 }
