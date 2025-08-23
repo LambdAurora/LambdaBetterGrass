@@ -1,0 +1,8 @@
+{
+	"type": "layer",
+	"variants": {
+		"half=top,waterlogged=false": {
+			"data": "minecraft:bettergrass/data/waxed_exposed_copper_trapdoor"
+		}
+	}
+}

@@ -31,11 +31,7 @@ public class LBGMixinPlugin implements IMixinConfigPlugin {
 	public LBGMixinPlugin() {
 		this.conditionalMixins.put(
 				"dev.lambdaurora.lambdabettergrass.mixin.sodium.SodiumOptionsGuiMixin",
-				LBGCompat.isSodiumInstalled() == LBGCompat.SodiumInstallation.V06X
-		);
-		this.conditionalMixins.put(
-				"dev.lambdaurora.lambdabettergrass.mixin.sodium.OldSodiumOptionsGuiMixin",
-				LBGCompat.isSodiumInstalled() == LBGCompat.SodiumInstallation.V05X
+				LBGCompat.isSodiumInstalled()
 		);
 	}
 

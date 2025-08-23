@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.lambdabettergrass.util;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
@@ -35,16 +34,6 @@ import java.util.stream.Collectors;
 public final class CodecUtils {
 	private CodecUtils() {
 		throw new UnsupportedOperationException("CodecUtils only contains static definitions.");
-	}
-
-	public static <T> Codec<T> withAlternative(final Codec<T> primary, final Codec<? extends T> alternative) {
-		return Codec.either(
-				primary,
-				alternative
-		).xmap(
-				either -> either.map(Function.identity(), Function.identity()),
-				Either::left
-		);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

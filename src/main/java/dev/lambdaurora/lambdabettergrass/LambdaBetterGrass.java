@@ -16,14 +16,14 @@ import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGLayerTypeManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
-import net.fabricmc.api.ClientModInitializer;
+import dev.yumi.mc.core.api.ModContainer;
+import dev.yumi.mc.core.api.YumiMods;
+import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
@@ -44,12 +44,6 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	public static final String NAMESPACE = "lambdabettergrass";
 	public static final Logger LOGGER = LogUtils.getLogger();
 
-	private static final ModContainer MOD = FabricLoader.getInstance().getModContainer(NAMESPACE).orElseThrow();
-	/**
-	 * The currently running version of LambdaBetterGrass.
-	 */
-	public static final String VERSION = MOD.getMetadata().getVersion().getFriendlyString();
-
 	@ApiStatus.Internal
 	public static final LambdaBetterGrass INSTANCE = new LambdaBetterGrass();
 	public final LBGConfig config = new LBGConfig(this);
@@ -59,17 +53,16 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	public final LBGResourceReloader resourceReloader = new LBGResourceReloader(layerTypeManager);
 	public final LBGDynamicTextureManager dynamicTextureManager = new LBGDynamicTextureManager();
 
+	private String version;
+
 	@Override
-	public void onInitializeClient() {
+	public void onInitializeClient(ModContainer mod) {
+		this.version = mod.getVersionString();
+
 		log(LOGGER, "Initializing LambdaBetterGrass...");
 		this.config.load();
 
-		ResourceManagerHelper.registerBuiltinResourcePack(
-				id("default"), MOD,
-				Text.translatable("lambdabettergrass.resourcepack.default", Text.translatable(NAMESPACE)),
-				ResourcePackActivationType.DEFAULT_ENABLED
-		);
-		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), MOD, ResourcePackActivationType.NORMAL);
+		this.registerBuiltinResourcePacks(mod);
 
 		LBGState.registerType(
 				"grass",
@@ -80,20 +73,19 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 		ModelLoadingPlugin.register(pluginCtx -> {
 			pluginCtx.modifyModelOnLoad().register(ModelModifier.WRAP_PHASE, (model, context) -> {
-				if (context.id() instanceof ModelIdentifier modelId) {
-					if (!modelId.variant().equals("inventory")) {
-						var stateId = new Identifier(modelId.namespace(), modelId.path());
+				final var modelId = context.topLevelId();
+				if (modelId != null && !modelId.variant().equals("inventory")) {
+					var stateId = modelId.id();
 
-						// Get cached states metadata.
-						var state = LBGState.getMetadataState(stateId);
+					// Get cached states metadata.
+					var state = LBGState.getMetadataState(stateId);
 
-						// If states metadata found, search for corresponding metadata and if exists replace the model.
-						if (state != null) {
-							var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
+					// If states metadata found, search for corresponding metadata and if exists replace the model.
+					if (state != null) {
+						var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
 
-							if (newModel != null) {
-								return newModel;
-							}
+						if (newModel != null) {
+							return newModel;
 						}
 					}
 				}
@@ -104,13 +96,33 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	}
 
 	/**
+	 * Gets the currently running version of LambdaBetterGrass.
+	 *
+	 * @return the version
+	 */
+	public String getVersion() {
+		return this.version;
+	}
+
+	private void registerBuiltinResourcePacks(dev.yumi.mc.core.api.ModContainer mod) {
+		var fabricMod = FabricLoader.getInstance().getModContainer(mod.id()).orElseThrow();
+
+		ResourceManagerHelper.registerBuiltinResourcePack(
+				id("default"), fabricMod,
+				Text.translatable("lambdabettergrass.resourcepack.default", Text.translatable(NAMESPACE)),
+				ResourcePackActivationType.DEFAULT_ENABLED
+		);
+		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), fabricMod, ResourcePackActivationType.NORMAL);
+	}
+
+	/**
 	 * Logs an informational message.
 	 *
 	 * @param logger the logger to use
 	 * @param msg the message to log
 	 */
 	public static void log(Logger logger, String msg) {
-		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+		if (!YumiMods.get().isDevelopmentEnvironment()) {
 			msg = "[LambdaBetterGrass] " + msg;
 		}
 
@@ -124,7 +136,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param msg the message to log
 	 */
 	public static void warn(Logger logger, String msg) {
-		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+		if (!YumiMods.get().isDevelopmentEnvironment()) {
 			msg = "[LambdaBetterGrass] " + msg;
 		}
 
@@ -138,7 +150,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param msg the message to log
 	 */
 	public static void warn(Logger logger, String msg, Object... args) {
-		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+		if (!YumiMods.get().isDevelopmentEnvironment()) {
 			msg = "[LambdaBetterGrass] " + msg;
 		}
 
@@ -152,7 +164,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param msg the message to log
 	 */
 	public static void error(Logger logger, String msg, Object... args) {
-		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+		if (!YumiMods.get().isDevelopmentEnvironment()) {
 			msg = "[LambdaBetterGrass] " + msg;
 		}
 
@@ -176,7 +188,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 * @param path the path
 	 */
 	public static Identifier id(@NotNull String path) {
-		return new Identifier(NAMESPACE, path);
+		return Identifier.of(NAMESPACE, path);
 	}
 
 	/**

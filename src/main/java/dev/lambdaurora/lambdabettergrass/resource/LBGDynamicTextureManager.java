@@ -12,9 +12,9 @@ package dev.lambdaurora.lambdabettergrass.resource;
 import com.mojang.blaze3d.platform.NativeImage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceMetadata;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +61,6 @@ public class LBGDynamicTextureManager {
 	 * @return the sprite contents
 	 */
 	private SpriteContents createSpriteContents(Identifier id, NativeImage image) {
-		return new SpriteContents(id, new FrameSize(image.getWidth(), image.getHeight()), image, AnimationMetadataSection.EMPTY);
+		return new SpriteContents(id, new FrameSize(image.getWidth(), image.getHeight()), image, ResourceMetadata.EMPTY);
 	}
 }

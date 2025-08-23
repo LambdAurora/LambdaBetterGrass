@@ -46,14 +46,14 @@ import java.util.concurrent.CompletableFuture;
  * @since 2.0.0
  */
 public class LBGDataGen implements DataGeneratorEntrypoint {
-	private static final Identifier BED_DATA = new Identifier("bettergrass/data/bed");
-	private static final Identifier BUTTON_DATA = new Identifier("bettergrass/data/button");
-	private static final Identifier CAKE_DATA = new Identifier("bettergrass/data/cake");
-	private static final Identifier CANDLE_DATA = new Identifier("bettergrass/data/candle");
-	private static final Identifier FLOWER_DATA = new Identifier("bettergrass/data/flower");
-	private static final Identifier GLASS_PANE_DATA = new Identifier("bettergrass/data/glass_pane");
-	private static final Identifier LANTERN_DATA = new Identifier("bettergrass/data/lantern");
-	private static final Identifier TORCH_DATA = new Identifier("bettergrass/data/torch");
+	private static final Identifier BED_DATA = Identifier.ofDefault("bettergrass/data/bed");
+	private static final Identifier BUTTON_DATA = Identifier.ofDefault("bettergrass/data/button");
+	private static final Identifier CAKE_DATA = Identifier.ofDefault("bettergrass/data/cake");
+	private static final Identifier CANDLE_DATA = Identifier.ofDefault("bettergrass/data/candle");
+	private static final Identifier FLOWER_DATA = Identifier.ofDefault("bettergrass/data/flower");
+	private static final Identifier GLASS_PANE_DATA = Identifier.ofDefault("bettergrass/data/glass_pane");
+	private static final Identifier LANTERN_DATA = Identifier.ofDefault("bettergrass/data/lantern");
+	private static final Identifier TORCH_DATA = Identifier.ofDefault("bettergrass/data/torch");
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -100,7 +100,7 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
 							} else if (block instanceof LanternBlock) {
 								context.addWaterloggedSimpleLayerState(id, LANTERN_DATA);
-							} else if (block instanceof TorchBlock) {
+							} else if (block instanceof BaseTorchBlock) {
 								context.addSimpleLayerState(id, TORCH_DATA);
 							} else if (block instanceof DoorBlock
 									|| block instanceof FenceGateBlock

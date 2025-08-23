@@ -62,7 +62,7 @@ public class LBGResourceReloader {
 			ResourceManager resourceManager, Identifier id, Resource resource,
 			BlockModelDefinition.Context blockModelDefinitionContext
 	) {
-		var stateId = new Identifier(
+		var stateId = Identifier.of(
 				id.namespace(),
 				id.path().substring(LBGState.PATH_PREFIX.length() + 1, id.path().length() - ".json".length())
 		);

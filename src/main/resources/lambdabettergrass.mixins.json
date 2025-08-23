@@ -7,7 +7,6 @@
 		"ReloadableResourceManagerMixin",
 		"SpriteLoaderMixin",
 		"VideoSettingsScreenMixin",
-		"sodium.OldSodiumOptionsGuiMixin",
 		"sodium.SodiumOptionsGuiMixin"
 	],
 	"injectors": {

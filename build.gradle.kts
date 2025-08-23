@@ -19,7 +19,7 @@ plugins {
 base.archivesName.set(project.property("archives_base_name") as String)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf("1.20")
+val compatibleMcVersions: Set<String> = setOf("1.21")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -64,6 +64,7 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
+	modImplementation(libs.yumi.mc.foundation)
 	modImplementation(libs.spruceui)
 
 	// Config
@@ -77,6 +78,7 @@ dependencies {
 	implementation(libs.nightconfig.toml)
 
 	// Bundling
+	include(libs.yumi.mc.foundation)
 	include(libs.spruceui)
 	shadow(libs.nightconfig.core)
 	shadow(libs.nightconfig.toml)
@@ -137,7 +139,7 @@ tasks.remapJar {
 }
 
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.20/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.21/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 

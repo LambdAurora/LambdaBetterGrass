@@ -49,7 +49,7 @@ public final class LBGLayerTypeManager {
 	 * @see #get(Identifier)
 	 */
 	public @NotNull Optional<LBGLayerType> get(String rawId) {
-		var id = new Identifier(rawId);
+		var id = Identifier.parse(rawId);
 
 		return this.get(id).or(() -> {
 			if (!rawId.contains(":") && id.namespace().equals(Identifier.DEFAULT_NAMESPACE)) {

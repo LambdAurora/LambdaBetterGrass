@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdabettergrass.util.CodecUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -61,18 +62,14 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 				.xmap(either -> {
 					return either.map(
 							Function.identity(), inner -> inner.map(Function.identity(), Function.identity()));
-				}, matcher -> {
-					if (matcher instanceof BlockMatch blockMatch) {
-						return Either.left(blockMatch);
-					} else if (matcher instanceof TagMatch tagMatch) {
-						return Either.right(Either.left(tagMatch));
-					} else {
-						return Either.right(Either.right((BlockStateMatch) matcher));
-					}
+				}, matcher -> switch (matcher) {
+					case BlockMatch blockMatch -> Either.left(blockMatch);
+					case TagMatch tagMatch -> Either.right(Either.left(tagMatch));
+					case BlockStateMatch blockStateMatch -> Either.right(Either.right(blockStateMatch));
 				});
-		Codec<List<Matcher>> LIST_CODEC = CodecUtils.withAlternative(
+		Codec<List<Matcher>> LIST_CODEC = Codec.withAlternative(
 				CODEC.listOf(),
-				CODEC.xmap(List::of, list -> list.get(0))
+				CODEC.xmap(List::of, List::getFirst)
 		);
 	}
 
@@ -81,10 +78,9 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 				"block",
 				BlockStateMatch::block,
 				block -> block.defaultState().getValues().isEmpty()
-						? Codec.unit(new BlockStateMatch(block, List.of()))
-						: CodecUtils.propertiesCodec(block.defaultState()).optionalFieldOf("properties", List.of())
+						? MapCodec.unit(new BlockStateMatch(block, List.of()))
+						: CodecUtils.propertiesCodec(block.defaultState()).lenientOptionalFieldOf("properties", List.of())
 						.xmap(values -> new BlockStateMatch(block, values), BlockStateMatch::properties)
-						.codec()
 		);
 
 		@Override

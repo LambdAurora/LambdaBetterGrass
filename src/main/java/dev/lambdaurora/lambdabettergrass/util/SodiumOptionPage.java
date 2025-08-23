@@ -36,16 +36,11 @@ public final class SodiumOptionPage {
 
 	static {
 		try {
-			switch (LBGCompat.isSodiumInstalled()) {
-				case V06X -> {
-					Class<?> optionPage = Class.forName("net.caffeinemc.mods.sodium.client.gui.options.OptionPage");
-					CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Text.class, ImmutableList.class));
-				}
-				case V05X -> {
-					Class<?> optionPage = Class.forName("me.jellysquid.mods.sodium.client.gui.options.OptionPage");
-					CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Text.class, ImmutableList.class));
-				}
-				default -> CREATE_OPTION_PAGE = null;
+			if (LBGCompat.isSodiumInstalled()) {
+				Class<?> optionPage = Class.forName("net.caffeinemc.mods.sodium.client.gui.options.OptionPage");
+				CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Text.class, ImmutableList.class));
+			} else {
+				CREATE_OPTION_PAGE = null;
 			}
 		} catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
 			throw new RuntimeException(e);

@@ -48,7 +48,7 @@ public class LBGGrassState extends LBGState {
 			variants.entrySet().forEach(entry -> {
 				var variant = entry.getValue().getAsJsonObject();
 				if (variant.has("data")) {
-					var metadataId = new Identifier(variant.get("data").getAsString());
+					var metadataId = Identifier.parse(variant.get("data").getAsString());
 
 					this.metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
 				}
@@ -65,7 +65,7 @@ public class LBGGrassState extends LBGState {
 
 			this.metadata = null;
 		} else if (json.has("data")) { // Look for a common metadata if no variants are specified.
-			var metadataId = new Identifier(json.get("data").getAsString());
+			var metadataId = Identifier.parse(json.get("data").getAsString());
 			this.metadata = this.loadMetadata(resourceManager, metadataId);
 		} else // The state file is invalid, cannot find any metadata.
 			this.metadata = null;

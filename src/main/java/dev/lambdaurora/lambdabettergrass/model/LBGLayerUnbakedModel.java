@@ -51,10 +51,10 @@ public class LBGLayerUnbakedModel implements UnbakedModel {
 	@Override
 	public @Nullable BakedModel bake(
 			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
-			ModelState modelState, Identifier modelId
+			ModelState modelState
 	) {
-		this.metadatas.forEach(metadata -> metadata.bake(baker, textureGetter, modelState, modelId));
-		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, modelState, modelId)),
+		this.metadatas.forEach(metadata -> metadata.bake(baker, textureGetter, modelState));
+		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, modelState)),
 				this.metadatas
 		);
 	}

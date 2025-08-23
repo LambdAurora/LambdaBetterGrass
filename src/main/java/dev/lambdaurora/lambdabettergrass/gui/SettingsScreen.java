@@ -52,7 +52,7 @@ public class SettingsScreen extends SpruceScreen {
 	private final SpruceOption resetOption;
 
 	static {
-		String rawVersion = LambdaBetterGrass.VERSION;
+		String rawVersion = LambdaBetterGrass.get().getVersion();
 
 		if (rawVersion.endsWith("-local")) {
 			rawVersion = rawVersion.substring(0, rawVersion.length() - "-local".length());

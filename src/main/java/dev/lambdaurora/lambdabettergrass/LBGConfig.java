@@ -14,7 +14,7 @@ import com.electronwill.nightconfig.core.io.ParsingException;
 import com.electronwill.nightconfig.core.io.ParsingMode;
 import com.electronwill.nightconfig.toml.TomlParser;
 import com.electronwill.nightconfig.toml.TomlWriter;
-import net.fabricmc.loader.api.FabricLoader;
+import dev.yumi.mc.core.api.YumiMods;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class LBGConfig {
 	private static final boolean DEFAULT_BETTER_LAYER = true;
 	private static final boolean DEFAULT_DEBUG = false;
 
-	public static final Path CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir()
+	public static final Path CONFIG_FILE_PATH = YumiMods.get().getConfigDirectory()
 			.resolve(LambdaBetterGrass.NAMESPACE + ".toml")
 			.normalize();
 
