@@ -72,7 +72,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		LBGState.registerType("layer", LBGLayerState::new);
 
 		ModelLoadingPlugin.register(pluginCtx -> {
-			pluginCtx.modifyBlockModelAfterBake().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
+			pluginCtx.modifyBlockModelBeforeBake().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
 				final var modelId = context.id();
 				if (modelId != null && !modelId.variant().equals("inventory")) {
 					var stateId = modelId.id();
@@ -82,7 +82,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 					// If states metadata found, search for corresponding metadata and if exists replace the model.
 					if (state != null) {
-						var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
+						var newModel = state.getCustomUnbakedModel(modelId, model);
 
 						if (newModel != null) {
 							return newModel;

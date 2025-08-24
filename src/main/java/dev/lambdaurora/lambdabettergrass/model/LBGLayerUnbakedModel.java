@@ -10,14 +10,13 @@
 package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.fabricmc.fabric.api.client.model.loading.v1.WrapperGroupableModel;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.*;
-import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * Represents the LambdaBetterGrass unbaked model for layer method.
@@ -26,36 +25,31 @@ import java.util.function.Function;
  * @version 1.4.0
  * @since 1.0.0
  */
-public class LBGLayerUnbakedModel implements UnbakedModel {
-	private final UnbakedModel baseModel;
+public class LBGLayerUnbakedModel extends WrapperGroupableModel implements UnbakedBlockStateModel {
+	private final UnbakedBlockStateModel wrapped;
 	private final List<LBGCompiledLayerMetadata> metadatas;
 
-	public LBGLayerUnbakedModel(UnbakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
-		this.baseModel = baseModel;
+	public LBGLayerUnbakedModel(UnbakedBlockStateModel wrapped, List<LBGCompiledLayerMetadata> metadatas) {
+        super(wrapped);
+		this.wrapped = wrapped;
 		this.metadatas = metadatas;
 	}
 
-	@Override
-	public @NotNull Collection<Identifier> getDependencies() {
-		Set<Identifier> ids = new HashSet<>(this.baseModel.getDependencies());
-		this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
-		return ids;
-	}
+    @Override
+    public @NotNull BakedModel bake(ModelBaker modelBaker) {
+        this.metadatas.forEach(metadata -> metadata.bake(modelBaker));
+        return new LBGLayerBakedModel(Objects.requireNonNull(this.wrapped.bake(modelBaker)), this.metadatas);
+    }
 
-	@Override
-	public void resolveParents(Function<Identifier, UnbakedModel> models) {
-		this.baseModel.resolveParents(models);
-		this.metadatas.forEach(metadata -> metadata.resolveParents(models));
-	}
+    @Override
+    public @NotNull Object visualEqualityGroup(BlockState state) {
+        this.metadatas.forEach(metadata -> metadata.visualEqualityGroup(state));
+        return this.wrapped.visualEqualityGroup(state);
+    }
 
-	@Override
-	public @Nullable BakedModel bake(
-			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
-			ModelState modelState
-	) {
-		this.metadatas.forEach(metadata -> metadata.bake(baker, textureGetter, modelState));
-		return new LBGLayerBakedModel(Objects.requireNonNull(this.baseModel.bake(baker, textureGetter, modelState)),
-				this.metadatas
-		);
-	}
+    @Override
+    public void resolveDependencies(Resolver resolver) {
+        this.wrapped.resolveDependencies(resolver);
+        this.metadatas.forEach(metadata -> metadata.resolveDependencies(resolver));
+    }
 }

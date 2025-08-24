@@ -10,16 +10,12 @@
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
@@ -28,8 +24,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.Collection;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -62,15 +56,15 @@ public class LBGCompiledLayerMetadata {
 		return this.offset;
 	}
 
-	public void fetchModelDependencies(Collection<Identifier> ids) {
+	public void visualEqualityGroup(BlockState state) {
 		if (this.unbakedModels.alternateModel() != null) {
-			ids.addAll(this.unbakedModels.alternateModel().getDependencies());
+			this.unbakedModels.alternateModel().visualEqualityGroup(state);
 		}
 	}
 
-	public void resolveParents(Function<Identifier, UnbakedModel> models) {
+	public void resolveDependencies(ResolvableModel.Resolver resolver) {
 		if (this.unbakedModels.alternateModel() != null) {
-			this.unbakedModels.alternateModel().resolveParents(models);
+			this.unbakedModels.alternateModel().resolveDependencies(resolver);
 		}
 	}
 
@@ -78,14 +72,12 @@ public class LBGCompiledLayerMetadata {
 	 * Bakes the hold unbaked models.
 	 *
 	 * @param baker the model baker
-	 * @param textureGetter the texture getter
-	 * @param modelState the model state
 	 */
 	public void bake(
-			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter, ModelState modelState
+			ModelBaker baker
 	) {
 		if (this.unbakedModels.alternateModel() != null) {
-			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, modelState);
+			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker);
 		}
 	}
 

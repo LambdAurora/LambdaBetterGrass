@@ -20,6 +20,7 @@ eclipse
 .metadata
 .classpath
 .project
+*~
 ## Visual Studio
 .vs/
 CMakeSettings.json
