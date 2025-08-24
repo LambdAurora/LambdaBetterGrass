@@ -91,7 +91,7 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 							} else if (block instanceof ButtonBlock) {
 								context.addSimpleLayerState(id, BUTTON_DATA);
 							} else if (block instanceof CakeBlock || block instanceof CandleCakeBlock) {
-								context.addSimpleLayerState(id, CANDLE_DATA);
+								context.addSimpleLayerState(id, CAKE_DATA);
 							} else if (block instanceof CandleBlock) {
 								context.addWaterloggedSimpleLayerState(id, CANDLE_DATA);
 							} else if (block instanceof FlowerBlock || block instanceof TallFlowerBlock) {

@@ -13,7 +13,9 @@ import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -33,7 +35,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -56,15 +58,15 @@ public class LBGCompiledLayerMetadata {
 		return this.offset;
 	}
 
-	public void visualEqualityGroup(BlockState state) {
-		if (this.unbakedModels.alternateModel() != null) {
-			this.unbakedModels.alternateModel().visualEqualityGroup(state);
-		}
-	}
-
 	public void resolveDependencies(ResolvableModel.Resolver resolver) {
 		if (this.unbakedModels.alternateModel() != null) {
 			this.unbakedModels.alternateModel().resolveDependencies(resolver);
+		}
+	}
+
+	public void visualEqualityGroup(BlockState state) {
+		if (this.unbakedModels.alternateModel() != null) {
+			this.unbakedModels.alternateModel().visualEqualityGroup(state);
 		}
 	}
 

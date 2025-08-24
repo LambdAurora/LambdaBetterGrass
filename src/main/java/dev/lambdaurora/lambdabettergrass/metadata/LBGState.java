@@ -18,6 +18,8 @@ import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -98,22 +100,24 @@ public abstract class LBGState {
 	}
 
 	public static void loadMetadataState(
-			Identifier id, Block block, ResourceManager resourceManager, JsonObject json
+			Identifier id, ResourceManager resourceManager, JsonObject json,
+			StateDefinition<Block, BlockState> stateDefinition
 	) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
 
 		if (LBG_STATES_TYPE.containsKey(type))
-			LBG_STATES_TYPE.get(type).create(id, block, resourceManager, json);
+			LBG_STATES_TYPE.get(type).create(id, resourceManager, json, stateDefinition);
 		else
 			LOGGER.warn("Could not find type {} for metadata state {}.", type, id);
 	}
 
 	@FunctionalInterface
 	public interface LBGStateProvider {
-		void create(
-				Identifier id, Block block, ResourceManager resourceManager, JsonObject json
+		LBGState create(
+				Identifier id, ResourceManager resourceManager, JsonObject json,
+				StateDefinition<Block, BlockState> stateDefinition
 		);
 	}
 }

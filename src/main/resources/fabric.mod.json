@@ -33,7 +33,7 @@
 	"depends": {
 		"fabricloader": ">=0.16.9",
 		"minecraft": "1.21.4",
-		"spruceui": ">=6.2.1",
+		"spruceui": ">=6.2.2",
 		"java": ">=21",
 		"yumi_mc_core": ">=1.0.0-alpha.7",
 		"fabric-model-loading-api-v1": "*",
@@ -41,7 +41,7 @@
 		"fabric-resource-loader-v0": "*"
 	},
 	"recommends": {
-		"modmenu": ">=11.0.3"
+		"modmenu": ">=13.0.2"
 	},
 	"breaks": {
 		"optifabric": "*"

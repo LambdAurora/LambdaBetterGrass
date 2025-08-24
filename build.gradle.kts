@@ -19,7 +19,7 @@ plugins {
 base.archivesName.set(project.property("archives_base_name") as String)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf("1.21")
+val compatibleMcVersions: Set<String> = setOf()
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -214,7 +214,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
 	mainFile.addModLoader("Fabric", "Quilt")
-	mainFile.addJavaVersion("Java 17", "Java 18", "Java 19", "Java 20", "Java 21", "Java 22")
+	mainFile.addJavaVersion("Java 21", "Java 22")
 
 	mainFile.displayName = "LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
 	mainFile.addRequirement("fabric-api")

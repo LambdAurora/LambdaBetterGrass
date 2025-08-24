@@ -12,7 +12,8 @@ package dev.lambdaurora.lambdabettergrass.model;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import net.fabricmc.fabric.api.client.model.loading.v1.WrapperGroupableModel;
 import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,7 @@ import java.util.Objects;
  * Represents the LambdaBetterGrass unbaked model.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGUnbakedModel extends WrapperGroupableModel implements UnbakedBlockStateModel {
@@ -30,9 +31,19 @@ public class LBGUnbakedModel extends WrapperGroupableModel implements UnbakedBlo
 	private final LBGMetadata metadata;
 
 	public LBGUnbakedModel(UnbakedBlockStateModel wrapped, LBGMetadata metadata) {
-        super(wrapped);
-        this.wrapped = wrapped;
+		super(wrapped);
+		this.wrapped = wrapped;
 		this.metadata = metadata;
+	}
+
+	@Override
+	public @NotNull Object visualEqualityGroup(BlockState state) {
+		return this.wrapped.visualEqualityGroup(state);
+	}
+
+	@Override
+	public void resolveDependencies(Resolver resolver) {
+		this.wrapped.resolveDependencies(resolver);
 	}
 
 	@Override
@@ -45,14 +56,4 @@ public class LBGUnbakedModel extends WrapperGroupableModel implements UnbakedBlo
 
 		return model;
 	}
-
-    @Override
-    public @NotNull Object visualEqualityGroup(BlockState state) {
-        return this.wrapped.visualEqualityGroup(state);
-    }
-
-    @Override
-    public void resolveDependencies(Resolver resolver) {
-        this.wrapped.resolveDependencies(resolver);
-    }
 }

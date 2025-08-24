@@ -70,7 +70,7 @@ public class LBGResourceReloader {
 
 		try (var reader = new InputStreamReader(resource.open())) {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
-			LBGState.loadMetadataState(stateId, block.get(), resourceManager, json);
+			LBGState.loadMetadataState(stateId, resourceManager, json, block.get().getStateDefinition());
 		} catch (IOException e) {
 			LOGGER.warn("Failed to load LambdaBetterGrass state {}.", stateId, e);
 		}

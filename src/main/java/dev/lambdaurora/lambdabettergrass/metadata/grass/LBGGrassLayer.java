@@ -29,7 +29,7 @@ import java.util.Map;
  * Represents a grass layer.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGGrassLayer {
@@ -49,6 +49,7 @@ public class LBGGrassLayer {
 
 	private final Map<String, TextureAtlasSprite> bakedSprites = new Object2ObjectOpenHashMap<>();
 
+	@SuppressWarnings("deprecation")
 	public LBGGrassLayer(ResourceManager resourceManager, LBGMetadata metadata, List<LBGLoadingGrassLayer> layers) {
 		this.parentMetadata = metadata;
 		var first = layers.get(0);
@@ -102,6 +103,7 @@ public class LBGGrassLayer {
 		this.tryBakeSprite("arch", this.archTexture, textureGetter);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void tryBakeSprite(String name, @Nullable Material id, SpriteGetter textureGetter) {
 		if (id == null)
 			id = new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation());

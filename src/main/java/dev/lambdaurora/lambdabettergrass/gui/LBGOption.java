@@ -48,8 +48,10 @@ public final class LBGOption {
 
 	private record DummyValueSet(Screen parent) implements OptionInstance.ValueSet<Unit> {
 		@Override
-		public @NotNull Function<OptionInstance<Unit>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
-                                                                                    int x, int y, int width, Consumer<Unit> consumer) {
+		public @NotNull Function<OptionInstance<Unit>, AbstractWidget> createButton(
+				OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
+				int x, int y, int width, Consumer<Unit> consumer
+		) {
 			return option -> Button.builder(
 							Text.translatable(KEY), btn -> Minecraft.getInstance().setScreen(new SettingsScreen(this.parent))
 					)

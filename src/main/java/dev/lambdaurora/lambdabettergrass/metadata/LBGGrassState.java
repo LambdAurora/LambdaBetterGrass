@@ -30,7 +30,7 @@ import java.util.Map;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -108,7 +108,8 @@ public class LBGGrassState extends LBGState {
 
 	@Override
 	public @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
-            ModelIdentifier modelId, UnbakedBlockStateModel originalModel) {
+			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
+	) {
 		var metadata = this.getMetadata(modelId);
 		if (metadata != null) {
 			return new LBGUnbakedModel(originalModel, metadata);

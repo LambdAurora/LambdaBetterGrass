@@ -103,6 +103,6 @@ public final class LBGLayerTypeManager {
 
 	private Identifier getIdFromResource(Identifier resourceId) {
 		final var path = resourceId.path();
-		return resourceId.withPath(path.substring(PREFIX.length()+1, path.length() - EXTENSION.length()));
+		return resourceId.withPath(path.substring(PREFIX.length() + 1, path.length() - EXTENSION.length()));
 	}
 }

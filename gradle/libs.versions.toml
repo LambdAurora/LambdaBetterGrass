@@ -1,7 +1,7 @@
 [versions]
 minecraft = "1.21.4"
 fabric-loader = "0.16.14"
-fabric-api = "0.113.0+1.21.4"
+fabric-api = "0.114.1+1.21.4"
 mappings-yalmm = "17"
 
 # Dependencies

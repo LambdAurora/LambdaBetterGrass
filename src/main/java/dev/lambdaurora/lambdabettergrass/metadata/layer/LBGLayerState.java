@@ -15,6 +15,7 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
+import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
@@ -31,12 +32,13 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -49,7 +51,10 @@ public class LBGLayerState extends LBGState {
 
 	private final Map<String, Map<LBGLayerType, LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
 
-	public LBGLayerState(Identifier id, Block block, ResourceManager resourceManager, JsonObject json) {
+	public LBGLayerState(
+			Identifier id, ResourceManager resourceManager, JsonObject json,
+			StateDefinition<Block, BlockState> stateDefinition
+	) {
 		super(id);
 
 		if (json.has("variants")) {
@@ -57,11 +62,11 @@ public class LBGLayerState extends LBGState {
 			variants.entrySet().forEach(entry -> {
 				var variant = entry.getValue().getAsJsonObject();
 				if (variant.has("data")) {
-					this.loadVariant(entry.getKey(), variant, resourceManager, block.getStateDefinition());
+					this.loadVariant(entry.getKey(), variant, resourceManager, stateDefinition);
 				}
 			});
 		} else if (json.has("data")) {
-			this.loadVariant("*", json, resourceManager, block.getStateDefinition());
+			this.loadVariant("*", json, resourceManager, stateDefinition);
 		} else {
 			LOGGER.warn("Invalid state definition for {}, missing data or variants entry.", id);
 		}
@@ -109,6 +114,17 @@ public class LBGLayerState extends LBGState {
 		metadatas.put(type, new LBGLayerMetadata(metadataId, type, metadataJson, stateDefinition));
 	}
 
+	public Stream<LBGLayerMetadata> streamMetadata(BlockState state) {
+		return this.metadatas.entrySet().stream()
+				.filter(entry -> {
+					var variant = entry.getKey();
+					var properties = VariantSelector.extractProperties(state.getBlock().getStateDefinition(), variant);
+					return VariantSelector.match(state, properties);
+				})
+				.map(Map.Entry::getValue)
+				.flatMap(map -> map.values().stream());
+	}
+
 	public void forEach(String[] variant, Consumer<LBGLayerMetadata> consumer) {
 		this.metadatas.entrySet().stream()
 				.filter(entry -> this.matchVariant(variant, entry.getKey().split(",")))
@@ -128,7 +144,7 @@ public class LBGLayerState extends LBGState {
 						.stream()
 						.map(metadata -> {
 							var models = metadata.getCustomUnbakedModel(modelId);
-							return new LBGCompiledLayerMetadata(metadata.layerType, metadata.hasLayerModel(), metadata.offset(), models);
+							return new LBGCompiledLayerMetadata(metadata.layerType(), metadata.hasLayerModel(), metadata.offset(), models);
 						})
 						.toList();
 
