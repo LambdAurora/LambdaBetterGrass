@@ -9,8 +9,6 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
-import net.fabricmc.fabric.api.renderer.v1.Renderer;
-import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -34,7 +32,7 @@ import java.util.function.Predicate;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.3.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -116,18 +114,9 @@ public class LBGCompiledLayerMetadata {
 				Vec3 offset = state.getOffset(pos);
 				boolean pushed = false;
 
-				final var materialFinder = Renderer.get().materialFinder();
 				var offsetPos = new BlockPos.Mutable();
 				quadEmitter.pushTransform(quad -> {
-					var originalMaterial = quad.material();
-					var material = materialFinder.copyFrom(originalMaterial);
-					//.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()));
-
-					if (material.blendMode() == BlendMode.DEFAULT) {
-						material = material.blendMode(BlendMode.fromRenderLayer(this.layerType.renderType));
-					}
-
-					quad.material(material.find());
+					quad.renderLayer(this.layerType.renderLayer);
 
 					var cullFace = quad.cullFace();
 					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {

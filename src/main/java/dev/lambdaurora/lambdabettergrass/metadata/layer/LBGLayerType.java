@@ -13,8 +13,8 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.Block;
  * Represents a layer type.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.3.0
  * @since 1.0.0
  */
 public final class LBGLayerType {
@@ -33,12 +33,12 @@ public final class LBGLayerType {
 
 	public final Identifier id;
 	public final LBGLayerTypeData data;
-	public final RenderType renderType;
+	public final ChunkSectionLayer renderLayer;
 
 	public LBGLayerType(Identifier id, LBGLayerTypeData data) {
 		this.id = id;
 		this.data = data;
-		this.renderType = ItemBlockRenderTypes.getChunkRenderType(data.state());
+		this.renderLayer = ItemBlockRenderTypes.getChunkRenderType(data.state());
 	}
 
 	public int getNearbyLayeredBlocks(BlockAndTintGetter world, BlockPos pos, Block type, boolean onlySourceBlock) {

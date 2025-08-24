@@ -170,5 +170,11 @@ The first release of LambdaBetterGrass!
 - Added missing potted plants to the better snow system.
 - Updated [SpruceUI].
 
+## 2.3.0
+
+- Updated to Minecraft 1.21.8.
+  - Added Dried Ghast to the better snow system.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

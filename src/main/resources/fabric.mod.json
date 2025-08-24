@@ -32,10 +32,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",
-		"minecraft": [
-			"~1.21.5- <1.21.6-",
-			"=1.21.6-alpha.25.14.craftmine"
-		],
+		"minecraft": "~1.21.6- <1.21.9-",
 		"spruceui": ">=6.2.2",
 		"java": ">=21",
 		"yumi_mc_core": ">=1.0.0-alpha.7",

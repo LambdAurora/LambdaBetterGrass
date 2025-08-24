@@ -1,13 +1,13 @@
 [versions]
-minecraft = "1.21.5"
+minecraft = "1.21.8"
 fabric-loader = "0.16.14"
-fabric-api = "0.119.5+1.21.5"
-mappings-yalmm = "15"
+fabric-api = "0.132.0+1.21.8"
+mappings-yalmm = "3"
 
 # Dependencies
 yumi-mc-foundation = "1.0.0-alpha.7+1.21.1"
-spruceui = "7.0.0+1.21.5"
-modmenu = "14.0.0-rc.2"
+spruceui = "8.0.2+1.21.8"
+modmenu = "15.0.0-beta.3"
 
 # Configuration
 nightconfig = "3.8.1"

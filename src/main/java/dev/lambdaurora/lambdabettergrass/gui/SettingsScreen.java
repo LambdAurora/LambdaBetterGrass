@@ -13,12 +13,14 @@ import dev.lambdaurora.lambdabettergrass.LBGConfig;
 import dev.lambdaurora.lambdabettergrass.LBGMode;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.SpruceTextAlignment;
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.option.SpruceBooleanOption;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
 import dev.lambdaurora.spruceui.option.SpruceSimpleActionOption;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
+import dev.lambdaurora.spruceui.tooltip.TooltipData;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
 import net.fabricmc.api.EnvType;
@@ -26,7 +28,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.TextFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Text;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.3.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -83,11 +84,15 @@ public class SettingsScreen extends SpruceScreen {
 						this.client.levelRenderer.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
-				Text.translatable("lambdabettergrass.tooltip.mode",
-						LBGMode.OFF.getTranslatedText(),
-						LBGMode.FASTEST.getTranslatedText(),
-						LBGMode.FAST.getTranslatedText(),
-						LBGMode.FANCY.getTranslatedText()));
+				TooltipData.builder()
+						.text(Text.translatable("lambdabettergrass.tooltip.mode",
+								LBGMode.OFF.getTranslatedText(),
+								LBGMode.FASTEST.getTranslatedText(),
+								LBGMode.FAST.getTranslatedText(),
+								LBGMode.FANCY.getTranslatedText()
+						))
+						.build()
+		);
 
 		this.betterSnowOption = new SpruceBooleanOption("lambdabettergrass.option.better_snow",
 				this.config::hasBetterLayer,
@@ -96,7 +101,7 @@ public class SettingsScreen extends SpruceScreen {
 					if (this.client != null)
 						this.client.levelRenderer.allChanged();
 				},
-				Text.translatable("lambdabettergrass.tooltip.better_snow"),
+				TooltipData.builder().text(Text.translatable("lambdabettergrass.tooltip.better_snow")).build(),
 				true);
 
 		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
@@ -145,11 +150,12 @@ public class SettingsScreen extends SpruceScreen {
 	private void buildLabels() {
 		this.addRenderableWidget(new SpruceLabelWidget(
 				Position.of(0, 8), this.title.copy().withStyle(TextFormatting.WHITE),
-				this.width, true
+				this.width, SpruceTextAlignment.CENTER
 		));
 		this.addRenderableWidget(new SpruceLabelWidget(
-				Position.of(this.width - 4 - this.font.width(VERSION), 8), VERSION,
-				this.width - 4
+				Position.of(0, 8), VERSION,
+				this.width - 4,
+				SpruceTextAlignment.RIGHT
 		));
 
 		int y = this.height / 2;
@@ -160,18 +166,19 @@ public class SettingsScreen extends SpruceScreen {
 		text.append(Text.translatable("lambdabettergrass.menu.info.1").withStyle(TextFormatting.WHITE)).append("\n");
 		text.append(Text.translatable("lambdabettergrass.menu.info.2").withStyle(TextFormatting.WHITE)).append(" ");
 		text.append(Text.translatable("lambdabettergrass.menu.info.3").withStyle(TextFormatting.WHITE)).append("\n");
-		var widget = this.addRenderableWidget(new SpruceLabelWidget(Position.of(this, 10, y),
-				text, this.width - 20, true));
-		var readMore = new SpruceLabelWidget(Position.of(this, 0, y + 5 + widget.getHeight()),
+		var widget = this.addRenderableWidget(new SpruceLabelWidget(
+				Position.of(this, 10, y),
+				text, this.width - 20, SpruceTextAlignment.CENTER
+		));
+		var readMore = new SpruceLabelWidget(
+				Position.of(this, 0, y + 5 + widget.getHeight()),
 				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]")
 						.withStyle(TextFormatting.GREEN),
 				this.width,
-				label -> Util.getPlatform().openUri(API_URL), true);
+				label -> Util.getPlatform().openUri(API_URL),
+				SpruceTextAlignment.CENTER
+		);
 		readMore.setTooltip(Text.translatable("chat.link.open"));
 		this.addRenderableWidget(readMore);
-	}
-
-	@Override
-	public void renderTitle(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 	}
 }

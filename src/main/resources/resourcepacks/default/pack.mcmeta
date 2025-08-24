@@ -1,6 +1,7 @@
 {
 	"pack": {
-		"pack_format": 55,
-		"description": "Vanilla-like assets for Better grass."
+		"pack_format": 64,
+		"description": "Vanilla-like assets for Better grass.",
+		"supported_formats": [63]
 	}
 }
