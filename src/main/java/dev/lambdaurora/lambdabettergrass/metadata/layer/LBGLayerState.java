@@ -16,8 +16,8 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
@@ -118,9 +117,8 @@ public class LBGLayerState extends LBGState {
 	}
 
 	@Override
-	public @Nullable UnbakedModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter
+	public @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
+			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
 	) {
 		String[] modelVariant = modelId.variant().split(",");
 

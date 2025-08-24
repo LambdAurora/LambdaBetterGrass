@@ -79,7 +79,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
 				amount -> {
 					this.config.setMode(this.config.getMode().next());
-					if (this.client != null && this.client.levelRenderer != null)
+					if (this.client != null)
 						this.client.levelRenderer.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
@@ -93,7 +93,7 @@ public class SettingsScreen extends SpruceScreen {
 				this.config::hasBetterLayer,
 				betterSnow -> {
 					this.config.setBetterLayer(betterSnow);
-					if (this.client != null && this.client.levelRenderer != null)
+					if (this.client != null)
 						this.client.levelRenderer.allChanged();
 				},
 				Text.translatable("lambdabettergrass.tooltip.better_snow"),

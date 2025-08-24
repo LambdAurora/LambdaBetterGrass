@@ -19,6 +19,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Text;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -47,8 +48,8 @@ public final class LBGOption {
 
 	private record DummyValueSet(Screen parent) implements OptionInstance.ValueSet<Unit> {
 		@Override
-		public Function<OptionInstance<Unit>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
-				int x, int y, int width, Consumer<Unit> consumer) {
+		public @NotNull Function<OptionInstance<Unit>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
+                                                                                    int x, int y, int width, Consumer<Unit> consumer) {
 			return option -> Button.builder(
 							Text.translatable(KEY), btn -> Minecraft.getInstance().setScreen(new SettingsScreen(this.parent))
 					)
@@ -58,12 +59,12 @@ public final class LBGOption {
 		}
 
 		@Override
-		public Optional<Unit> validateValue(Unit value) {
+		public @NotNull Optional<Unit> validateValue(Unit value) {
 			return Optional.of(Unit.INSTANCE);
 		}
 
 		@Override
-		public Codec<Unit> codec() {
+		public @NotNull Codec<Unit> codec() {
 			return Codec.EMPTY.codec();
 		}
 	}

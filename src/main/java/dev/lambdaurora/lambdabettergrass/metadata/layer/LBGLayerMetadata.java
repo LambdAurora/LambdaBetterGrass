@@ -13,9 +13,9 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.renderer.block.model.MultiVariant;
 import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,8 +37,8 @@ public class LBGLayerMetadata {
 	public final LBGLayerType layerType;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final Object2ObjectMap<String, UnbakedBlockStateModel> variantModels = new Object2ObjectOpenHashMap<>();
-	private UnbakedModel alternateModel;
+	/*TODO*/ private final Object2ObjectMap<String, MultiVariant> variantModels = new Object2ObjectOpenHashMap<>();
+	private UnbakedBlockStateModel alternateModel;
 	private final boolean hasAlternateModel;
 
 	public LBGLayerMetadata(
@@ -73,8 +73,9 @@ public class LBGLayerMetadata {
 		map.instantiate(stateDefinition, id.toString());
 		if (map.getMultiPart() != null)
 			this.alternateModel = map.getMultiPart().instantiate(stateDefinition);
-		else
-			this.variantModels.putAll(map.getMultiVariants());
+		else {
+            /*TODO this.variantModels.put(map.getMultiVariants());*/
+        }
 
 		this.hasAlternateModel = true;
 	}
@@ -88,12 +89,12 @@ public class LBGLayerMetadata {
 	}
 
 	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId) {
-		UnbakedModel alternateModel = null;
+		UnbakedBlockStateModel alternateModel = null;
 		if (this.hasAlternateModel) {
 			if (this.alternateModel != null) {
 				alternateModel = this.alternateModel;
 			} else {
-				UnbakedModel alternateVariantModel = this.variantModels.get(modelId.variant());
+				UnbakedBlockStateModel alternateVariantModel = this.variantModels.get(modelId.variant());
 				if (alternateVariantModel != null) {
 					alternateModel = alternateVariantModel;
 				}
@@ -113,7 +114,7 @@ public class LBGLayerMetadata {
 				'}';
 	}
 
-	public record LayerUnbakedModels(@Nullable UnbakedModel alternateModel) {
+	public record LayerUnbakedModels(@Nullable UnbakedBlockStateModel alternateModel) {
 		public boolean isEmpty() {
 			return this.alternateModel() == null;
 		}

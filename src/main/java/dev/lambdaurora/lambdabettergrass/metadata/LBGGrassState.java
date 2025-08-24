@@ -14,8 +14,8 @@ import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Represents grass model states with its different {@link LBGMetadata}.
@@ -108,10 +107,8 @@ public class LBGGrassState extends LBGState {
 	}
 
 	@Override
-	public @Nullable UnbakedModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter
-	) {
+	public @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
+            ModelIdentifier modelId, UnbakedBlockStateModel originalModel) {
 		var metadata = this.getMetadata(modelId);
 		if (metadata != null) {
 			return new LBGUnbakedModel(originalModel, metadata);

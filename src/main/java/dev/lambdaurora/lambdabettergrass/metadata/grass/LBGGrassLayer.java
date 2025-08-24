@@ -12,18 +12,18 @@ package dev.lambdaurora.lambdabettergrass.metadata.grass;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.SpriteGetter;
 import net.minecraft.resources.io.ResourceManager;
-import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Represents a grass layer.
@@ -69,10 +69,10 @@ public class LBGGrassLayer {
 			texture.close();
 		}
 
-		this.connectTexture = new Material(InventoryMenu.BLOCK_ATLAS, parentTextures.resolveConnect());
-		this.blendUpTexture = new Material(InventoryMenu.BLOCK_ATLAS, parentTextures.resolveBlendUp());
-		this.blendUpMirroredTexture = new Material(InventoryMenu.BLOCK_ATLAS, parentTextures.resolveBlendUpMirrored());
-		this.archTexture = new Material(InventoryMenu.BLOCK_ATLAS, parentTextures.resolveArch());
+		this.connectTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveConnect());
+		this.blendUpTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveBlendUp());
+		this.blendUpMirroredTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveBlendUpMirrored());
+		this.archTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveArch());
 
 		this.parentMetadata.getTextures().add(this.connectTexture);
 		this.parentMetadata.getTextures().add(this.blendUpTexture);
@@ -95,23 +95,23 @@ public class LBGGrassLayer {
 	 *
 	 * @param textureGetter the texture getter
 	 */
-	public void bakeTextures(Function<Material, TextureAtlasSprite> textureGetter) {
+	public void bakeTextures(SpriteGetter textureGetter) {
 		this.tryBakeSprite("connect", this.connectTexture, textureGetter);
 		this.tryBakeSprite("blend_up", this.blendUpTexture, textureGetter);
 		this.tryBakeSprite("blend_up_m", this.blendUpMirroredTexture, textureGetter);
 		this.tryBakeSprite("arch", this.archTexture, textureGetter);
 	}
 
-	private void tryBakeSprite(String name, @Nullable Material id, Function<Material, TextureAtlasSprite> textureGetter) {
+	private void tryBakeSprite(String name, @Nullable Material id, SpriteGetter textureGetter) {
 		if (id == null)
-			id = new Material(InventoryMenu.BLOCK_ATLAS, ModelBakery.MISSING_MODEL_ID);
+			id = new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation());
 
 		try {
-			this.bakedSprites.put(name, textureGetter.apply(id));
+			this.bakedSprites.put(name, textureGetter.get(id));
 		} catch (NullPointerException e) {
 			LambdaBetterGrass.warn(LOGGER, "Could not bake sprite `{}` with id `{}`!", name, id);
 
-			this.bakedSprites.put(name, textureGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ModelBakery.MISSING_MODEL_ID)));
+			this.bakedSprites.put(name, textureGetter.get(new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation())));
 		}
 	}
 

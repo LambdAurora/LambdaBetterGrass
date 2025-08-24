@@ -13,15 +13,13 @@ import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-
-import java.util.function.Function;
 
 /**
  * Represents LambdaBetterGrass model states.
@@ -70,9 +68,8 @@ public abstract class LBGState {
 		return true;
 	}
 
-	public abstract @Nullable UnbakedModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter
+	public abstract @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
+			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
 	);
 
 	protected static void putState(Identifier id, LBGState state) {
@@ -115,7 +112,7 @@ public abstract class LBGState {
 
 	@FunctionalInterface
 	public interface LBGStateProvider {
-		LBGState create(
+		void create(
 				Identifier id, Block block, ResourceManager resourceManager, JsonObject json
 		);
 	}
