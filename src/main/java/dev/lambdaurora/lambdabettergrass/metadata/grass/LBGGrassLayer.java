@@ -16,8 +16,10 @@ import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.SpriteGetter;
 import net.minecraft.resources.io.ResourceManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +31,10 @@ import java.util.Map;
  * Represents a grass layer.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
-public class LBGGrassLayer {
+public class LBGGrassLayer implements ModelDebugName {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|LBGGrassLayer");
 	/**
 	 * Parent metadata.
@@ -52,7 +54,7 @@ public class LBGGrassLayer {
 	@SuppressWarnings("deprecation")
 	public LBGGrassLayer(ResourceManager resourceManager, LBGMetadata metadata, List<LBGLoadingGrassLayer> layers) {
 		this.parentMetadata = metadata;
-		var first = layers.get(0);
+		var first = layers.getFirst();
 
 		this.colorIndex = first.colorIndex();
 
@@ -60,7 +62,7 @@ public class LBGGrassLayer {
 				.map(layer -> LBGGrassLayerTextures.generate(resourceManager, metadata.id, layer))
 				.toList();
 
-		var parentTextures = textures.get(0);
+		var parentTextures = textures.getFirst();
 		for (int i = 1; i < textures.size(); i++) {
 			var texture = textures.get(i);
 			var oldTextures = parentTextures;
@@ -109,11 +111,17 @@ public class LBGGrassLayer {
 			id = new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation());
 
 		try {
-			this.bakedSprites.put(name, textureGetter.get(id));
+			this.bakedSprites.put(name, textureGetter.get(id, this));
 		} catch (NullPointerException e) {
 			LambdaBetterGrass.warn(LOGGER, "Could not bake sprite `{}` with id `{}`!", name, id);
 
-			this.bakedSprites.put(name, textureGetter.get(new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation())));
+			this.bakedSprites.put(
+					name,
+					textureGetter.get(
+							new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation()),
+							this
+					)
+			);
 		}
 	}
 
@@ -123,5 +131,10 @@ public class LBGGrassLayer {
 				"id=" + this.parentMetadata.id +
 				", colorIndex=" + this.colorIndex +
 				'}';
+	}
+
+	@Override
+	public @NotNull String debugName() {
+		return "%s (Better Grass Layer %s)".formatted(this.parentMetadata.id, this.colorIndex);
 	}
 }

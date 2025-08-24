@@ -10,36 +10,33 @@
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
 import com.google.gson.JsonObject;
-import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
+import com.google.gson.JsonParseException;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
-import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.io.StringReader;
 import java.util.Map;
 
 /**
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
 	public final Identifier id;
 	private final LBGLayerType layerType;
-	private final StateDefinition<Block, BlockState> stateDefinition;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final Map<BlockState, UnbakedBlockStateModel> variantModels;
+	private final Map<BlockState, BlockStateModel.UnbakedRoot> variantModels;
 
 	public LBGLayerMetadata(
 			Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
@@ -47,7 +44,6 @@ public class LBGLayerMetadata {
 	) {
 		this.id = id;
 		this.layerType = layerType;
-		this.stateDefinition = stateDefinition;
 
 		if (json.has("layer")) {
 			this.layerModel = json.get("layer").getAsBoolean();
@@ -66,8 +62,9 @@ public class LBGLayerMetadata {
 		} else this.offset = null;
 
 		if (json.has("block_state")) {
-			var blockModelDefinition = BlockModelDefinition.fromStream(new StringReader(json.get("block_state").toString()));
-			this.variantModels = blockModelDefinition.instantiate(stateDefinition, id.toString());
+			var blockModelDefinition = BlockModelDefinition.CODEC.parse(JsonOps.INSTANCE, json.get("block_state"))
+					.getOrThrow(JsonParseException::new);
+			this.variantModels = blockModelDefinition.instantiate(stateDefinition, id::toString);
 		} else {
 			this.variantModels = null;
 		}
@@ -88,27 +85,11 @@ public class LBGLayerMetadata {
 		return this.offset;
 	}
 
-	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId) {
+	public LayerUnbakedModels getCustomUnbakedModel(BlockState state) {
 		if (this.variantModels == null)
 			return new LayerUnbakedModels(null);
 
-		var properties = VariantSelector.extractProperties(this.stateDefinition, modelId.variant());
-
-		var state = this.stateDefinition.getOwner().defaultState();
-		for (var property : properties) {
-			state = this.withValue(state, property);
-		}
-
 		return new LayerUnbakedModels(this.variantModels.get(state));
-	}
-
-	private <T extends Comparable<T>> Property.Value<T> makeValue(Property<T> property, String rawValue) {
-		var value = property.getValue(rawValue);
-		return value.map(property::value).orElse(null);
-	}
-
-	private <T extends Comparable<T>> BlockState withValue(BlockState state, Property.Value<T> value) {
-		return state.with(value.property(), value.value());
 	}
 
 	@Override
@@ -121,7 +102,7 @@ public class LBGLayerMetadata {
 				'}';
 	}
 
-	public record LayerUnbakedModels(@Nullable UnbakedBlockStateModel alternateModel) {
+	public record LayerUnbakedModels(@Nullable BlockStateModel.UnbakedRoot alternateModel) {
 		public boolean isEmpty() {
 			return this.alternateModel() == null;
 		}

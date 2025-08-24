@@ -42,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
  * The data generator of LambdaBetterGrass.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.2.0
  * @since 2.0.0
  */
 public class LBGDataGen implements DataGeneratorEntrypoint {
@@ -51,6 +51,8 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 	private static final Identifier CAKE_DATA = Identifier.ofDefault("bettergrass/data/cake");
 	private static final Identifier CANDLE_DATA = Identifier.ofDefault("bettergrass/data/candle");
 	private static final Identifier FLOWER_DATA = Identifier.ofDefault("bettergrass/data/flower");
+	private static final Identifier FLOWER_BED_DATA = Identifier.ofDefault("bettergrass/data/flower_bed");
+	private static final Identifier FLOWER_POT_DATA = Identifier.ofDefault("bettergrass/data/flower_pot");
 	private static final Identifier GLASS_PANE_DATA = Identifier.ofDefault("bettergrass/data/glass_pane");
 	private static final Identifier LANTERN_DATA = Identifier.ofDefault("bettergrass/data/lantern");
 	private static final Identifier TORCH_DATA = Identifier.ofDefault("bettergrass/data/torch");
@@ -96,6 +98,10 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addWaterloggedSimpleLayerState(id, CANDLE_DATA);
 							} else if (block instanceof FlowerBlock || block instanceof TallFlowerBlock) {
 								context.addSimpleLayerState(id, FLOWER_DATA);
+							} else if (block instanceof FlowerBedBlock) {
+								context.addSimpleLayerState(id, FLOWER_BED_DATA);
+							} else if (block instanceof FlowerPotBlock) {
+								context.addSimpleLayerState(id, FLOWER_POT_DATA);
 							} else if (block instanceof StainedGlassPaneBlock) {
 								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
 							} else if (block instanceof LanternBlock) {

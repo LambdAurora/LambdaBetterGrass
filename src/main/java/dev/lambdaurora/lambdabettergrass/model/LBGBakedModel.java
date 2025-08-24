@@ -15,14 +15,13 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
+import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.DelegateBakedModel;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -32,39 +31,33 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
-public class LBGBakedModel extends DelegateBakedModel {
+public class LBGBakedModel extends WrapperBlockStateModel {
 	private final LBGMetadata metadata;
 
-	public LBGBakedModel(BakedModel baseModel, LBGMetadata metadata) {
+	public LBGBakedModel(BlockStateModel baseModel, LBGMetadata metadata) {
 		super(baseModel);
 		this.metadata = metadata;
 	}
 
 	@Override
-	public boolean isVanillaAdapter() {
-		return false;
-	}
-
-	@Override
-	public void emitBlockQuads(
+	public void emitQuads(
 			QuadEmitter quadEmitter,
-			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
+			BlockAndTintGetter world, BlockPos pos, BlockState state, RandomSource random,
 			Predicate<@Nullable Direction> cullTest
 	) {
 		var mode = LambdaBetterGrass.get().config.getMode();
 
 		if (mode == LBGMode.OFF) {
 			// Don't touch the model.
-			super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+			super.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 			return;
 		}
 
@@ -73,11 +66,10 @@ public class LBGBakedModel extends DelegateBakedModel {
 			var upPos = pos.above();
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
-				var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
-				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, blockId, up, false)) {
+				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, up, false)) {
 					this.metadata.getSnowyModelVariant()
-							.emitBlockQuads(
-									quadEmitter, world, state.with(BlockStateProperties.SNOWY, true), pos, randomSupplier, cullTest
+							.emitQuads(
+									quadEmitter, world, pos, state.with(BlockStateProperties.SNOWY, true), random, cullTest
 							);
 					return;
 				}
@@ -119,7 +111,7 @@ public class LBGBakedModel extends DelegateBakedModel {
 			}
 			return true;
 		});
-		super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+		super.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 		quadEmitter.popTransform();
 	}
 
@@ -173,8 +165,7 @@ public class LBGBakedModel extends DelegateBakedModel {
 					if (up.is(Blocks.SNOW))
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
-						var blockId = BuiltInRegistries.BLOCK.getId(up.getBlock());
-						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, blockId, up, true))
+						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, up, true))
 							return true;
 					}
 				}

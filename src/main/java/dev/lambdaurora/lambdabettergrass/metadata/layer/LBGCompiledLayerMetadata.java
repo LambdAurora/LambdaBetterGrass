@@ -12,8 +12,8 @@ package dev.lambdaurora.lambdabettergrass.metadata.layer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Represents a compiled layer metadata.
@@ -35,7 +34,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -43,7 +42,8 @@ public class LBGCompiledLayerMetadata {
 	private final boolean hasLayer;
 	private final @Nullable Vector3f offset;
 	public final LBGLayerMetadata.LayerUnbakedModels unbakedModels;
-	private BakedModel bakedAlternateModel;
+	private final boolean isLeafLitter;
+	private BlockStateModel bakedAlternateModel;
 
 	public LBGCompiledLayerMetadata(
 			LBGLayerType layerType, boolean hasLayer, @Nullable Vector3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels
@@ -52,6 +52,7 @@ public class LBGCompiledLayerMetadata {
 		this.hasLayer = hasLayer;
 		this.offset = offset;
 		this.unbakedModels = unbakedModels;
+		this.isLeafLitter = layerType.id.equals(LBGLayerType.LEAF_LITTER_LAYER_TYPE);
 	}
 
 	public @Nullable Vector3f offset() {
@@ -73,13 +74,12 @@ public class LBGCompiledLayerMetadata {
 	/**
 	 * Bakes the hold unbaked models.
 	 *
+	 * @param state the block state
 	 * @param baker the model baker
 	 */
-	public void bake(
-			ModelBaker baker
-	) {
+	public void bake(BlockState state, ModelBaker baker) {
 		if (this.unbakedModels.alternateModel() != null) {
-			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker);
+			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(state, baker);
 		}
 	}
 
@@ -90,13 +90,13 @@ public class LBGCompiledLayerMetadata {
 	 * @param world the world
 	 * @param state the block state
 	 * @param pos the block position
-	 * @param randomSupplier the random supplier
+	 * @param random the random source
 	 * @return {@code 0} if no custom models have emitted quads, {@code 1} if only the layer model has emitted quads,
 	 * or {@code 2} if the custom alternative model has emitted quads
 	 */
 	public int emitBlockQuads(
 			QuadEmitter quadEmitter,
-			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
+			BlockAndTintGetter world, BlockState state, BlockPos pos, RandomSource random,
 			Predicate<@Nullable Direction> cullTest
 	) {
 		int success = 0;
@@ -111,6 +111,8 @@ public class LBGCompiledLayerMetadata {
 			) {
 				var layerModel = this.layerType.getLayerModel();
 
+				Integer color = this.isLeafLitter ? (0xff000000 | BiomeColors.getAverageDryFoliageColor(world, pos)) : null;
+
 				Vec3 offset = state.getOffset(pos);
 				boolean pushed = false;
 
@@ -118,8 +120,8 @@ public class LBGCompiledLayerMetadata {
 				var offsetPos = new BlockPos.Mutable();
 				quadEmitter.pushTransform(quad -> {
 					var originalMaterial = quad.material();
-					var material = materialFinder.copyFrom(originalMaterial)
-							.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()));
+					var material = materialFinder.copyFrom(originalMaterial);
+					//.ambientOcclusion(TriState.of(layerModel.useAmbientOcclusion()));
 
 					if (material.blendMode() == BlendMode.DEFAULT) {
 						material = material.blendMode(BlendMode.fromRenderLayer(this.layerType.renderType));
@@ -138,6 +140,10 @@ public class LBGCompiledLayerMetadata {
 						}
 					}
 
+					if (color != null) {
+						quad.tintIndex(-1).color(color, color, color, color);
+					}
+
 					return true;
 				});
 
@@ -154,7 +160,7 @@ public class LBGCompiledLayerMetadata {
 					});
 					pushed = true;
 				}
-				layerModel.emitBlockQuads(quadEmitter, world, layerState, pos, randomSupplier, cullTest);
+				layerModel.emitQuads(quadEmitter, world, pos, layerState, random, cullTest);
 				success = 1;
 				if (pushed)
 					quadEmitter.popTransform();
@@ -164,7 +170,7 @@ public class LBGCompiledLayerMetadata {
 
 		if (this.layerType.getNearbyLayeredBlocks(world, pos, state.getBlock(), false) > 1
 				&& this.bakedAlternateModel != null) {
-			this.bakedAlternateModel.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+			this.bakedAlternateModel.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 			success = 2;
 		}
 

@@ -15,7 +15,7 @@ import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
 import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGLoadingGrassLayer;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.SpriteGetter;
 import net.minecraft.resources.Identifier;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -46,8 +46,8 @@ public class LBGMetadata {
 
 	private final List<LBGGrassLayer> layers;
 
-	protected Consumer<BakedModel> snowyModelVariantProvider = null;
-	protected BakedModel snowyModelVariant = null;
+	protected Consumer<BlockStateModel> snowyModelVariantProvider = null;
+	protected BlockStateModel snowyModelVariant = null;
 
 	public LBGMetadata(ResourceManager resourceManager, Identifier id, JsonObject json) {
 		this.id = id;
@@ -108,7 +108,7 @@ public class LBGMetadata {
 	/**
 	 * {@return the snowy model variant}
 	 */
-	public @Nullable BakedModel getSnowyModelVariant() {
+	public @Nullable BlockStateModel getSnowyModelVariant() {
 		return this.snowyModelVariant;
 	}
 

@@ -17,8 +17,7 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
-import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -31,14 +30,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -49,13 +47,13 @@ public class LBGLayerState extends LBGState {
 		DEFAULT_METADATA_LAYER_JSON.addProperty("layer", true);
 	}
 
-	private final Map<String, Map<LBGLayerType, LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
+	private final Map<BlockState, Map<LBGLayerType, LBGLayerMetadata>> metadatas = new Object2ObjectOpenHashMap<>();
 
 	public LBGLayerState(
 			Identifier id, ResourceManager resourceManager, JsonObject json,
 			StateDefinition<Block, BlockState> stateDefinition
 	) {
-		super(id);
+		super(id, stateDefinition.getOwner());
 
 		if (json.has("variants")) {
 			var variants = json.getAsJsonObject("variants");
@@ -101,7 +99,7 @@ public class LBGLayerState extends LBGState {
 					}
 				}
 			} catch (IOException e) {
-				LOGGER.warn("Cannot load metadata file \"{}\" from layer state \"{}\" (variant: \"{}\").", metadataId, id, variant, e);
+				LOGGER.warn("Cannot load metadata file \"{}\" from layer state \"{}\" (variant: \"{}\").", metadataId, this.id(), variant, e);
 			}
 		}
 	}
@@ -110,51 +108,50 @@ public class LBGLayerState extends LBGState {
 			String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
 			StateDefinition<Block, BlockState> stateDefinition
 	) {
-		var metadatas = this.metadatas.computeIfAbsent(variant, v -> new HashMap<>());
-		metadatas.put(type, new LBGLayerMetadata(metadataId, type, metadataJson, stateDefinition));
+		var metadata = new LBGLayerMetadata(metadataId, type, metadataJson, stateDefinition);
+
+		if (variant.equals("*")) {
+			for (var state : stateDefinition.getPossibleStates()) {
+				this.putOrReplaceMetadata(state, metadata);
+			}
+		} else {
+			var properties = VariantSelector.extractProperties(stateDefinition, variant);
+
+			for (var state : stateDefinition.getPossibleStates()) {
+				if (VariantSelector.match(state, properties)) {
+					this.putOrReplaceMetadata(state, metadata);
+				}
+			}
+		}
+	}
+
+	private void putOrReplaceMetadata(BlockState state, LBGLayerMetadata metadata) {
+		var metadatas = this.metadatas.computeIfAbsent(state, v -> new HashMap<>());
+		metadatas.put(metadata.layerType(), metadata);
 	}
 
 	public Stream<LBGLayerMetadata> streamMetadata(BlockState state) {
 		return this.metadatas.entrySet().stream()
-				.filter(entry -> {
-					var variant = entry.getKey();
-					var properties = VariantSelector.extractProperties(state.getBlock().getStateDefinition(), variant);
-					return VariantSelector.match(state, properties);
-				})
+				.filter(entry -> entry.getKey().equals(state))
 				.map(Map.Entry::getValue)
 				.flatMap(map -> map.values().stream());
 	}
 
-	public void forEach(String[] variant, Consumer<LBGLayerMetadata> consumer) {
-		this.metadatas.entrySet().stream()
-				.filter(entry -> this.matchVariant(variant, entry.getKey().split(",")))
-				.flatMap(entry -> entry.getValue().values().stream())
-				.forEach(consumer);
-	}
-
 	@Override
-	public @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
+	public @Nullable BlockStateModel.UnbakedRoot getCustomUnbakedModel(
+			BlockState state, BlockStateModel.UnbakedRoot originalModel
 	) {
-		String[] modelVariant = modelId.variant().split(",");
+		var metadatas = this.streamMetadata(state)
+				.map(metadata -> {
+					var models = metadata.getCustomUnbakedModel(state);
+					return new LBGCompiledLayerMetadata(metadata.layerType(), metadata.hasLayerModel(), metadata.offset(), models);
+				})
+				.toList();
 
-		for (var entry : this.metadatas.entrySet()) {
-			if (entry.getKey().equals("*") || this.matchVariant(modelVariant, entry.getKey().split(","))) {
-				var metadatas = entry.getValue().values()
-						.stream()
-						.map(metadata -> {
-							var models = metadata.getCustomUnbakedModel(modelId);
-							return new LBGCompiledLayerMetadata(metadata.layerType(), metadata.hasLayerModel(), metadata.offset(), models);
-						})
-						.toList();
-
-				if (!metadatas.isEmpty()) {
-					return new LBGLayerUnbakedModel(originalModel, metadatas);
-				}
-
-				return null;
-			}
+		if (!metadatas.isEmpty()) {
+			return new LBGLayerUnbakedModel(originalModel, metadatas);
 		}
+
 		return null;
 	}
 }

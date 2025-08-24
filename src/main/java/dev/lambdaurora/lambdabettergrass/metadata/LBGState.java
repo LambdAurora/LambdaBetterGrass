@@ -13,13 +13,15 @@ import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
-import net.minecraft.client.resources.model.ModelIdentifier;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -27,20 +29,36 @@ import org.slf4j.Logger;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public abstract class LBGState {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final String PATH_PREFIX = "bettergrass/states";
 	private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
-	private static final Object2ObjectMap<Identifier, LBGState> LBG_STATES = new Object2ObjectOpenHashMap<>();
+	private static final Reference2ObjectMap<Block, LBGState> LBG_STATES = new Reference2ObjectOpenHashMap<>();
 
-	public final Identifier id;
+	private final Identifier id;
+	private final Block block;
 
-	public LBGState(Identifier id) {
+	public LBGState(Identifier id, Block block) {
 		this.id = id;
-		putState(id, this);
+		this.block = block;
+		putState(block, this);
+	}
+
+	/**
+	 * {@return the identifier of this state}
+	 */
+	public @NotNull Identifier id() {
+		return this.id;
+	}
+
+	/**
+	 * {@return the block associated with this state}
+	 */
+	public @NotNull Block block() {
+		return this.block;
 	}
 
 	/**
@@ -70,22 +88,22 @@ public abstract class LBGState {
 		return true;
 	}
 
-	public abstract @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
+	public abstract @Nullable BlockStateModel.UnbakedRoot getCustomUnbakedModel(
+			BlockState state, BlockStateModel.UnbakedRoot originalModel
 	);
 
-	protected static void putState(Identifier id, LBGState state) {
-		LBG_STATES.put(id, state);
+	protected static void putState(Block block, LBGState state) {
+		LBG_STATES.put(block, state);
 	}
 
 	/**
 	 * Returns the state from the cache using its identifier.
 	 *
-	 * @param id the identifier of the state
+	 * @param block the block of the state
 	 * @return the state if cached, else {@code null}
 	 */
-	public static @Nullable LBGState getMetadataState(Identifier id) {
-		return LBG_STATES.get(id);
+	public static @Nullable LBGState getMetadataState(Block block) {
+		return LBG_STATES.get(block);
 	}
 
 	/**

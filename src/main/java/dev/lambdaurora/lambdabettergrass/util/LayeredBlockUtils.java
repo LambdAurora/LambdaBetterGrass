@@ -16,11 +16,9 @@ import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.List;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 2.0.2
+ * @version 2.2.0
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -41,7 +39,7 @@ public final class LayeredBlockUtils {
 	}
 
 	public static boolean shouldGrassBeSnowy(
-			BlockAndTintGetter world, BlockPos pos, Identifier stateId, BlockState upState,
+			BlockAndTintGetter world, BlockPos pos, BlockState upState,
 			boolean onlyPureSnow
 	) {
 		// Ignore blocks that are not rendered through the normal system.
@@ -52,7 +50,7 @@ public final class LayeredBlockUtils {
 		if (snowLayerType.isEmpty())
 			return false;
 
-		var state = LBGState.getMetadataState(stateId);
+		var state = LBGState.getMetadataState(upState.getBlock());
 		if (!(state instanceof LBGLayerState layerState))
 			return false;
 
@@ -64,10 +62,5 @@ public final class LayeredBlockUtils {
 						layerType.getNearbyLayeredBlocks(world, pos.above(), upState.getBlock(), onlyPureSnow) > 1
 				)
 				.orElse(false);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T extends Comparable<T>> String nameValue(Property<T> property, Comparable<?> value) {
-		return property.getName((T) value);
 	}
 }

@@ -13,61 +13,92 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
+import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
-import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|LBGGrassState");
-	private final LBGMetadata metadata;
-	private final Map<String, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
+	private final Map<BlockState, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
-	public LBGGrassState(@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json) {
-		super(id);
+	public LBGGrassState(
+			@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json,
+			@NotNull StateDefinition<Block, BlockState> stateDefinition
+	) {
+		super(id, stateDefinition.getOwner());
 
 		// Look for variants.
 		if (json.has("variants")) {
-			var variants = json.getAsJsonObject("variants");
-			variants.entrySet().forEach(entry -> {
-				var variant = entry.getValue().getAsJsonObject();
-				if (variant.has("data")) {
-					var metadataId = Identifier.parse(variant.get("data").getAsString());
+			record Entry(List<Property.Value<?>> properties, LBGMetadata metadata) {}
 
-					this.metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
-				}
-			});
+			var variants = json.getAsJsonObject("variants")
+					.entrySet().stream()
+					.map(entry -> {
+						var variant = entry.getValue().getAsJsonObject();
+						if (variant.has("data")) {
+							var metadataId = Identifier.parse(variant.get("data").getAsString());
+							var properties = VariantSelector.extractProperties(stateDefinition, entry.getKey());
 
-			{
-				LBGMetadata normalMetadata = this.metadatas.get("snowy=false");
-				LBGMetadata snowyMetadata = this.metadatas.get("snowy=true");
+							return new Entry(properties, this.loadMetadata(resourceManager, metadataId));
+						} else {
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.toList();
 
-				if (normalMetadata != null && snowyMetadata != null) {
-					snowyMetadata.snowyModelVariantProvider = bakedModel -> normalMetadata.snowyModelVariant = bakedModel;
+			for (var state : stateDefinition.getPossibleStates()) {
+				for (var variant : variants) {
+					assert variant != null;
+
+					if (VariantSelector.match(state, variant.properties)) {
+						this.metadatas.put(state, variant.metadata);
+					}
 				}
 			}
 
-			this.metadata = null;
+			if (stateDefinition.getProperties().contains(BlockStateProperties.SNOWY)) {
+				this.metadatas.forEach((state, metadata) -> {
+					if (!state.get(BlockStateProperties.SNOWY)) {
+						var snowyState = state.with(BlockStateProperties.SNOWY, true);
+						var snowyMetadata = this.metadatas.get(snowyState);
+
+						if (snowyMetadata != null) {
+							snowyMetadata.snowyModelVariantProvider = bakedModel -> metadata.snowyModelVariant = bakedModel;
+						}
+					}
+				});
+			}
 		} else if (json.has("data")) { // Look for a common metadata if no variants are specified.
 			var metadataId = Identifier.parse(json.get("data").getAsString());
-			this.metadata = this.loadMetadata(resourceManager, metadataId);
-		} else // The state file is invalid, cannot find any metadata.
-			this.metadata = null;
+			var metadata = this.loadMetadata(resourceManager, metadataId);
+			for (var state : stateDefinition.getPossibleStates()) {
+				this.metadatas.put(state, metadata);
+			}
+		} // The state file is invalid, cannot find any metadata.
 	}
 
 	/**
@@ -90,27 +121,20 @@ public class LBGGrassState extends LBGState {
 	}
 
 	/**
-	 * Returns the metadata corresponding to the specified model identifier.
+	 * Returns the metadata corresponding to the specified block state.
 	 *
-	 * @param modelId the model identifier
-	 * @return a metadata if it exists for the given model id, else {@code null}
+	 * @param state the block state
+	 * @return a metadata if it exists for the given block state, else {@code null}
 	 */
-	public @Nullable LBGMetadata getMetadata(@NotNull ModelIdentifier modelId) {
-		if (this.metadata != null)
-			return this.metadata;
-		String[] modelVariant = modelId.variant().split(",");
-		for (var variant : this.metadatas.entrySet()) {
-			if (this.matchVariant(modelVariant, variant.getKey().split(",")))
-				return variant.getValue();
-		}
-		return null;
+	public @Nullable LBGMetadata getMetadata(@NotNull BlockState state) {
+		return this.metadatas.get(state);
 	}
 
 	@Override
-	public @Nullable UnbakedBlockStateModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedBlockStateModel originalModel
+	public @Nullable BlockStateModel.UnbakedRoot getCustomUnbakedModel(
+			BlockState state, BlockStateModel.UnbakedRoot originalModel
 	) {
-		var metadata = this.getMetadata(modelId);
+		var metadata = this.getMetadata(state);
 		if (metadata != null) {
 			return new LBGUnbakedModel(originalModel, metadata);
 		}

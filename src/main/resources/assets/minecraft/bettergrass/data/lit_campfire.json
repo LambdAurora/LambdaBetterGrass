@@ -10,5 +10,8 @@
 	},
 	"glow_lichen": {
 		"layer": false
+	},
+	"leaf_litter": {
+		"layer": false
 	}
 }

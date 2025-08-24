@@ -11,9 +11,9 @@ package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
+import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.DelegateBakedModel;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -24,42 +24,36 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Represents the LambdaBetterGrass baked model for layer method.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
-public class LBGLayerBakedModel extends DelegateBakedModel {
+public class LBGLayerBakedModel extends WrapperBlockStateModel {
 	private final List<LBGCompiledLayerMetadata> metadatas;
 
-	public LBGLayerBakedModel(BakedModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
+	public LBGLayerBakedModel(BlockStateModel baseModel, List<LBGCompiledLayerMetadata> metadatas) {
 		super(baseModel);
 		this.metadatas = metadatas;
 	}
 
 	@Override
-	public boolean isVanillaAdapter() {
-		return false;
-	}
-
-	@Override
-	public void emitBlockQuads(
+	public void emitQuads(
 			QuadEmitter quadEmitter,
-			BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
+			BlockAndTintGetter world, BlockPos pos, BlockState state, RandomSource random,
 			Predicate<@Nullable Direction> cullTest
 	) {
 		if (!LambdaBetterGrass.get().hasBetterLayer()) {
 			// Don't touch the model.
-			super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+			super.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 			return;
 		}
 
 		for (var metadata : this.metadatas) {
-			int success = metadata.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+			int success = metadata.emitBlockQuads(quadEmitter, world, state, pos, random, cullTest);
 			if (success != 0) {
 				if (success == 1) {
 					final Vector3f offset = metadata.offset();
@@ -74,7 +68,7 @@ public class LBGLayerBakedModel extends DelegateBakedModel {
 							return true;
 						});
 					}
-					super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+					super.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 					if (offset != null) {
 						quadEmitter.popTransform();
 					}
@@ -83,6 +77,6 @@ public class LBGLayerBakedModel extends DelegateBakedModel {
 			}
 		}
 
-		super.emitBlockQuads(quadEmitter, world, state, pos, randomSupplier, cullTest);
+		super.emitQuads(quadEmitter, world, pos, state, random, cullTest);
 	}
 }

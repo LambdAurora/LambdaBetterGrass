@@ -1,0 +1,32 @@
+{
+	"leaf_litter": {
+		"layer": false
+	},
+	"moss": {
+		"layer": true,
+		"offset": [
+			0,
+			0.0625,
+			0
+		]
+	},
+	"pale_moss": {
+		"layer": true,
+		"offset": [
+			0,
+			0.0625,
+			0
+		]
+	},
+	"sculk": {
+		"layer": false
+	},
+	"snow": {
+		"layer": true,
+		"offset": [
+			0,
+			0.125,
+			0
+		]
+	}
+}

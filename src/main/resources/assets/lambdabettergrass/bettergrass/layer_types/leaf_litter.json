@@ -1,0 +1,14 @@
+{
+	"block": {
+		"Name": "minecraft:leaf_litter",
+		"Properties": {
+			"segment_amount": "4"
+		}
+	},
+	"match": {
+		"block": "minecraft:leaf_litter",
+		"properties": {
+			"segment_amount": "4"
+		}
+	}
+}

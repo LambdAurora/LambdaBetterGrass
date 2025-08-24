@@ -34,7 +34,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 2.1.0
+ * @version 2.2.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -64,29 +64,20 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 		this.registerBuiltinResourcePacks(mod);
 
-		LBGState.registerType(
-				"grass",
-				(id, resourceManager, json, stateDefinition) ->
-						new LBGGrassState(id, resourceManager, json)
-		);
+		LBGState.registerType("grass", LBGGrassState::new);
 		LBGState.registerType("layer", LBGLayerState::new);
 
 		ModelLoadingPlugin.register(pluginCtx -> {
 			pluginCtx.modifyBlockModelOnLoad().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
-				final var modelId = context.id();
-				if (modelId != null && !modelId.variant().equals("inventory")) {
-					var stateId = modelId.id();
+				// Get cached states metadata.
+				var state = LBGState.getMetadataState(context.state().getBlock());
 
-					// Get cached states metadata.
-					var state = LBGState.getMetadataState(stateId);
+				// If states metadata found, search for corresponding metadata and if exists replace the model.
+				if (state != null) {
+					var newModel = state.getCustomUnbakedModel(context.state(), model);
 
-					// If states metadata found, search for corresponding metadata and if exists replace the model.
-					if (state != null) {
-						var newModel = state.getCustomUnbakedModel(modelId, model);
-
-						if (newModel != null) {
-							return newModel;
-						}
+					if (newModel != null) {
+						return newModel;
 					}
 				}
 
