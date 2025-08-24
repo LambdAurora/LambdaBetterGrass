@@ -18,7 +18,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +33,7 @@ import java.util.function.Function;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -48,7 +47,6 @@ public class LBGMetadata {
 
 	private final List<LBGGrassLayer> layers;
 
-	protected UnbakedModel snowyVariant = null;
 	protected Consumer<BakedModel> snowyModelVariantProvider = null;
 	protected BakedModel snowyModelVariant = null;
 
@@ -109,13 +107,6 @@ public class LBGMetadata {
 	}
 
 	/**
-	 * {@return the snowy variant of this}
-	 */
-	public @Nullable UnbakedModel getSnowyVariant() {
-		return this.snowyVariant;
-	}
-
-	/**
 	 * {@return the snowy model variant}
 	 */
 	public @Nullable BakedModel getSnowyModelVariant() {
@@ -137,7 +128,6 @@ public class LBGMetadata {
 		return "LBGMetadata{" +
 				"id=" + this.id +
 				", layers=" + this.layers +
-				", snowyVariant=" + this.snowyVariant +
 				'}';
 	}
 }

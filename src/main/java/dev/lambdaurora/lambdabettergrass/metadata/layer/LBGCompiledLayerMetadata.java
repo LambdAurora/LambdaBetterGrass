@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -36,7 +34,7 @@ import java.util.function.Supplier;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -59,15 +57,9 @@ public class LBGCompiledLayerMetadata {
 		return this.offset;
 	}
 
-	public void fetchModelDependencies(Collection<Identifier> ids) {
+	public void resolveModelDependencies(UnbakedModel.Resolver resolver) {
 		if (this.unbakedModels.alternateModel() != null) {
-			ids.addAll(this.unbakedModels.alternateModel().getDependencies());
-		}
-	}
-
-	public void resolveParents(Function<Identifier, UnbakedModel> models) {
-		if (this.unbakedModels.alternateModel() != null) {
-			this.unbakedModels.alternateModel().resolveParents(models);
+			this.unbakedModels.alternateModel().resolveDependencies(resolver);
 		}
 	}
 
@@ -112,7 +104,7 @@ public class LBGCompiledLayerMetadata {
 			) {
 				var layerModel = this.layerType.getLayerModel();
 
-				Vec3 offset = state.getOffset(world, pos);
+				Vec3 offset = state.getOffset(pos);
 				boolean pushed = false;
 
 				final var materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
@@ -132,7 +124,7 @@ public class LBGCompiledLayerMetadata {
 					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {
 						offsetPos.setWithOffset(pos, cullFace);
 
-						if (Block.shouldRenderFace(layerState, world, pos, cullFace, offsetPos)) {
+						if (Block.shouldRenderFace(layerState, world.getBlockState(offsetPos), cullFace)) {
 							quad.cullFace(null);
 						} else {
 							return false;

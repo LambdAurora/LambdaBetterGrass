@@ -12,11 +12,8 @@ package dev.lambdaurora.lambdabettergrass.model;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -24,7 +21,7 @@ import java.util.function.Function;
  * Represents the LambdaBetterGrass unbaked model.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGUnbakedModel implements UnbakedModel {
@@ -37,21 +34,12 @@ public class LBGUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public @NotNull Collection<Identifier> getDependencies() {
-		return this.baseModel.getDependencies();
+	public void resolveDependencies(Resolver resolver) {
+		this.baseModel.resolveDependencies(resolver);
 	}
 
 	@Override
-	public void resolveParents(Function<Identifier, UnbakedModel> models) {
-		this.baseModel.resolveParents(models);
-
-		if (this.metadata.getSnowyVariant() != null) {
-			this.metadata.getSnowyVariant().resolveParents(models);
-		}
-	}
-
-	@Override
-	public @Nullable BakedModel bake(
+	public @NotNull BakedModel bake(
 			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
 			ModelState modelState
 	) {

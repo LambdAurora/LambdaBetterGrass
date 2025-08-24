@@ -10,40 +10,45 @@
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.renderer.block.model.UnbakedBlockStateModel;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.io.StringReader;
+import java.util.Map;
 
 /**
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 2.0.2
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
 	public final Identifier id;
 	private final LBGLayerType layerType;
+	private final StateDefinition<Block, BlockState> stateDefinition;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
-	private UnbakedModel alternateModel;
-	private final boolean hasAlternateModel;
+	private final Map<BlockState, UnbakedBlockStateModel> variantModels;
 
 	public LBGLayerMetadata(
 			Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
-			BlockModelDefinition.Context deserializationContext
+			StateDefinition<Block, BlockState> stateDefinition
 	) {
 		this.id = id;
 		this.layerType = layerType;
+		this.stateDefinition = stateDefinition;
 
 		if (json.has("layer")) {
 			this.layerModel = json.get("layer").getAsBoolean();
@@ -61,19 +66,12 @@ public class LBGLayerMetadata {
 			} else this.offset = null;
 		} else this.offset = null;
 
-		if (!json.has("block_state")) {
-			this.alternateModel = null;
-			this.hasAlternateModel = false;
-			return;
+		if (json.has("block_state")) {
+			var blockModelDefinition = BlockModelDefinition.fromStream(new StringReader(json.get("block_state").toString()));
+			this.variantModels = blockModelDefinition.instantiate(stateDefinition, id.toString());
+		} else {
+			this.variantModels = null;
 		}
-
-		var map = BlockModelDefinition.fromStream(deserializationContext, new StringReader(json.get("block_state").toString()));
-		if (map.isMultiPart())
-			this.alternateModel = map.getMultiPart();
-		else
-			this.variantModels.putAll(map.getVariants());
-
-		this.hasAlternateModel = true;
 	}
 
 	/**
@@ -92,19 +90,26 @@ public class LBGLayerMetadata {
 	}
 
 	public LayerUnbakedModels getCustomUnbakedModel(ModelIdentifier modelId) {
-		UnbakedModel alternateModel = null;
-		if (this.hasAlternateModel) {
-			if (this.alternateModel != null) {
-				alternateModel = this.alternateModel;
-			} else {
-				UnbakedModel alternateVariantModel = this.variantModels.get(modelId.variant());
-				if (alternateVariantModel != null) {
-					alternateModel = alternateVariantModel;
-				}
-			}
+		if (this.variantModels == null || modelId.variant().equals(ModelIdentifier.INVENTORY_VARIANT))
+			return new LayerUnbakedModels(null);
+
+		var properties = VariantSelector.extractProperties(this.stateDefinition, modelId.variant());
+
+		var state = this.stateDefinition.getOwner().defaultState();
+		for (var property : properties) {
+			state = this.withValue(state, property);
 		}
 
-		return new LayerUnbakedModels(alternateModel);
+		return new LayerUnbakedModels(this.variantModels.get(state));
+	}
+
+	private <T extends Comparable<T>> Property.Value<T> makeValue(Property<T> property, String rawValue) {
+		var value = property.getValue(rawValue);
+		return value.map(property::value).orElse(null);
+	}
+
+	private <T extends Comparable<T>> BlockState withValue(BlockState state, Property.Value<T> value) {
+		return state.with(value.property(), value.value());
 	}
 
 	@Override
@@ -113,7 +118,7 @@ public class LBGLayerMetadata {
 				"id=" + this.id +
 				", layerType=" + this.layerType +
 				", layerModel=" + this.layerModel +
-				", hasAlternateModel=" + this.hasAlternateModel +
+				", variantModels=" + this.variantModels +
 				'}';
 	}
 

@@ -34,7 +34,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -66,7 +66,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 		LBGState.registerType(
 				"grass",
-				(id, block, resourceManager, json, deserializationContext) ->
+				(id, resourceManager, json, stateDefinition) ->
 						new LBGGrassState(id, resourceManager, json)
 		);
 		LBGState.registerType("layer", LBGLayerState::new);
@@ -82,7 +82,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 					// If states metadata found, search for corresponding metadata and if exists replace the model.
 					if (state != null) {
-						var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
+						var newModel = state.getCustomUnbakedModel(modelId, model);
 
 						if (newModel != null) {
 							return newModel;

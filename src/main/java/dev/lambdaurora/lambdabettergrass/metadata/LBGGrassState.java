@@ -31,7 +31,7 @@ import java.util.function.Function;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -109,8 +109,7 @@ public class LBGGrassState extends LBGState {
 
 	@Override
 	public @Nullable UnbakedModel getCustomUnbakedModel(
-			ModelIdentifier modelId, UnbakedModel originalModel,
-			Function<Identifier, UnbakedModel> modelGetter
+			ModelIdentifier modelId, UnbakedModel originalModel
 	) {
 		var metadata = this.getMetadata(modelId);
 		if (metadata != null) {

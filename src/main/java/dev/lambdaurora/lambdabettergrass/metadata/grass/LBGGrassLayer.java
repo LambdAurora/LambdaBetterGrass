@@ -12,9 +12,9 @@ package dev.lambdaurora.lambdabettergrass.metadata.grass;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ import java.util.function.Function;
  * Represents a grass layer.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGGrassLayer {
@@ -104,14 +104,14 @@ public class LBGGrassLayer {
 
 	private void tryBakeSprite(String name, @Nullable Material id, Function<Material, TextureAtlasSprite> textureGetter) {
 		if (id == null)
-			id = new Material(InventoryMenu.BLOCK_ATLAS, ModelBakery.MISSING_MODEL_ID);
+			id = BlockModel.MISSING_MATERIAL;
 
 		try {
 			this.bakedSprites.put(name, textureGetter.apply(id));
 		} catch (NullPointerException e) {
 			LambdaBetterGrass.warn(LOGGER, "Could not bake sprite `{}` with id `{}`!", name, id);
 
-			this.bakedSprites.put(name, textureGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ModelBakery.MISSING_MODEL_ID)));
+			this.bakedSprites.put(name, textureGetter.apply(BlockModel.MISSING_MATERIAL));
 		}
 	}
 

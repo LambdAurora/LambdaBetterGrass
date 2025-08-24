@@ -12,18 +12,17 @@ package dev.lambdaurora.lambdabettergrass.model;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * Represents the LambdaBetterGrass unbaked model for layer method.
  *
  * @author LambdAurora
- * @version 1.4.0
+ * @version 2.1.0
  * @since 1.0.0
  */
 public class LBGLayerUnbakedModel implements UnbakedModel {
@@ -36,20 +35,13 @@ public class LBGLayerUnbakedModel implements UnbakedModel {
 	}
 
 	@Override
-	public @NotNull Collection<Identifier> getDependencies() {
-		Set<Identifier> ids = new HashSet<>(this.baseModel.getDependencies());
-		this.metadatas.forEach(metadata -> metadata.fetchModelDependencies(ids));
-		return ids;
+	public void resolveDependencies(Resolver resolver) {
+		this.baseModel.resolveDependencies(resolver);
+		this.metadatas.forEach(metadata -> metadata.resolveModelDependencies(resolver));
 	}
 
 	@Override
-	public void resolveParents(Function<Identifier, UnbakedModel> models) {
-		this.baseModel.resolveParents(models);
-		this.metadatas.forEach(metadata -> metadata.resolveParents(models));
-	}
-
-	@Override
-	public @Nullable BakedModel bake(
+	public @NotNull BakedModel bake(
 			ModelBaker baker, Function<Material, TextureAtlasSprite> textureGetter,
 			ModelState modelState
 	) {
