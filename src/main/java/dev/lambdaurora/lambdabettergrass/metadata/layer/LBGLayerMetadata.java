@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -25,12 +26,12 @@ import java.io.StringReader;
  * Represents a metadata for blocks which have snowy variants or equivalent.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.0.2
  * @since 1.0.0
  */
 public class LBGLayerMetadata {
 	public final Identifier id;
-	public final LBGLayerType layerType;
+	private final LBGLayerType layerType;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
 	private final Object2ObjectMap<String, UnbakedModel> variantModels = new Object2ObjectOpenHashMap<>();
@@ -73,6 +74,13 @@ public class LBGLayerMetadata {
 			this.variantModels.putAll(map.getVariants());
 
 		this.hasAlternateModel = true;
+	}
+
+	/**
+	 * {@return the layer type associated with this metadata}
+	 */
+	public @NotNull LBGLayerType layerType() {
+		return this.layerType;
 	}
 
 	public boolean hasLayerModel() {

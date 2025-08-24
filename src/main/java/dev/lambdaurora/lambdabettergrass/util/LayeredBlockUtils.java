@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdabettergrass.util;
 
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
+import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerMetadata;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerType;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,7 @@ import java.util.List;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.0.2
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -55,26 +56,14 @@ public final class LayeredBlockUtils {
 		if (!(state instanceof LBGLayerState layerState))
 			return false;
 
-		var properties = upState.getProperties();
-		var modelVariant = new String[properties.size()];
-
-		int i = 0;
-		for (var property : properties) {
-			var end = ",";
-			if (modelVariant.length == i + 1)
-				end = "";
-			modelVariant[i] = property.getName() + '=' + nameValue(property, upState.get(property)) + end;
-			i++;
-		}
-
-		LBGLayerType[] shouldTry = {null};
-		layerState.forEach(modelVariant, metadata -> {
-			if (metadata.layerType.id.equals(LBGLayerType.SNOW_LAYER_TYPE) && metadata.hasLayerModel()) {
-				shouldTry[0] = metadata.layerType;
-			}
-		});
-
-		return shouldTry[0] != null && shouldTry[0].getNearbyLayeredBlocks(world, pos.above(), upState.getBlock(), onlyPureSnow) > 1;
+		return layerState.streamMetadata(upState)
+				.filter(metadata -> metadata.layerType().id.equals(LBGLayerType.SNOW_LAYER_TYPE) && metadata.hasLayerModel())
+				.map(LBGLayerMetadata::layerType)
+				.findFirst()
+				.map(layerType ->
+						layerType.getNearbyLayeredBlocks(world, pos.above(), upState.getBlock(), onlyPureSnow) > 1
+				)
+				.orElse(false);
 	}
 
 	@SuppressWarnings("unchecked")

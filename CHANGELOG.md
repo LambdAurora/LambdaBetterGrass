@@ -150,5 +150,9 @@ The first release of LambdaBetterGrass!
 
 - Fixed bad cake layer data.
 
+### 2.0.2
+
+- Fixed some cases where the underneath grass block wasn't displayed as snowy when a snow layer was added on top of it using better snow.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

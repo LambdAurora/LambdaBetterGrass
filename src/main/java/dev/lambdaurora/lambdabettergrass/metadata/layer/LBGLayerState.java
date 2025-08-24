@@ -15,6 +15,7 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
+import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.client.resources.model.ModelIdentifier;
@@ -22,6 +23,7 @@ import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -31,12 +33,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.0.2
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -114,6 +117,17 @@ public class LBGLayerState extends LBGState {
 		metadatas.put(type, new LBGLayerMetadata(metadataId, type, metadataJson, deserializationContext));
 	}
 
+	public Stream<LBGLayerMetadata> streamMetadata(BlockState state) {
+		return this.metadatas.entrySet().stream()
+				.filter(entry -> {
+					var variant = entry.getKey();
+					var properties = VariantSelector.extractProperties(state.getBlock().getStateDefinition(), variant);
+					return VariantSelector.match(state, properties);
+				})
+				.map(Map.Entry::getValue)
+				.flatMap(map -> map.values().stream());
+	}
+
 	public void forEach(String[] variant, Consumer<LBGLayerMetadata> consumer) {
 		this.metadatas.entrySet().stream()
 				.filter(entry -> this.matchVariant(variant, entry.getKey().split(",")))
@@ -134,7 +148,7 @@ public class LBGLayerState extends LBGState {
 						.stream()
 						.map(metadata -> {
 							var models = metadata.getCustomUnbakedModel(modelId);
-							return new LBGCompiledLayerMetadata(metadata.layerType, metadata.hasLayerModel(), metadata.offset(), models);
+							return new LBGCompiledLayerMetadata(metadata.layerType(), metadata.hasLayerModel(), metadata.offset(), models);
 						})
 						.toList();
 
