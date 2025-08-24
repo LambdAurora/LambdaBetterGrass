@@ -214,7 +214,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
 	mainFile.addModLoader("Fabric", "Quilt")
-	mainFile.addJavaVersion("Java 17", "Java 18", "Java 19", "Java 20", "Java 21", "Java 22")
+	mainFile.addJavaVersion("Java 21", "Java 22")
 
 	mainFile.displayName = "LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
 	mainFile.addRequirement("fabric-api")
