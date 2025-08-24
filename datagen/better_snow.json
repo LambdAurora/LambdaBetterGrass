@@ -119,35 +119,6 @@
 		},
 		"nether_sprouts",
 		{
-			"id": "pink_petals",
-			"data": {
-				"ash": {
-					"layer": true,
-					"offset": [
-						0,
-						0.001,
-						0
-					]
-				},
-				"moss": {
-					"layer": true,
-					"offset": [
-						0,
-						0.001,
-						0
-					]
-				},
-				"snow": {
-					"layer": true,
-					"offset": [
-						0,
-						0.001,
-						0
-					]
-				}
-			}
-		},
-		{
 			"id": "pointed_dripstone",
 			"waterloggable": true
 		},

@@ -1,0 +1,7 @@
+{
+	"parent": "lambdabettergrass:block/template/fence_post",
+	"textures": {
+		"particle": "#texture",
+		"top": "minecraft:block/pale_moss_block"
+	}
+}

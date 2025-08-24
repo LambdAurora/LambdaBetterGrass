@@ -95,6 +95,54 @@
 			]
 		}
 	},
+	"pale_moss": {
+		"layer": true,
+		"block_state": {
+			"multipart": [
+				{
+					"apply": {
+						"model": "lambdabettergrass:block/fence/bamboo/pale_mossy_fence_post"
+					}
+				},
+				{
+					"when": {
+						"north": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/bamboo/pale_mossy_fence_side_north",
+						"uvlock": false
+					}
+				},
+				{
+					"when": {
+						"east": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/bamboo/pale_mossy_fence_side_east",
+						"uvlock": false
+					}
+				},
+				{
+					"when": {
+						"south": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/bamboo/pale_mossy_fence_side_south",
+						"uvlock": false
+					}
+				},
+				{
+					"when": {
+						"west": "true"
+					},
+					"apply": {
+						"model": "lambdabettergrass:block/fence/bamboo/pale_mossy_fence_side_west",
+						"uvlock": false
+					}
+				}
+			]
+		}
+	},
 	"sculk": {
 		"layer": true,
 		"block_state": {

@@ -1,0 +1,7 @@
+{
+	"parent": "lambdabettergrass:block/fence/template/bamboo_fence_side_south",
+	"textures": {
+		"texture": "lambdabettergrass:block/fence/pale_mossy_bamboo_fence",
+		"top": "minecraft:block/pale_moss_block"
+	}
+}

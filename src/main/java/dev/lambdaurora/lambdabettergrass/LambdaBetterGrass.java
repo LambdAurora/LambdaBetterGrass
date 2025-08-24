@@ -72,7 +72,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		LBGState.registerType("layer", LBGLayerState::new);
 
 		ModelLoadingPlugin.register(pluginCtx -> {
-			pluginCtx.modifyBlockModelBeforeBake().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
+			pluginCtx.modifyBlockModelOnLoad().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
 				final var modelId = context.id();
 				if (modelId != null && !modelId.variant().equals("inventory")) {
 					var stateId = modelId.id();

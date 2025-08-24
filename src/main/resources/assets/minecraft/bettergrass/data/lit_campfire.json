@@ -5,6 +5,9 @@
 	"moss": {
 		"layer": false
 	},
+	"pale_moss": {
+		"layer": false
+	},
 	"glow_lichen": {
 		"layer": false
 	}

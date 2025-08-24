@@ -156,7 +156,10 @@ The first release of LambdaBetterGrass!
 
 ## 2.1.0
 
-- Updated to Minecraft 1.21.4.
+- Updated to Minecraft 1.21.4 (thanks to [#113](https://github.com/LambdAurora/LambdaBetterGrass/pull/113) for the help).
+  - Added pale moss layer type.
+  - Added new relevant blocks to the better snow system.
+  - (Built-in Default addon) Added textures for the new fence and pale moss layer to fences.
 - Updated [SpruceUI].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI

@@ -1,0 +1,14 @@
+{
+	"block": {
+		"Name": "minecraft:pale_moss_carpet"
+	},
+	"match": [
+		{
+			"block": "minecraft:pale_moss_carpet",
+			"properties": {
+				"bottom": "true"
+			}
+		},
+		"minecraft:pale_moss_block"
+	]
+}
