@@ -93,6 +93,9 @@ public class LBGBakedModel extends DelegateBakedModel {
 					}
 
 					Direction face = quad.nominalFace();
+					if (face == null)
+						return;
+
 					var right = face.getClockWise();
 					var left = face.getCounterClockWise();
 
@@ -124,13 +127,15 @@ public class LBGBakedModel extends DelegateBakedModel {
 	}
 
 	private static boolean canEditQuad(QuadView quad) {
-		if (quad.nominalFace().getAxis() == Direction.Axis.Y) return false;
+		var nominalFace = quad.nominalFace();
 
-		if (testAll(i -> quad.y(i) > 1.f || quad.y(i) < 0.f)) return false;
+		if (nominalFace == null) return false;
+		else if (nominalFace.getAxis() == Direction.Axis.Y) return false;
+		else if (testAll(i -> quad.y(i) > 1.f || quad.y(i) < 0.f)) return false;
 
-		if (quad.nominalFace().getAxis() == Direction.Axis.X) {
+		if (nominalFace.getAxis() == Direction.Axis.X) {
 			return !testAll(i -> quad.z(i) != 0) || !testAll(i -> quad.z(i) != 1);
-		} else if (quad.nominalFace().getAxis() == Direction.Axis.Z) {
+		} else if (nominalFace.getAxis() == Direction.Axis.Z) {
 			return !testAll(i -> quad.x(i) != 0) || !testAll(i -> quad.x(i) != 1);
 		}
 
