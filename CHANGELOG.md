@@ -154,6 +154,11 @@ The first release of LambdaBetterGrass!
 
 - Fixed some cases where the underneath grass block wasn't displayed as snowy when a snow layer was added on top of it using better snow.
 
+### 2.0.3
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
+    - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
+
 ## 2.1.0
 
 - Updated to Minecraft 1.21.4 (thanks to [#113](https://github.com/LambdAurora/LambdaBetterGrass/pull/113) for the help).
@@ -161,6 +166,11 @@ The first release of LambdaBetterGrass!
   - Added new relevant blocks to the better snow system.
   - (Built-in Default addon) Added textures for the new fence and pale moss layer to fences.
 - Updated [SpruceUI].
+
+### 2.1.1
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
+    - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
 
 ## 2.2.0
 
@@ -170,11 +180,20 @@ The first release of LambdaBetterGrass!
 - Added missing potted plants to the better snow system.
 - Updated [SpruceUI].
 
+### 2.2.1
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
+    - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
+
 ## 2.3.0
 
 - Updated to Minecraft 1.21.8.
   - Added Dried Ghast to the better snow system.
 - Updated [SpruceUI].
+
+### 2.3.1
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
