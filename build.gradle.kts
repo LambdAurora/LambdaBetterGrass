@@ -11,7 +11,7 @@ plugins {
 	alias(libs.plugins.licenser)
 	`java-library`
 	`maven-publish`
-	id("com.gradleup.shadow").version("8.3.3")
+	id("com.gradleup.shadow").version("9.1.0")
 	id("com.modrinth.minotaur").version("2.+")
 	id("net.darkhax.curseforgegradle").version("1.1.+")
 }
@@ -102,18 +102,20 @@ tasks.processResources {
 	inputs.property("version", project.version)
 
 	filesMatching("fabric.mod.json") {
-		expand("version" to inputs.properties["version"])
+		expand("version" to (inputs.properties["version"] as String))
 	}
 	filesMatching("quilt.mod.json") {
-		expand("version" to inputs.properties["version"])
+		expand("version" to (inputs.properties["version"] as String))
 	}
 
 	exclude(".cache/**")
 }
 
 tasks.jar {
+	inputs.property("archivesName", base.archivesName)
+
 	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}" }
+		rename { "${it}_${inputs.properties["archivesName"]}" }
 	}
 }
 
@@ -123,6 +125,8 @@ license {
 
 tasks.shadowJar {
 	dependsOn(tasks.jar)
+	inputs.property("archivesName", base.archivesName)
+
 	configurations = listOf(project.configurations["shadow"])
 	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
 	archiveClassifier.set("dev")
@@ -130,7 +134,7 @@ tasks.shadowJar {
 	relocate("com.electronwill.nightconfig", "dev.lambdaurora.lambdabettergrass.shadow.nightconfig")
 
 	from(rootProject.file("LICENSE")) {
-		rename { "${it}_${base.archivesName.get()}" }
+		rename { "${it}_${inputs.properties["archivesName"]}" }
 	}
 }
 
@@ -149,9 +153,11 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	this.gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
 	this.loaders.set(listOf("fabric", "quilt"))
-	this.dependencies.set(listOf(
-		ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED), // Fabric API
-	))
+	this.dependencies.set(
+		listOf(
+			ModVersionDependency("P7dR8mSH", ModVersionDependency.Type.REQUIRED), // Fabric API
+		)
+	)
 	this.changelog.set(CHANGELOG_CONTENT)
 	this.readme.set(README)
 	this.files.setFrom(tasks.remapJar.get())
@@ -164,9 +170,11 @@ modrinth {
 	uploadFile.set(tasks.remapJar)
 	loaders.set(listOf("fabric", "quilt"))
 	gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
-	dependencies.set(listOf(
-		ModDependency("P7dR8mSH", "required") // Fabric API
-	))
+	dependencies.set(
+		listOf(
+			ModDependency("P7dR8mSH", "required") // Fabric API
+		)
+	)
 	syncBodyFrom.set(README)
 
 	// Changelog fetching
