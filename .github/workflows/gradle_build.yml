@@ -3,15 +3,16 @@ name: "Gradle Build"
 on:
   push:
     branches:
-      - "*"
+      - "**"
   pull_request:
+
 concurrency: build-${{ github.sha }}
 
 jobs:
   build:
     strategy:
       matrix:
-        java: [ 21, 24 ]
+        java: [ 21, 25 ]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -22,7 +23,7 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
       - name: "Set up Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: "Gradle Build"
         run: ./gradlew build --stacktrace --parallel
       - name: "Upload artifacts"
