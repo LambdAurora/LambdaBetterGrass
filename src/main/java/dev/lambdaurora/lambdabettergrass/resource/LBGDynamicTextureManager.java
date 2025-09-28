@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Represents the dynamic texture manager of LambdaBetterGrass to handle any runtime-generated textures.
  *
- * @version 2.0.0
+ * @version 2.4.0
  * @since 2.0.0
  * @author LambdAurora
  */
@@ -61,6 +61,6 @@ public class LBGDynamicTextureManager {
 	 * @return the sprite contents
 	 */
 	private SpriteContents createSpriteContents(Identifier id, NativeImage image) {
-		return new SpriteContents(id, new FrameSize(image.getWidth(), image.getHeight()), image, ResourceMetadata.EMPTY);
+		return new SpriteContents(id, new FrameSize(image.getWidth(), image.getHeight()), image);
 	}
 }

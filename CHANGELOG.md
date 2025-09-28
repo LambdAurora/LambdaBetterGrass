@@ -219,6 +219,11 @@ The first release of LambdaBetterGrass!
 - Updated [Yumi Minecraft Libraries: Foundation].
   - This may fix some synchronization issues on Fabric.
 
+## 2.4.0
+
+- Updated to Minecraft 1.21.9.
+- Updated [SpruceUI].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

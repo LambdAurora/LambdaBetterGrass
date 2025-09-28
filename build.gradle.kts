@@ -71,9 +71,9 @@ dependencies {
 	modCompileOnly(libs.modmenu) {
 		this.isTransitive = false
 	}
-	modLocalRuntime(libs.modmenu) {
+	/*modLocalRuntime(libs.modmenu) {
 		this.isTransitive = false
-	}
+	}*/
 	implementation(libs.nightconfig.core)
 	implementation(libs.nightconfig.toml)
 

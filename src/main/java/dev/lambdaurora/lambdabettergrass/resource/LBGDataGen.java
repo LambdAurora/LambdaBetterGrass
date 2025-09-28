@@ -42,19 +42,24 @@ import java.util.concurrent.CompletableFuture;
  * The data generator of LambdaBetterGrass.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.4.0
  * @since 2.0.0
  */
 public class LBGDataGen implements DataGeneratorEntrypoint {
+	private static final Identifier BARS_DATA = Identifier.ofDefault("bettergrass/data/bars");
 	private static final Identifier BED_DATA = Identifier.ofDefault("bettergrass/data/bed");
 	private static final Identifier BUTTON_DATA = Identifier.ofDefault("bettergrass/data/button");
 	private static final Identifier CAKE_DATA = Identifier.ofDefault("bettergrass/data/cake");
 	private static final Identifier CANDLE_DATA = Identifier.ofDefault("bettergrass/data/candle");
+	private static final Identifier CHAIN_DATA = Identifier.ofDefault("bettergrass/data/chain");
+	private static final Identifier COPPER_CHEST = Identifier.ofDefault("bettergrass/data/copper_chest");
+	private static final Identifier COPPER_GOLEM_STATUE = Identifier.ofDefault("bettergrass/data/copper_golem_statue");
 	private static final Identifier FLOWER_DATA = Identifier.ofDefault("bettergrass/data/flower");
 	private static final Identifier FLOWER_BED_DATA = Identifier.ofDefault("bettergrass/data/flower_bed");
 	private static final Identifier FLOWER_POT_DATA = Identifier.ofDefault("bettergrass/data/flower_pot");
 	private static final Identifier GLASS_PANE_DATA = Identifier.ofDefault("bettergrass/data/glass_pane");
 	private static final Identifier LANTERN_DATA = Identifier.ofDefault("bettergrass/data/lantern");
+	private static final Identifier LIGHTNING_ROD_DATA = Identifier.ofDefault("bettergrass/data/lightning_rod");
 	private static final Identifier TORCH_DATA = Identifier.ofDefault("bettergrass/data/torch");
 
 	@Override
@@ -88,7 +93,11 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 							final var id = entry.key().value();
 							final var block = entry.value();
 
-							if (block instanceof BedBlock) {
+							if (block instanceof StainedGlassPaneBlock) {
+								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
+							} else if (block instanceof IronBarsBlock && !id.path().contains("glass")) {
+								context.addWaterloggedSimpleLayerState(id, BARS_DATA);
+							} else if (block instanceof BedBlock) {
 								context.addSimpleLayerState(id, BED_DATA);
 							} else if (block instanceof ButtonBlock) {
 								context.addSimpleLayerState(id, BUTTON_DATA);
@@ -96,16 +105,22 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addSimpleLayerState(id, CAKE_DATA);
 							} else if (block instanceof CandleBlock) {
 								context.addWaterloggedSimpleLayerState(id, CANDLE_DATA);
+							} else if (block instanceof ChainBlock) {
+								context.addWaterloggedSimpleLayerState(id, CHAIN_DATA);
+							} else if (block instanceof CopperChestBlock) {
+								context.addWaterloggedSimpleLayerState(id, COPPER_CHEST);
+							}  else if (block instanceof CopperGolemStatueBlock) {
+								context.addWaterloggedSimpleLayerState(id, COPPER_GOLEM_STATUE);
 							} else if (block instanceof FlowerBlock || block instanceof TallFlowerBlock) {
 								context.addSimpleLayerState(id, FLOWER_DATA);
 							} else if (block instanceof FlowerBedBlock) {
 								context.addSimpleLayerState(id, FLOWER_BED_DATA);
 							} else if (block instanceof FlowerPotBlock) {
 								context.addSimpleLayerState(id, FLOWER_POT_DATA);
-							} else if (block instanceof StainedGlassPaneBlock) {
-								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
 							} else if (block instanceof LanternBlock) {
 								context.addWaterloggedSimpleLayerState(id, LANTERN_DATA);
+							} else if (block instanceof LightningRodBlock) {
+								context.addWaterloggedSimpleLayerState(id, LIGHTNING_ROD_DATA);
 							} else if (block instanceof BaseTorchBlock) {
 								context.addSimpleLayerState(id, TORCH_DATA);
 							} else if (block instanceof DoorBlock
@@ -120,7 +135,9 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addEmptyLayerData(id);
 								context.addLayerStateWithSimpleCondition(id, "half=top,waterlogged=false");
 							} else if (block instanceof BaseCoralPlantTypeBlock
+									|| block instanceof ChestBlock
 									|| block instanceof FenceBlock
+									|| block instanceof ShelfBlock
 									|| block instanceof WallBlock) {
 								context.addEmptyLayerData(id);
 								context.addWaterloggedSimpleLayerState(id);

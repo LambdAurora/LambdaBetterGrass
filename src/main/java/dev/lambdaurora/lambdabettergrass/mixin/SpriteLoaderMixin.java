@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 @Mixin(SpriteLoader.class)
 public class SpriteLoaderMixin {
 	@WrapOperation(
-			method = "loadAndStitch(Lnet/minecraft/resources/io/ResourceManager;Lnet/minecraft/resources/Identifier;ILjava/util/concurrent/Executor;Ljava/util/Collection;)Ljava/util/concurrent/CompletableFuture;",
+			method = "loadAndStitch(Lnet/minecraft/resources/io/ResourceManager;Lnet/minecraft/resources/Identifier;ILjava/util/concurrent/Executor;Ljava/util/Set;)Ljava/util/concurrent/CompletableFuture;",
 			at = @At(
 					value = "INVOKE",
 					target = "Ljava/util/concurrent/CompletableFuture;thenCompose(Ljava/util/function/Function;)Ljava/util/concurrent/CompletableFuture;"

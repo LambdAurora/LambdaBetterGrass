@@ -1,7 +1,7 @@
 {
 	"pack": {
-		"pack_format": 64,
-		"description": "LambdaBetterGrass - 32x32 extension.",
-		"supported_formats": [63]
+		"min_format": 69,
+		"max_format": 69,
+		"description": "LambdaBetterGrass - 32x32 extension."
 	}
 }
