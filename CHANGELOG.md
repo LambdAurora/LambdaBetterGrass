@@ -159,6 +159,12 @@ The first release of LambdaBetterGrass!
 - Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
     - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
 
+### 2.0.4
+
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
 ## 2.1.0
 
 - Updated to Minecraft 1.21.3.
@@ -169,5 +175,47 @@ The first release of LambdaBetterGrass!
 - Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
     - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
 
+### 2.1.2
+
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
+## 2.2.0
+
+- Updated to Minecraft 1.21.5.
+  - Added leaf litter layer type.
+  - Added new relevant blocks to the better snow system.
+- Added missing potted plants to the better snow system.
+- Updated [SpruceUI].
+
+### 2.2.1
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
+    - Note: this may not affect this version as this was discovered on 1.21.8, but the faulty code path is the same.
+
+### 2.2.2
+
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
+## 2.3.0
+
+- Updated to Minecraft 1.21.8.
+  - Added Dried Ghast to the better snow system.
+- Updated [SpruceUI].
+
+### 2.3.1
+
+- Fixed crash with Sodium while rendering some better grass blocks ([#114](https://github.com/LambdAurora/LambdaBetterGrass/issues/114)).
+
+### 2.3.2
+
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+  - This may fix some synchronization issues on Fabric.
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
+[Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
