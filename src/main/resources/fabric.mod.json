@@ -31,7 +31,7 @@
 		"lambdabettergrass.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.9",
+		"fabricloader": ">=0.17.2",
 		"minecraft": "~1.21.9-",
 		"spruceui": ">=9.0.0",
 		"java": ">=21",
@@ -54,7 +54,8 @@
 				"modmenu.discord": "https://discord.lambdaurora.dev/",
 				"modmenu.github_releases": "https://github.com/LambdAurora/LambdaBetterGrass/releases",
 				"modmenu.modrinth": "https://modrinth.com/mod/lambdabettergrass",
-				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev"
+				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev",
+				"modmenu.donate": "https://donate.lambdaurora.dev/"
 			}
 		}
 	}

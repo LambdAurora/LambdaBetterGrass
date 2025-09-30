@@ -223,6 +223,7 @@ The first release of LambdaBetterGrass!
 
 - Updated to Minecraft 1.21.9.
 - Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
 
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"

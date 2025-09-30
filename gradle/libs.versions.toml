@@ -1,11 +1,11 @@
 [versions]
-minecraft = "1.21.9-rc1"
+minecraft = "1.21.9"
 fabric-loader = "0.17.2"
-fabric-api = "0.133.13+1.21.9"
-mappings-yalmm = "7"
+fabric-api = "0.133.14+1.21.9"
+mappings-yalmm = "8"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-alpha.16+1.21.1"
+yumi-mc-foundation = "1.0.0-alpha.16+1.21.9"
 spruceui = "9.0.0+1.21.9"
 modmenu = "15.0.0-beta.3"
 
