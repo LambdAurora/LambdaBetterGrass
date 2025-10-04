@@ -4,7 +4,6 @@
 	"plugin": "dev.lambdaurora.lambdabettergrass.LBGMixinPlugin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ReloadableResourceManagerMixin",
 		"SpriteLoaderMixin",
 		"VideoSettingsScreenMixin",
 		"sodium.SodiumOptionsGuiMixin"

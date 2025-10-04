@@ -9,11 +9,10 @@
 
 package dev.lambdaurora.lambdabettergrass.util;
 
-import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
-import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerMetadata;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerType;
+import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -27,7 +26,7 @@ import java.util.List;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -40,17 +39,17 @@ public final class LayeredBlockUtils {
 
 	public static boolean shouldGrassBeSnowy(
 			BlockAndTintGetter world, BlockPos pos, BlockState upState,
-			boolean onlyPureSnow
+			boolean onlyPureSnow, LBGContext context
 	) {
 		// Ignore blocks that are not rendered through the normal system.
 		if (upState.getRenderShape() != RenderShape.MODEL)
 			return false;
 
-		var snowLayerType = LambdaBetterGrass.get().layerTypeManager.get(LBGLayerType.SNOW_LAYER_TYPE);
+		var snowLayerType = context.layerTypeManager().get(LBGLayerType.SNOW_LAYER_TYPE);
 		if (snowLayerType.isEmpty())
 			return false;
 
-		var state = LBGState.getMetadataState(upState.getBlock());
+		var state = context.getState(upState.getBlock());
 		if (!(state instanceof LBGLayerState layerState))
 			return false;
 

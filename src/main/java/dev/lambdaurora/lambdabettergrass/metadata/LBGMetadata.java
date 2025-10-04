@@ -14,12 +14,14 @@ import com.mojang.serialization.JsonOps;
 import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
 import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGLoadingGrassLayer;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
+import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.SpriteGetter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.function.Consumer;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -41,7 +43,7 @@ public class LBGMetadata {
 	 */
 	public final Identifier id;
 
-	protected final ResourceManager resourceManager;
+	private final LBGContext context;
 	protected final List<Material> textures = new ArrayList<>();
 
 	private final List<LBGGrassLayer> layers;
@@ -49,9 +51,11 @@ public class LBGMetadata {
 	protected Consumer<BlockStateModel> snowyModelVariantProvider = null;
 	protected BlockStateModel snowyModelVariant = null;
 
-	public LBGMetadata(ResourceManager resourceManager, Identifier id, JsonObject json) {
+	public LBGMetadata(
+			ResourceManager resourceManager, LBGContext context, Identifier id, JsonObject json
+	) {
 		this.id = id;
-		this.resourceManager = resourceManager;
+		this.context = context;
 
 		/* JSON read */
 		var loadingLayers = new ArrayList<LBGLoadingGrassLayer>();
@@ -71,6 +75,13 @@ public class LBGMetadata {
 		this.layers = layers.values().stream()
 				.map(layer -> new LBGGrassLayer(resourceManager, this, layer))
 				.toList();
+	}
+
+	/**
+	 * {@return the LambdaBetterGrass context}
+	 */
+	public @NotNull LBGContext context() {
+		return this.context;
 	}
 
 	/**

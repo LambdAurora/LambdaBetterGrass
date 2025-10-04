@@ -12,9 +12,9 @@ package dev.lambdaurora.lambdabettergrass.metadata.layer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
+import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -51,7 +51,7 @@ public class LBGLayerState extends LBGState {
 
 	public LBGLayerState(
 			Identifier id, ResourceManager resourceManager, JsonObject json,
-			StateDefinition<Block, BlockState> stateDefinition
+			StateDefinition<Block, BlockState> stateDefinition, LBGContext context
 	) {
 		super(id, stateDefinition.getOwner());
 
@@ -60,11 +60,11 @@ public class LBGLayerState extends LBGState {
 			variants.entrySet().forEach(entry -> {
 				var variant = entry.getValue().getAsJsonObject();
 				if (variant.has("data")) {
-					this.loadVariant(entry.getKey(), variant, resourceManager, stateDefinition);
+					this.loadVariant(entry.getKey(), variant, resourceManager, stateDefinition, context);
 				}
 			});
 		} else if (json.has("data")) {
-			this.loadVariant("*", json, resourceManager, stateDefinition);
+			this.loadVariant("*", json, resourceManager, stateDefinition, context);
 		} else {
 			LOGGER.warn("Invalid state definition for {}, missing data or variants entry.", id);
 		}
@@ -72,14 +72,14 @@ public class LBGLayerState extends LBGState {
 
 	private void loadVariant(
 			String variant, JsonObject json, ResourceManager resourceManager,
-			StateDefinition<Block, BlockState> stateDefinition
+			StateDefinition<Block, BlockState> stateDefinition, LBGContext context
 	) {
 		var metadataId = Identifier.tryParse(json.get("data").getAsString());
 		var metadataResourceId = metadataId.withSuffix(".json");
 
-		LambdaBetterGrass.get().layerTypeManager.forEach(type -> {
-			this.putOrReplaceMetadata(variant, metadataId, type, DEFAULT_METADATA_LAYER_JSON, stateDefinition);
-		});
+		context.layerTypeManager().forEach(type ->
+				this.putOrReplaceMetadata(variant, metadataId, type, DEFAULT_METADATA_LAYER_JSON, stateDefinition)
+		);
 
 		var resources = resourceManager.getAllResources(metadataResourceId);
 		for (var resource : resources) {
@@ -87,7 +87,7 @@ public class LBGLayerState extends LBGState {
 				var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
 				for (var entry : metadataJson.entrySet()) {
-					var type = LambdaBetterGrass.get().layerTypeManager.get(entry.getKey());
+					var type = context.layerTypeManager().get(entry.getKey());
 
 					if (type.isEmpty())
 						continue;

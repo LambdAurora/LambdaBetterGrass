@@ -11,10 +11,9 @@ package dev.lambdaurora.lambdabettergrass.metadata;
 
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
+import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceManager;
@@ -25,18 +24,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.Optional;
+
 /**
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public abstract class LBGState {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final String PATH_PREFIX = "bettergrass/states";
 	private static final Object2ObjectMap<String, LBGStateProvider> LBG_STATES_TYPE = new Object2ObjectOpenHashMap<>();
-	private static final Reference2ObjectMap<Block, LBGState> LBG_STATES = new Reference2ObjectOpenHashMap<>();
 
 	private final Identifier id;
 	private final Block block;
@@ -44,7 +44,6 @@ public abstract class LBGState {
 	public LBGState(Identifier id, Block block) {
 		this.id = id;
 		this.block = block;
-		putState(block, this);
 	}
 
 	/**
@@ -92,50 +91,32 @@ public abstract class LBGState {
 			BlockState state, BlockStateModel.UnbakedRoot originalModel
 	);
 
-	protected static void putState(Block block, LBGState state) {
-		LBG_STATES.put(block, state);
-	}
-
-	/**
-	 * Returns the state from the cache using its identifier.
-	 *
-	 * @param block the block of the state
-	 * @return the state if cached, else {@code null}
-	 */
-	public static @Nullable LBGState getMetadataState(Block block) {
-		return LBG_STATES.get(block);
-	}
-
-	/**
-	 * Resets all the known states cache.
-	 */
-	public static void reset() {
-		LBG_STATES.clear();
-	}
-
 	public static void registerType(String type, LBGStateProvider stateProvider) {
 		LBG_STATES_TYPE.put(type, stateProvider);
 	}
 
-	public static void loadMetadataState(
+	public static Optional<LBGState> loadMetadataState(
 			Identifier id, ResourceManager resourceManager, JsonObject json,
-			StateDefinition<Block, BlockState> stateDefinition
+			StateDefinition<Block, BlockState> stateDefinition,
+			LBGContext context
 	) {
 		String type = "grass";
 		if (json.has("type"))
 			type = json.get("type").getAsString();
 
 		if (LBG_STATES_TYPE.containsKey(type))
-			LBG_STATES_TYPE.get(type).create(id, resourceManager, json, stateDefinition);
-		else
+			return Optional.of(LBG_STATES_TYPE.get(type).create(id, resourceManager, json, stateDefinition, context));
+		else {
 			LOGGER.warn("Could not find type {} for metadata state {}.", type, id);
+			return Optional.empty();
+		}
 	}
 
 	@FunctionalInterface
 	public interface LBGStateProvider {
 		LBGState create(
 				Identifier id, ResourceManager resourceManager, JsonObject json,
-				StateDefinition<Block, BlockState> stateDefinition
+				StateDefinition<Block, BlockState> stateDefinition, LBGContext context
 		);
 	}
 }

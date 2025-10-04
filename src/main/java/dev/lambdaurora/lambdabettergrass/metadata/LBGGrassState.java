@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
+import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -37,7 +38,7 @@ import java.util.Objects;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {
@@ -46,7 +47,7 @@ public class LBGGrassState extends LBGState {
 
 	public LBGGrassState(
 			@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json,
-			@NotNull StateDefinition<Block, BlockState> stateDefinition
+			@NotNull StateDefinition<Block, BlockState> stateDefinition, @NotNull LBGContext context
 	) {
 		super(id, stateDefinition.getOwner());
 
@@ -62,7 +63,7 @@ public class LBGGrassState extends LBGState {
 							var metadataId = Identifier.parse(variant.get("data").getAsString());
 							var properties = VariantSelector.extractProperties(stateDefinition, entry.getKey());
 
-							return new Entry(properties, this.loadMetadata(resourceManager, metadataId));
+							return new Entry(properties, this.loadMetadata(resourceManager, context, metadataId));
 						} else {
 							return null;
 						}
@@ -94,7 +95,7 @@ public class LBGGrassState extends LBGState {
 			}
 		} else if (json.has("data")) { // Look for a common metadata if no variants are specified.
 			var metadataId = Identifier.parse(json.get("data").getAsString());
-			var metadata = this.loadMetadata(resourceManager, metadataId);
+			var metadata = this.loadMetadata(resourceManager, context, metadataId);
 			for (var state : stateDefinition.getPossibleStates()) {
 				this.metadatas.put(state, metadata);
 			}
@@ -105,15 +106,18 @@ public class LBGGrassState extends LBGState {
 	 * Loads the metadata from the resource manager.
 	 *
 	 * @param resourceManager the resource manager
+	 * @param context the LambdaBetterGrass context
 	 * @param metadataId the metadata identifier
 	 * @return the metadata if loaded successfully, else {@code null}
 	 */
-	private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
+	private @Nullable LBGMetadata loadMetadata(
+			@NotNull ResourceManager resourceManager, @NotNull LBGContext context, @NotNull Identifier metadataId
+	) {
 		var metadataResourceId = metadataId.withSuffix(".json");
 		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).open())) {
 			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
-			return new LBGMetadata(resourceManager, metadataId, metadataJson);
+			return new LBGMetadata(resourceManager, context, metadataId, metadataJson);
 		} catch (Exception e) {
 			LambdaBetterGrass.warn(LOGGER, "Could not load metadata `{}`.", metadataId, e);
 		}

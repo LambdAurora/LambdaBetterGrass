@@ -86,22 +86,6 @@ public enum LBGTextureGenerator {
 	}
 
 	/**
-	 * Generates the side texture using the original side texture, the top texture and the mask texture.
-	 *
-	 * @param target the texture name
-	 * @param side the original side texture
-	 * @param top the top texture
-	 * @param mask the mask texture
-	 * @return the generated texture identifier
-	 */
-	public static Identifier generateTexture(String target, NativeImage side, NativeImage top, NativeImage mask) {
-		var image = applyMask(side, top, mask);
-
-		final var id = LambdaBetterGrass.id("block/bettergrass/" + target);
-		return LambdaBetterGrass.get().dynamicTextureManager.registerSprite(id, image);
-	}
-
-	/**
 	 * Applies the mask on the source texture using the top and mask textures.
 	 * <p>
 	 * If a pixel is alpha 255 in the mask texture, then the pixel will be from the top texture, else it will be from the source texture.

@@ -10,26 +10,25 @@
 package dev.lambdaurora.lambdabettergrass.resource;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.resources.ResourceMetadata;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents the dynamic texture manager of LambdaBetterGrass to handle any runtime-generated textures.
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @since 2.0.0
  * @author LambdAurora
  */
 public class LBGDynamicTextureManager {
-	private final Map<Identifier, SpriteContents> sprites = new Object2ObjectOpenHashMap<>();
-	private CompletableFuture<List<SpriteContents>> future;
+	private final Map<Identifier, SpriteContents> sprites = new ConcurrentHashMap<>();
+	private CompletableFuture<List<SpriteContents>> future = CompletableFuture.completedFuture(List.of());
 
 	public void reset() {
 		this.sprites.clear();
@@ -44,13 +43,12 @@ public class LBGDynamicTextureManager {
 		return this.future;
 	}
 
-	public Identifier registerSprite(Identifier id, NativeImage image) {
+	public void registerSprite(Identifier id, NativeImage image) {
 		var sprite = this.createSpriteContents(id, image);
 		var oldSprite = this.sprites.put(id, sprite);
 		if (oldSprite != null) {
 			oldSprite.close();
 		}
-		return id;
 	}
 
 	/**

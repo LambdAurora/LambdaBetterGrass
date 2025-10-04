@@ -14,18 +14,20 @@ import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
-import dev.lambdaurora.lambdabettergrass.resource.LBGLayerTypeManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.YumiMods;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
+import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.ResourceReloaderKeys;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -49,8 +51,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	public final LBGConfig config = new LBGConfig(this);
 	private final ThreadLocal<Boolean> betterLayerDisabled = ThreadLocal.withInitial(() -> false);
 
-	public final LBGLayerTypeManager layerTypeManager = new LBGLayerTypeManager();
-	public final LBGResourceReloader resourceReloader = new LBGResourceReloader(layerTypeManager);
+	public final LBGResourceReloader resourceReloader = new LBGResourceReloader();
 	public final LBGDynamicTextureManager dynamicTextureManager = new LBGDynamicTextureManager();
 
 	private String version;
@@ -67,23 +68,31 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		LBGState.registerType("grass", LBGGrassState::new);
 		LBGState.registerType("layer", LBGLayerState::new);
 
-		ModelLoadingPlugin.register(pluginCtx -> {
-			pluginCtx.modifyBlockModelOnLoad().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
-				// Get cached states metadata.
-				var state = LBGState.getMetadataState(context.state().getBlock());
+		var resourceLoader = ResourceLoader.get(ResourceType.CLIENT_RESOURCES);
+		resourceLoader.registerReloader(LBGResourceReloader.ID, this.resourceReloader);
+		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.MODELS);
+		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.ATLAS);
 
-				// If states metadata found, search for corresponding metadata and if exists replace the model.
-				if (state != null) {
-					var newModel = state.getCustomUnbakedModel(context.state(), model);
+		PreparableModelLoadingPlugin.register(
+				(sharedState, applyExecutor) -> sharedState.get(LBGResourceReloader.SHARED_STATE_KEY).awaitContext(),
+				(lbgCtx, pluginCtx) -> {
+					pluginCtx.modifyBlockModelOnLoad().register(ModelModifier.WRAP_LAST_PHASE, (model, context) -> {
+						// Get cached states metadata.
+						var state = lbgCtx.getState(context.state().getBlock());
 
-					if (newModel != null) {
-						return newModel;
-					}
+						// If states metadata found, search for corresponding metadata and if exists replace the model.
+						if (state != null) {
+							var newModel = state.getCustomUnbakedModel(context.state(), model);
+
+							if (newModel != null) {
+								return newModel;
+							}
+						}
+
+						return model;
+					});
 				}
-
-				return model;
-			});
-		});
+		);
 	}
 
 	/**

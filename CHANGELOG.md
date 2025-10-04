@@ -225,6 +225,14 @@ The first release of LambdaBetterGrass!
 - Updated [SpruceUI].
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+## 2.5.0
+
+- Improved reliability and performances of resource reloading.
+  - The mod now only delays the resource reloader that depends on better grass/snow data.
+  - The performance improvement exists but won't be noticeable in most situations (~200ms).
+  - The LambdaBetterGrass context is now properly contained, avoiding resource leaks and bad interactions with other mods.
+- Fixed crash with Remove Reloading Screen [#117](https://github.com/LambdAurora/LambdaBetterGrass/issues/117).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

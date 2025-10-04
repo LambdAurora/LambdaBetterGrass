@@ -36,7 +36,7 @@ import java.util.function.Predicate;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.5.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends WrapperBlockStateModel {
@@ -66,7 +66,7 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 			var upPos = pos.above();
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
-				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, up, false)) {
+				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, up, false, this.metadata.context())) {
 					this.metadata.getSnowyModelVariant()
 							.emitQuads(
 									quadEmitter, world, pos, state.with(BlockStateProperties.SNOWY, true), random, cullTest
@@ -142,19 +142,19 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 		return true;
 	}
 
-	private static boolean canFullyConnect(
+	private boolean canFullyConnect(
 			BlockAndTintGetter world, BlockState self, BlockPos selfPos, Direction direction
 	) {
-		return canConnect(world, self, selfPos, selfPos.relative(direction).below());
+		return this.canConnect(world, self, selfPos, selfPos.relative(direction).below());
 	}
 
-	private static boolean canConnect(
+	private boolean canConnect(
 			BlockAndTintGetter world, BlockState self, BlockPos start, Direction direction
 	) {
-		return canConnect(world, self, start, start.relative(direction));
+		return this.canConnect(world, self, start, start.relative(direction));
 	}
 
-	private static boolean canConnect(
+	private boolean canConnect(
 			BlockAndTintGetter world, BlockState self, BlockPos selfPos, BlockPos adjacentPos
 	) {
 		var adjacent = world.getBlockState(adjacentPos);
@@ -170,7 +170,7 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 					if (up.is(Blocks.SNOW))
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
-						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, up, true))
+						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, up, true, this.metadata.context()))
 							return true;
 					}
 				}
