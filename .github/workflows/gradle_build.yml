@@ -24,6 +24,12 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: "Set up Gradle"
         uses: gradle/actions/setup-gradle@v4
+      - name: "Handle Loom Cache"
+        uses: actions/cache@v4
+        with:
+          path: "**/.gradle/loom-cache"
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.*', '**/*.gradle*', '**/gradle-wrapper.properties') }}"
+          restore-keys: "${{ runner.os }}-gradle-"
       - name: "Gradle Build"
         run: ./gradlew build --stacktrace --parallel
       - name: "Upload artifacts"
