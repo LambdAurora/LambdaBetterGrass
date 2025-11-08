@@ -5,7 +5,7 @@ fabric-api = "0.133.14+1.21.9"
 mappings-yalmm = "8"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-alpha.16+1.21.9"
+yumi-mc-foundation = "1.0.0-beta.1+1.21.10"
 spruceui = "9.0.0+1.21.9"
 modmenu = "15.0.0-beta.3"
 
@@ -13,9 +13,9 @@ modmenu = "15.0.0-beta.3"
 nightconfig = "3.8.1"
 
 # Gradle
-gradle-licenser = "2.1.+"
-gradle-loom = "1.11.+"
-gradle-lambdamcdev = "1.6.+"
+gradle-licenser = "2.2.+"
+gradle-loom = "1.13.+"
+gradle-lambdamcdev = "1.8.+"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
