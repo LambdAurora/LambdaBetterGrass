@@ -16,11 +16,10 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -49,14 +48,14 @@ public abstract class LBGState {
 	/**
 	 * {@return the identifier of this state}
 	 */
-	public @NotNull Identifier id() {
+	public Identifier id() {
 		return this.id;
 	}
 
 	/**
 	 * {@return the block associated with this state}
 	 */
-	public @NotNull Block block() {
+	public Block block() {
 		return this.block;
 	}
 

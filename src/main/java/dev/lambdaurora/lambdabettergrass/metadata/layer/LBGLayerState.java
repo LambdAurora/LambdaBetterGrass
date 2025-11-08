@@ -19,11 +19,11 @@ import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -74,14 +74,14 @@ public class LBGLayerState extends LBGState {
 			String variant, JsonObject json, ResourceManager resourceManager,
 			StateDefinition<Block, BlockState> stateDefinition, LBGContext context
 	) {
-		var metadataId = Identifier.tryParse(json.get("data").getAsString());
+		var metadataId = Identifier.parse(json.get("data").getAsString());
 		var metadataResourceId = metadataId.withSuffix(".json");
 
 		context.layerTypeManager().forEach(type ->
 				this.putOrReplaceMetadata(variant, metadataId, type, DEFAULT_METADATA_LAYER_JSON, stateDefinition)
 		);
 
-		var resources = resourceManager.getAllResources(metadataResourceId);
+		var resources = resourceManager.getResourceStack(metadataResourceId);
 		for (var resource : resources) {
 			try (var reader = new InputStreamReader(resource.open())) {
 				var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
@@ -138,7 +138,7 @@ public class LBGLayerState extends LBGState {
 	}
 
 	@Override
-	public @Nullable BlockStateModel.UnbakedRoot getCustomUnbakedModel(
+	public BlockStateModel.@Nullable UnbakedRoot getCustomUnbakedModel(
 			BlockState state, BlockStateModel.UnbakedRoot originalModel
 	) {
 		var metadatas = this.streamMetadata(state)

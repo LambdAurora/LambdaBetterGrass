@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdabettergrass.resource;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -35,7 +34,7 @@ public final class LBGContext {
 	/**
 	 * {@return the layer type manager}
 	 */
-	public @NotNull LBGLayerTypeManager layerTypeManager() {
+	public LBGLayerTypeManager layerTypeManager() {
 		return this.layerTypeManager;
 	}
 
@@ -45,7 +44,7 @@ public final class LBGContext {
 	 * @param block the block
 	 * @return the LambdaBetterGrass state if one is associated with the given block, or {@code null} otherwise
 	 */
-	public @Nullable LBGState getState(@NotNull Block block) {
+	public @Nullable LBGState getState(Block block) {
 		return this.states.get(block);
 	}
 }

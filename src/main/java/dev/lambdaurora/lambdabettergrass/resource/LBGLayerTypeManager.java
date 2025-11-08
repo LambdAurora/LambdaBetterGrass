@@ -15,9 +15,8 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerType;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerTypeData;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.Resource;
-import net.minecraft.resources.io.ResourceManager;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,12 +47,12 @@ public final class LBGLayerTypeManager {
 	 * @return the layer type if present, or {@link Optional#empty()} otherwise
 	 * @see #get(Identifier)
 	 */
-	public @NotNull Optional<LBGLayerType> get(String rawId) {
+	public Optional<LBGLayerType> get(String rawId) {
 		var id = Identifier.parse(rawId);
 
 		return this.get(id).or(() -> {
-			if (!rawId.contains(":") && id.namespace().equals(Identifier.DEFAULT_NAMESPACE)) {
-				return this.get(LambdaBetterGrass.id(id.path()));
+			if (!rawId.contains(":") && id.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
+				return this.get(LambdaBetterGrass.id(id.getPath()));
 			} else {
 				return Optional.empty();
 			}
@@ -67,7 +66,7 @@ public final class LBGLayerTypeManager {
 	 * @return the layer type if present, or {@link Optional#empty()} otherwise
 	 * @see #get(String)
 	 */
-	public @NotNull Optional<LBGLayerType> get(Identifier id) {
+	public Optional<LBGLayerType> get(Identifier id) {
 		return Optional.ofNullable(this.types.get(id));
 	}
 
@@ -77,7 +76,7 @@ public final class LBGLayerTypeManager {
 
 	public void load(ResourceManager resourceManager) {
 		this.types.clear();
-		var layerTypes = resourceManager.findResources(PREFIX, path -> path.path().endsWith(EXTENSION));
+		var layerTypes = resourceManager.listResources(PREFIX, path -> path.getPath().endsWith(EXTENSION));
 		layerTypes.forEach(this::loadLayerType);
 	}
 
@@ -102,7 +101,7 @@ public final class LBGLayerTypeManager {
 	}
 
 	private Identifier getIdFromResource(Identifier resourceId) {
-		final var path = resourceId.path();
+		final var path = resourceId.getPath();
 		return resourceId.withPath(path.substring(PREFIX.length() + 1, path.length() - EXTENSION.length()));
 	}
 }

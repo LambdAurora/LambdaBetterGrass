@@ -25,12 +25,12 @@ import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.TextFormatting;
-import net.minecraft.Util;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Text;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the LambdaBetterGrass settings screen.
@@ -41,12 +41,12 @@ import org.jetbrains.annotations.Nullable;
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
-	public static final Text MOD_NAME = Text.translatable(LambdaBetterGrass.NAMESPACE);
+	public static final Component MOD_NAME = Component.translatable(LambdaBetterGrass.NAMESPACE);
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
-	private static final Text VERSION;
+	private static final Component VERSION;
 
 	private final LBGConfig config;
-	private final Screen parent;
+	private final @Nullable Screen parent;
 
 	private final SpruceOption modeOption;
 	private final SpruceOption betterSnowOption;
@@ -59,10 +59,10 @@ public class SettingsScreen extends SpruceScreen {
 			rawVersion = rawVersion.substring(0, rawVersion.length() - "-local".length());
 		}
 
-		var version = Text.literal('v' + rawVersion).withStyle(TextFormatting.GRAY);
+		var version = Component.literal('v' + rawVersion).withStyle(ChatFormatting.GRAY);
 
 		if (rawVersion.matches("^.+-rc\\.\\d+\\+.+$")) {
-			version = version.append(Text.literal(" (Release Candidate)").withStyle(TextFormatting.GOLD));
+			version = version.append(Component.literal(" (Release Candidate)").withStyle(ChatFormatting.GOLD));
 		}
 
 		/*if (LambdaBetterGrass.isDevMode()) {
@@ -73,19 +73,19 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	public SettingsScreen(@Nullable Screen parent) {
-		super(Text.translatable("lambdabettergrass.menu.title", MOD_NAME));
+		super(Component.translatable("lambdabettergrass.menu.title", MOD_NAME));
 		this.config = LambdaBetterGrass.get().config;
 		this.parent = parent;
 
 		this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
 				amount -> {
 					this.config.setMode(this.config.getMode().next());
-					if (this.client != null)
-						this.client.levelRenderer.allChanged();
+					if (this.minecraft != null)
+						this.minecraft.levelRenderer.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
 				TooltipData.builder()
-						.text(Text.translatable("lambdabettergrass.tooltip.mode",
+						.text(Component.translatable("lambdabettergrass.tooltip.mode",
 								LBGMode.OFF.getTranslatedText(),
 								LBGMode.FASTEST.getTranslatedText(),
 								LBGMode.FAST.getTranslatedText(),
@@ -98,10 +98,10 @@ public class SettingsScreen extends SpruceScreen {
 				this.config::hasBetterLayer,
 				betterSnow -> {
 					this.config.setBetterLayer(betterSnow);
-					if (this.client != null)
-						this.client.levelRenderer.allChanged();
+					if (this.minecraft != null)
+						this.minecraft.levelRenderer.allChanged();
 				},
-				TooltipData.builder().text(Text.translatable("lambdabettergrass.tooltip.better_snow")).build(),
+				TooltipData.builder().text(Component.translatable("lambdabettergrass.tooltip.better_snow")).build(),
 				true);
 
 		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
@@ -119,7 +119,7 @@ public class SettingsScreen extends SpruceScreen {
 
 	@Override
 	public void onClose() {
-		this.client.setScreen(this.parent);
+		this.minecraft.setScreen(this.parent);
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class SettingsScreen extends SpruceScreen {
 
 	private void buildLabels() {
 		this.addRenderableWidget(new SpruceLabelWidget(
-				Position.of(0, 8), this.title.copy().withStyle(TextFormatting.WHITE),
+				Position.of(0, 8), this.title.copy().withStyle(ChatFormatting.WHITE),
 				this.width, SpruceTextAlignment.CENTER
 		));
 		this.addRenderableWidget(new SpruceLabelWidget(
@@ -160,25 +160,25 @@ public class SettingsScreen extends SpruceScreen {
 
 		int y = this.height / 2;
 
-		var text = Text.literal("");
-		text.append(Text.translatable("lambdabettergrass.menu.title.info").withStyle(TextFormatting.GOLD, TextFormatting.BOLD));
+		var text = Component.literal("");
+		text.append(Component.translatable("lambdabettergrass.menu.title.info").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 		text.append("\n");
-		text.append(Text.translatable("lambdabettergrass.menu.info.1").withStyle(TextFormatting.WHITE)).append("\n");
-		text.append(Text.translatable("lambdabettergrass.menu.info.2").withStyle(TextFormatting.WHITE)).append(" ");
-		text.append(Text.translatable("lambdabettergrass.menu.info.3").withStyle(TextFormatting.WHITE)).append("\n");
+		text.append(Component.translatable("lambdabettergrass.menu.info.1").withStyle(ChatFormatting.WHITE)).append("\n");
+		text.append(Component.translatable("lambdabettergrass.menu.info.2").withStyle(ChatFormatting.WHITE)).append(" ");
+		text.append(Component.translatable("lambdabettergrass.menu.info.3").withStyle(ChatFormatting.WHITE)).append("\n");
 		var widget = this.addRenderableWidget(new SpruceLabelWidget(
 				Position.of(this, 10, y),
 				text, this.width - 20, SpruceTextAlignment.CENTER
 		));
 		var readMore = new SpruceLabelWidget(
 				Position.of(this, 0, y + 5 + widget.getHeight()),
-				Text.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]")
-						.withStyle(TextFormatting.GREEN),
+				Component.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]")
+						.withStyle(ChatFormatting.GREEN),
 				this.width,
 				label -> Util.getPlatform().openUri(API_URL),
 				SpruceTextAlignment.CENTER
 		);
-		readMore.setTooltip(Text.translatable("chat.link.open"));
+		readMore.setTooltip(Component.translatable("chat.link.open"));
 		this.addRenderableWidget(readMore);
 	}
 }

@@ -11,8 +11,8 @@ package dev.lambdaurora.lambdabettergrass;
 
 import dev.lambdaurora.spruceui.SpruceTexts;
 import dev.lambdaurora.spruceui.util.Nameable;
-import net.minecraft.TextFormatting;
-import net.minecraft.network.chat.Text;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -25,14 +25,14 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public enum LBGMode implements Nameable {
-	OFF(SpruceTexts.OPTIONS_OFF, TextFormatting.RED),
-	FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, TextFormatting.GOLD),
-	FAST(SpruceTexts.OPTIONS_GENERIC_FAST, TextFormatting.YELLOW),
-	FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, TextFormatting.GREEN);
+	OFF(SpruceTexts.OPTIONS_OFF, ChatFormatting.RED),
+	FASTEST(SpruceTexts.OPTIONS_GENERIC_FASTEST, ChatFormatting.GOLD),
+	FAST(SpruceTexts.OPTIONS_GENERIC_FAST, ChatFormatting.YELLOW),
+	FANCY(SpruceTexts.OPTIONS_GENERIC_FANCY, ChatFormatting.GREEN);
 
-	private final Text text;
+	private final Component text;
 
-	LBGMode(Text text, TextFormatting formatting) {
+	LBGMode(Component text, ChatFormatting formatting) {
 		this.text = text.copy().withStyle(formatting);
 	}
 
@@ -58,7 +58,7 @@ public enum LBGMode implements Nameable {
 	/**
 	 * {@return the translated text of the better grass mode}
 	 */
-	public Text getTranslatedText() {
+	public Component getTranslatedText() {
 		return this.text;
 	}
 

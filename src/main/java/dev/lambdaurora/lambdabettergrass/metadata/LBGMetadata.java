@@ -20,9 +20,8 @@ import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.SpriteGetter;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,8 +47,8 @@ public class LBGMetadata {
 
 	private final List<LBGGrassLayer> layers;
 
-	protected Consumer<BlockStateModel> snowyModelVariantProvider = null;
-	protected BlockStateModel snowyModelVariant = null;
+	protected @Nullable Consumer<BlockStateModel> snowyModelVariantProvider = null;
+	protected @Nullable BlockStateModel snowyModelVariant = null;
 
 	public LBGMetadata(
 			ResourceManager resourceManager, LBGContext context, Identifier id, JsonObject json
@@ -80,7 +79,7 @@ public class LBGMetadata {
 	/**
 	 * {@return the LambdaBetterGrass context}
 	 */
-	public @NotNull LBGContext context() {
+	public LBGContext context() {
 		return this.context;
 	}
 

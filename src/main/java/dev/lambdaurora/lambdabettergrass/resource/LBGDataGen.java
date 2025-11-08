@@ -17,7 +17,6 @@ import com.google.gson.stream.JsonWriter;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -26,8 +25,8 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.block.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,21 +45,21 @@ import java.util.concurrent.CompletableFuture;
  * @since 2.0.0
  */
 public class LBGDataGen implements DataGeneratorEntrypoint {
-	private static final Identifier BARS_DATA = Identifier.ofDefault("bettergrass/data/bars");
-	private static final Identifier BED_DATA = Identifier.ofDefault("bettergrass/data/bed");
-	private static final Identifier BUTTON_DATA = Identifier.ofDefault("bettergrass/data/button");
-	private static final Identifier CAKE_DATA = Identifier.ofDefault("bettergrass/data/cake");
-	private static final Identifier CANDLE_DATA = Identifier.ofDefault("bettergrass/data/candle");
-	private static final Identifier CHAIN_DATA = Identifier.ofDefault("bettergrass/data/chain");
-	private static final Identifier COPPER_CHEST = Identifier.ofDefault("bettergrass/data/copper_chest");
-	private static final Identifier COPPER_GOLEM_STATUE = Identifier.ofDefault("bettergrass/data/copper_golem_statue");
-	private static final Identifier FLOWER_DATA = Identifier.ofDefault("bettergrass/data/flower");
-	private static final Identifier FLOWER_BED_DATA = Identifier.ofDefault("bettergrass/data/flower_bed");
-	private static final Identifier FLOWER_POT_DATA = Identifier.ofDefault("bettergrass/data/flower_pot");
-	private static final Identifier GLASS_PANE_DATA = Identifier.ofDefault("bettergrass/data/glass_pane");
-	private static final Identifier LANTERN_DATA = Identifier.ofDefault("bettergrass/data/lantern");
-	private static final Identifier LIGHTNING_ROD_DATA = Identifier.ofDefault("bettergrass/data/lightning_rod");
-	private static final Identifier TORCH_DATA = Identifier.ofDefault("bettergrass/data/torch");
+	private static final Identifier BARS_DATA = Identifier.withDefaultNamespace("bettergrass/data/bars");
+	private static final Identifier BED_DATA = Identifier.withDefaultNamespace("bettergrass/data/bed");
+	private static final Identifier BUTTON_DATA = Identifier.withDefaultNamespace("bettergrass/data/button");
+	private static final Identifier CAKE_DATA = Identifier.withDefaultNamespace("bettergrass/data/cake");
+	private static final Identifier CANDLE_DATA = Identifier.withDefaultNamespace("bettergrass/data/candle");
+	private static final Identifier CHAIN_DATA = Identifier.withDefaultNamespace("bettergrass/data/chain");
+	private static final Identifier COPPER_CHEST = Identifier.withDefaultNamespace("bettergrass/data/copper_chest");
+	private static final Identifier COPPER_GOLEM_STATUE = Identifier.withDefaultNamespace("bettergrass/data/copper_golem_statue");
+	private static final Identifier FLOWER_DATA = Identifier.withDefaultNamespace("bettergrass/data/flower");
+	private static final Identifier FLOWER_BED_DATA = Identifier.withDefaultNamespace("bettergrass/data/flower_bed");
+	private static final Identifier FLOWER_POT_DATA = Identifier.withDefaultNamespace("bettergrass/data/flower_pot");
+	private static final Identifier GLASS_PANE_DATA = Identifier.withDefaultNamespace("bettergrass/data/glass_pane");
+	private static final Identifier LANTERN_DATA = Identifier.withDefaultNamespace("bettergrass/data/lantern");
+	private static final Identifier LIGHTNING_ROD_DATA = Identifier.withDefaultNamespace("bettergrass/data/lightning_rod");
+	private static final Identifier TORCH_DATA = Identifier.withDefaultNamespace("bettergrass/data/torch");
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -84,18 +83,18 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 		}
 
 		@Override
-		public @NotNull CompletableFuture<?> run(CachedOutput cachedOutput) {
+		public CompletableFuture<?> run(CachedOutput cachedOutput) {
 			return this.registryProvider.thenCompose(provider -> {
 				final var context = new Context();
-				provider.lookupOrThrow(Registries.BLOCK).streamElements()
+				provider.lookupOrThrow(Registries.BLOCK).listElements()
 						.filter(Holder::isBound)
 						.forEach(entry -> {
-							final var id = entry.key().value();
+							final var id = entry.key().identifier();
 							final var block = entry.value();
 
 							if (block instanceof StainedGlassPaneBlock) {
 								context.addWaterloggedSimpleLayerState(id, GLASS_PANE_DATA);
-							} else if (block instanceof IronBarsBlock && !id.path().contains("glass")) {
+							} else if (block instanceof IronBarsBlock && !id.getPath().contains("glass")) {
 								context.addWaterloggedSimpleLayerState(id, BARS_DATA);
 							} else if (block instanceof BedBlock) {
 								context.addSimpleLayerState(id, BED_DATA);
@@ -109,7 +108,7 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addWaterloggedSimpleLayerState(id, CHAIN_DATA);
 							} else if (block instanceof CopperChestBlock) {
 								context.addWaterloggedSimpleLayerState(id, COPPER_CHEST);
-							}  else if (block instanceof CopperGolemStatueBlock) {
+							} else if (block instanceof CopperGolemStatueBlock) {
 								context.addWaterloggedSimpleLayerState(id, COPPER_GOLEM_STATUE);
 							} else if (block instanceof FlowerBlock || block instanceof TallFlowerBlock) {
 								context.addSimpleLayerState(id, FLOWER_DATA);

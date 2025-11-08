@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperUnbakedGro
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the LambdaBetterGrass unbaked model.
@@ -32,7 +31,7 @@ public class LBGUnbakedModel extends WrapperUnbakedGroupedBlockStateModel {
 	}
 
 	@Override
-	public @NotNull BlockStateModel bake(BlockState state, ModelBaker baker) {
+	public BlockStateModel bake(BlockState state, ModelBaker baker) {
 		this.metadata.bakeTextures(baker.sprites());
 
 		var model = new LBGBakedModel(super.bake(state, baker), this.metadata);

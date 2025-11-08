@@ -18,13 +18,12 @@ import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +45,8 @@ public class LBGGrassState extends LBGState {
 	private final Map<BlockState, LBGMetadata> metadatas = new Object2ObjectOpenHashMap<>();
 
 	public LBGGrassState(
-			@NotNull Identifier id, @NotNull ResourceManager resourceManager, @NotNull JsonObject json,
-			@NotNull StateDefinition<Block, BlockState> stateDefinition, @NotNull LBGContext context
+			Identifier id, ResourceManager resourceManager, JsonObject json,
+			StateDefinition<Block, BlockState> stateDefinition, LBGContext context
 	) {
 		super(id, stateDefinition.getOwner());
 
@@ -83,8 +82,8 @@ public class LBGGrassState extends LBGState {
 
 			if (stateDefinition.getProperties().contains(BlockStateProperties.SNOWY)) {
 				this.metadatas.forEach((state, metadata) -> {
-					if (!state.get(BlockStateProperties.SNOWY)) {
-						var snowyState = state.with(BlockStateProperties.SNOWY, true);
+					if (!state.getValue(BlockStateProperties.SNOWY)) {
+						var snowyState = state.setValue(BlockStateProperties.SNOWY, true);
 						var snowyMetadata = this.metadatas.get(snowyState);
 
 						if (snowyMetadata != null) {
@@ -111,7 +110,7 @@ public class LBGGrassState extends LBGState {
 	 * @return the metadata if loaded successfully, else {@code null}
 	 */
 	private @Nullable LBGMetadata loadMetadata(
-			@NotNull ResourceManager resourceManager, @NotNull LBGContext context, @NotNull Identifier metadataId
+			ResourceManager resourceManager, LBGContext context, Identifier metadataId
 	) {
 		var metadataResourceId = metadataId.withSuffix(".json");
 		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).open())) {
@@ -130,7 +129,7 @@ public class LBGGrassState extends LBGState {
 	 * @param state the block state
 	 * @return a metadata if it exists for the given block state, else {@code null}
 	 */
-	public @Nullable LBGMetadata getMetadata(@NotNull BlockState state) {
+	public @Nullable LBGMetadata getMetadata(BlockState state) {
 		return this.metadatas.get(state);
 	}
 

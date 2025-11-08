@@ -14,7 +14,7 @@ import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

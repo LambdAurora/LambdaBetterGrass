@@ -13,7 +13,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the masks to use for a better grass layer.
@@ -27,9 +26,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 public record LBGGrassMasks(
-		@NotNull Identifier connect,
-		@NotNull Identifier blendUp,
-		@NotNull Identifier arch
+		Identifier connect,
+		Identifier blendUp,
+		Identifier arch
 ) {
 	public static final Identifier DEFAULT_CONNECT_MASK = LambdaBetterGrass.id("bettergrass/mask/standard_block_side_connect");
 	public static final Identifier DEFAULT_BLEND_UP_MASK = LambdaBetterGrass.id("bettergrass/mask/grass_block_side_blend_up");

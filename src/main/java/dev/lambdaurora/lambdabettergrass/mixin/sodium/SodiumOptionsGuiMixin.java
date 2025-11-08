@@ -14,7 +14,7 @@ import dev.lambdaurora.lambdabettergrass.util.SodiumOptionPage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -34,7 +34,7 @@ public class SodiumOptionsGuiMixin extends Screen {
 	@Unique
 	private Object lambdaBetterGrass;
 
-	protected SodiumOptionsGuiMixin(Text title) {
+	protected SodiumOptionsGuiMixin(Component title) {
 		super(title);
 	}
 
@@ -42,7 +42,7 @@ public class SodiumOptionsGuiMixin extends Screen {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void lbg$onInit(Screen prevScreen, CallbackInfo ci) {
 		this.pages.add(this.lambdaBetterGrass = SodiumOptionPage.makeSodiumOptionPage(
-				Text.translatable("lambdabettergrass.menu.sodium.tab", SettingsScreen.MOD_NAME)
+				Component.translatable("lambdabettergrass.menu.sodium.tab", SettingsScreen.MOD_NAME)
 		));
 	}
 
@@ -50,7 +50,7 @@ public class SodiumOptionsGuiMixin extends Screen {
 	@Inject(method = "setPage", at = @At("HEAD"), remap = false, cancellable = true)
 	private void lbg$onSetPage(@Coerce Object page, CallbackInfo ci) {
 		if (page == this.lambdaBetterGrass) {
-			this.client.setScreen(new SettingsScreen(this));
+			this.minecraft.setScreen(new SettingsScreen(this));
 			ci.cancel();
 		}
 	}

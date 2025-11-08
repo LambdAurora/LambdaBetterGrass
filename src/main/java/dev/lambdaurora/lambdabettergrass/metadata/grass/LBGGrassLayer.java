@@ -18,9 +18,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.SpriteGetter;
-import net.minecraft.resources.io.ResourceManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,7 +133,7 @@ public class LBGGrassLayer implements ModelDebugName {
 	}
 
 	@Override
-	public @NotNull String debugName() {
+	public String debugName() {
 		return "%s (Better Grass Layer %s)".formatted(this.parentMetadata.id, this.colorIndex);
 	}
 }

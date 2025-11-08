@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides utilities for selecting variants.
@@ -52,7 +53,7 @@ public final class VariantSelector {
 
 			if (property == null) continue;
 
-			list.add(makeValue(property, rawValue));
+			makeValue(property, rawValue).ifPresent(list::add);
 		}
 
 		return list.build();
@@ -67,7 +68,7 @@ public final class VariantSelector {
 	 */
 	public static boolean match(BlockState state, List<Property.Value<?>> values) {
 		for (var value : values) {
-			if (!state.get(value.property()).equals(value.value())) {
+			if (!state.getValue(value.property()).equals(value.value())) {
 				return false;
 			}
 		}
@@ -75,8 +76,8 @@ public final class VariantSelector {
 		return true;
 	}
 
-	private static <T extends Comparable<T>> Property.Value<T> makeValue(Property<T> property, String rawValue) {
+	private static <T extends Comparable<T>> Optional<Property.Value<T>> makeValue(Property<T> property, String rawValue) {
 		var value = property.getValue(rawValue);
-		return value.map(property::value).orElse(null);
+		return value.map(property::value);
 	}
 }

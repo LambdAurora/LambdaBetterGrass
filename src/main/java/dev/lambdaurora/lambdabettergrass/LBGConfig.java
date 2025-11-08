@@ -15,7 +15,6 @@ import com.electronwill.nightconfig.core.io.ParsingMode;
 import com.electronwill.nightconfig.toml.TomlParser;
 import com.electronwill.nightconfig.toml.TomlWriter;
 import dev.yumi.mc.core.api.YumiMods;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +42,10 @@ public class LBGConfig {
 			.normalize();
 
 	private final CommentedConfig config;
-	private final LambdaBetterGrass mod;
-	private LBGMode mode;
+	private LBGMode mode = DEFAULT_MODE;
 	private boolean betterLayer;
 
-	public LBGConfig(@NotNull LambdaBetterGrass mod) {
-		this.mod = mod;
+	public LBGConfig(LambdaBetterGrass mod) {
 		this.config = CommentedConfig.inMemory();
 	}
 
@@ -155,7 +152,7 @@ public class LBGConfig {
 	 *
 	 * @param mode the better grass mode
 	 */
-	public void setMode(@NotNull LBGMode mode) {
+	public void setMode(LBGMode mode) {
 		this.mode = mode;
 		this.config.set("mode", mode.getName());
 	}

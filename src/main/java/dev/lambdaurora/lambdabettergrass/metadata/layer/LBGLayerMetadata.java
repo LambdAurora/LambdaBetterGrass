@@ -18,9 +18,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -36,10 +35,10 @@ public class LBGLayerMetadata {
 	private final LBGLayerType layerType;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final Map<BlockState, BlockStateModel.UnbakedRoot> variantModels;
+	private final @Nullable Map<BlockState, BlockStateModel.UnbakedRoot> variantModels;
 
 	public LBGLayerMetadata(
-			Identifier id, @Nullable LBGLayerType layerType, JsonObject json,
+			Identifier id, LBGLayerType layerType, JsonObject json,
 			StateDefinition<Block, BlockState> stateDefinition
 	) {
 		this.id = id;
@@ -73,7 +72,7 @@ public class LBGLayerMetadata {
 	/**
 	 * {@return the layer type associated with this metadata}
 	 */
-	public @NotNull LBGLayerType layerType() {
+	public LBGLayerType layerType() {
 		return this.layerType;
 	}
 
@@ -102,7 +101,7 @@ public class LBGLayerMetadata {
 				'}';
 	}
 
-	public record LayerUnbakedModels(@Nullable BlockStateModel.UnbakedRoot alternateModel) {
+	public record LayerUnbakedModels(BlockStateModel.@Nullable UnbakedRoot alternateModel) {
 		public boolean isEmpty() {
 			return this.alternateModel() == null;
 		}

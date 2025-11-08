@@ -13,13 +13,12 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
-import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.Resource;
-import net.minecraft.resources.io.ResourceManager;
-import net.minecraft.resources.io.ResourceReloader;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Util;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -35,10 +34,10 @@ import java.util.concurrent.Executor;
  * @version 2.5.0
  * @since 1.4.0
  */
-public final class LBGResourceReloader implements ResourceReloader {
+public final class LBGResourceReloader implements PreparableReloadListener {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final Identifier ID = LambdaBetterGrass.id("resource_reloader");
-	public static final ResourceReloader.StateKey<LBGSharedState> SHARED_STATE_KEY = new ResourceReloader.StateKey<>();
+	public static final PreparableReloadListener.StateKey<LBGSharedState> SHARED_STATE_KEY = new PreparableReloadListener.StateKey<>();
 
 	@Override
 	public String getName() {
@@ -55,7 +54,7 @@ public final class LBGResourceReloader implements ResourceReloader {
 
 	@Override
 	public CompletableFuture<Void> reload(
-			SharedState sharedState, Executor prepareExecutor, Synchronizer synchronizer, Executor applyExecutor
+			SharedState sharedState, Executor prepareExecutor, PreparationBarrier synchronizer, Executor applyExecutor
 	) {
 		return CompletableFuture.supplyAsync(
 						() -> {
@@ -72,13 +71,13 @@ public final class LBGResourceReloader implements ResourceReloader {
 					lbgSharedState.contextFuture.complete(context);
 					LambdaBetterGrass.get().dynamicTextureManager.finish();
 				}, prepareExecutor)
-				.thenCompose(synchronizer::whenPrepared);
+				.thenCompose(synchronizer::wait);
 	}
 
 	private CompletableFuture<LBGContext> loadStates(
 			ResourceManager resourceManager, LBGContext context, Executor prepareExecutor
 	) {
-		var futures = resourceManager.findResources(LBGState.PATH_PREFIX, id -> id.path().endsWith(".json"))
+		var futures = resourceManager.listResources(LBGState.PATH_PREFIX, id -> id.getPath().endsWith(".json"))
 				.entrySet().stream()
 				.map(entry ->
 						CompletableFuture.supplyAsync(
@@ -107,9 +106,9 @@ public final class LBGResourceReloader implements ResourceReloader {
 	private Optional<LBGState> loadState(
 			ResourceManager resourceManager, LBGContext context, Identifier id, Resource resource
 	) {
-		var stateId = Identifier.of(
-				id.namespace(),
-				id.path().substring(LBGState.PATH_PREFIX.length() + 1, id.path().length() - ".json".length())
+		var stateId = Identifier.fromNamespaceAndPath(
+				id.getNamespace(),
+				id.getPath().substring(LBGState.PATH_PREFIX.length() + 1, id.getPath().length() - ".json".length())
 		);
 
 		var block = BuiltInRegistries.BLOCK.getOptional(stateId);
@@ -130,7 +129,7 @@ public final class LBGResourceReloader implements ResourceReloader {
 	public static class LBGSharedState {
 		private final CompletableFuture<LBGContext> contextFuture = new CompletableFuture<>();
 
-		public @NotNull CompletableFuture<LBGContext> awaitContext() {
+		public CompletableFuture<LBGContext> awaitContext() {
 			return this.contextFuture;
 		}
 	}

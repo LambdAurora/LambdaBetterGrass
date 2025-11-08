@@ -12,7 +12,6 @@ package dev.lambdaurora.lambdabettergrass.metadata.grass;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -27,7 +26,7 @@ import java.util.Optional;
  * @version 2.0.0
  * @since 2.0.0
  */
-public record LBGLoadingGrassLayer(int colorIndex, @NotNull Textures textures, @NotNull LBGGrassMasks masks) {
+public record LBGLoadingGrassLayer(int colorIndex, Textures textures, LBGGrassMasks masks) {
 	public static final Codec<LBGLoadingGrassLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("color_index", -1).forGetter(LBGLoadingGrassLayer::colorIndex),
 			Textures.CODEC.fieldOf("textures").forGetter(LBGLoadingGrassLayer::textures),
@@ -35,9 +34,9 @@ public record LBGLoadingGrassLayer(int colorIndex, @NotNull Textures textures, @
 	).apply(instance, LBGLoadingGrassLayer::new));
 
 	public record Textures(
-			@NotNull Identifier top,
-			@NotNull Identifier side,
-			@NotNull Overrides overrides
+			Identifier top,
+			Identifier side,
+			Overrides overrides
 	) {
 		public static final Codec<Textures> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Identifier.CODEC.fieldOf("top").forGetter(Textures::top),

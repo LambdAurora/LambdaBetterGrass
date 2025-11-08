@@ -17,7 +17,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 @Mixin(SpriteLoader.class)
 public class SpriteLoaderMixin {
 	@WrapOperation(
-			method = "loadAndStitch(Lnet/minecraft/resources/io/ResourceManager;Lnet/minecraft/resources/Identifier;ILjava/util/concurrent/Executor;Ljava/util/Set;)Ljava/util/concurrent/CompletableFuture;",
+			method = "loadAndStitch(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/Identifier;ILjava/util/concurrent/Executor;Ljava/util/Set;)Ljava/util/concurrent/CompletableFuture;",
 			at = @At(
 					value = "INVOKE",
 					target = "Ljava/util/concurrent/CompletableFuture;thenCompose(Ljava/util/function/Function;)Ljava/util/concurrent/CompletableFuture;"
@@ -43,7 +43,7 @@ public class SpriteLoaderMixin {
 	) {
 		var future = original.call(instance, fn);
 
-		if (id.namespace().equals(Identifier.DEFAULT_NAMESPACE) && id.path().equals("blocks")) {
+		if (id.getNamespace().equals(Identifier.DEFAULT_NAMESPACE) && id.getPath().equals("blocks")) {
 			var dynamicSprites = LambdaBetterGrass.get().dynamicTextureManager.awaitSprites();
 			return future.thenCombine(
 					dynamicSprites,

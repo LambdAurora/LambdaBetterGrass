@@ -25,11 +25,10 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.reloader.ResourceReloaderKeys;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.PackType;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 /**
@@ -53,7 +52,6 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 	public final LBGResourceReloader resourceReloader = new LBGResourceReloader();
 	public final LBGDynamicTextureManager dynamicTextureManager = new LBGDynamicTextureManager();
-
 	private String version;
 
 	@Override
@@ -68,7 +66,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		LBGState.registerType("grass", LBGGrassState::new);
 		LBGState.registerType("layer", LBGLayerState::new);
 
-		var resourceLoader = ResourceLoader.get(ResourceType.CLIENT_RESOURCES);
+		var resourceLoader = ResourceLoader.get(PackType.CLIENT_RESOURCES);
 		resourceLoader.registerReloader(LBGResourceReloader.ID, this.resourceReloader);
 		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.MODELS);
 		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.ATLAS);
@@ -109,7 +107,7 @@ public class LambdaBetterGrass implements ClientModInitializer {
 
 		ResourceManagerHelper.registerBuiltinResourcePack(
 				id("default"), fabricMod,
-				Text.translatable("lambdabettergrass.resourcepack.default", Text.translatable(NAMESPACE)),
+				Component.translatable("lambdabettergrass.resourcepack.default", Component.translatable(NAMESPACE)),
 				ResourcePackActivationType.DEFAULT_ENABLED
 		);
 		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), fabricMod, ResourcePackActivationType.NORMAL);
@@ -187,8 +185,8 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 *
 	 * @param path the path
 	 */
-	public static Identifier id(@NotNull String path) {
-		return Identifier.of(NAMESPACE, path);
+	public static Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(NAMESPACE, path);
 	}
 
 	/**

@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperUnbakedGro
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class LBGLayerUnbakedModel extends WrapperUnbakedGroupedBlockStateModel {
 	}
 
 	@Override
-	public @NotNull Object visualEqualityGroup(BlockState state) {
+	public Object visualEqualityGroup(BlockState state) {
 		this.metadatas.forEach(metadata -> metadata.visualEqualityGroup(state));
 		return super.visualEqualityGroup(state);
 	}
@@ -46,7 +45,7 @@ public class LBGLayerUnbakedModel extends WrapperUnbakedGroupedBlockStateModel {
 	}
 
 	@Override
-	public @NotNull BlockStateModel bake(BlockState state, ModelBaker modelBaker) {
+	public BlockStateModel bake(BlockState state, ModelBaker modelBaker) {
 		this.metadatas.forEach(metadata -> metadata.bake(state, modelBaker));
 		return new LBGLayerBakedModel(super.bake(state, modelBaker), this.metadatas);
 	}

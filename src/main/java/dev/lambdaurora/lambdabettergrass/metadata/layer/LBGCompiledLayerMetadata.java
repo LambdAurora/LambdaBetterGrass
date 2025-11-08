@@ -21,8 +21,8 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -41,7 +41,7 @@ public class LBGCompiledLayerMetadata {
 	private final @Nullable Vector3f offset;
 	public final LBGLayerMetadata.LayerUnbakedModels unbakedModels;
 	private final boolean isLeafLitter;
-	private BlockStateModel bakedAlternateModel;
+	private @Nullable BlockStateModel bakedAlternateModel;
 
 	public LBGCompiledLayerMetadata(
 			LBGLayerType layerType, boolean hasLayer, @Nullable Vector3f offset, LBGLayerMetadata.LayerUnbakedModels unbakedModels
@@ -114,7 +114,7 @@ public class LBGCompiledLayerMetadata {
 				Vec3 offset = state.getOffset(pos);
 				boolean pushed = false;
 
-				var offsetPos = new BlockPos.Mutable();
+				var offsetPos = new BlockPos.MutableBlockPos();
 				quadEmitter.pushTransform(quad -> {
 					quad.renderLayer(this.layerType.renderLayer);
 

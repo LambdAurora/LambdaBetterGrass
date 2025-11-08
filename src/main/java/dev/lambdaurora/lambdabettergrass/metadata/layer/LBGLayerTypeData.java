@@ -20,7 +20,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
@@ -37,7 +36,7 @@ import java.util.function.Predicate;
  * @version 2.0.0
  * @since 2.0.0
  */
-public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Matcher> matchers) {
+public record LBGLayerTypeData(BlockState state, @Unmodifiable List<Matcher> matchers) {
 	public static final Codec<LBGLayerTypeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			BlockState.CODEC.fieldOf("block").forGetter(LBGLayerTypeData::state),
 			Matcher.LIST_CODEC.optionalFieldOf("match", List.of()).forGetter(LBGLayerTypeData::matchers)
@@ -73,13 +72,13 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 		);
 	}
 
-	public record BlockStateMatch(@NotNull Block block, @Unmodifiable Collection<Property.Value<?>> properties) implements Matcher {
+	public record BlockStateMatch(Block block, @Unmodifiable Collection<Property.Value<?>> properties) implements Matcher {
 		public static final Codec<BlockStateMatch> CODEC = BuiltInRegistries.BLOCK.byNameCodec().dispatch(
 				"block",
 				BlockStateMatch::block,
-				block -> block.defaultState().getValues().isEmpty()
+				block -> block.defaultBlockState().getValues().isEmpty()
 						? MapCodec.unit(new BlockStateMatch(block, List.of()))
-						: CodecUtils.propertiesCodec(block.defaultState()).lenientOptionalFieldOf("properties", List.of())
+						: CodecUtils.propertiesCodec(block.defaultBlockState()).lenientOptionalFieldOf("properties", List.of())
 						.xmap(values -> new BlockStateMatch(block, values), BlockStateMatch::properties)
 		);
 
@@ -88,7 +87,7 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 			if (!state.is(this.block)) return false;
 
 			for (var value : this.properties) {
-				if (!state.get(value.property()).equals(value.value())) {
+				if (!state.getValue(value.property()).equals(value.value())) {
 					return false;
 				}
 			}
@@ -97,7 +96,7 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 		}
 	}
 
-	public record BlockMatch(@NotNull Block block) implements Matcher {
+	public record BlockMatch(Block block) implements Matcher {
 		public static final Codec<BlockMatch> CODEC = BuiltInRegistries.BLOCK.byNameCodec()
 				.xmap(BlockMatch::new, BlockMatch::block);
 
@@ -107,7 +106,7 @@ public record LBGLayerTypeData(@NotNull BlockState state, @Unmodifiable List<Mat
 		}
 	}
 
-	public record TagMatch(@NotNull TagKey<Block> tag) implements Matcher {
+	public record TagMatch(TagKey<Block> tag) implements Matcher {
 		public static final Codec<TagMatch> CODEC = TagKey.hashedCodec(Registries.BLOCK)
 				.xmap(TagMatch::new, TagMatch::tag);
 

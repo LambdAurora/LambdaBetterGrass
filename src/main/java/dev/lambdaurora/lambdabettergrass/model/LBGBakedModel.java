@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -62,14 +62,14 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 		}
 
 		if (this.metadata.getSnowyModelVariant() != null && LambdaBetterGrass.get().hasBetterLayer()
-				&& state.getProperties().contains(BlockStateProperties.SNOWY) && !state.get(BlockStateProperties.SNOWY)) {
+				&& state.getProperties().contains(BlockStateProperties.SNOWY) && !state.getValue(BlockStateProperties.SNOWY)) {
 			var upPos = pos.above();
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
 				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, up, false, this.metadata.context())) {
 					this.metadata.getSnowyModelVariant()
 							.emitQuads(
-									quadEmitter, world, pos, state.with(BlockStateProperties.SNOWY, true), random, cullTest
+									quadEmitter, world, pos, state.setValue(BlockStateProperties.SNOWY, true), random, cullTest
 							);
 					return;
 				}
@@ -163,7 +163,7 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 
 		if (LambdaBetterGrass.get().hasBetterLayer() &&
 				self.getBlock() instanceof SnowyDirtBlock) {
-			boolean selfSnowy = self.get(BlockStateProperties.SNOWY);
+			boolean selfSnowy = self.getValue(BlockStateProperties.SNOWY);
 
 			if (selfSnowy) {
 				if (!up.isAir()) {

@@ -13,8 +13,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.util.LBGTextureGenerator;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceManager;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Closeable;
 import java.util.Optional;
@@ -33,10 +33,10 @@ import java.util.function.Function;
  * @since 2.0.0
  */
 public record LBGGrassLayerTextures(
-		@NotNull Texture connect,
-		@NotNull Texture blendUp,
-		@NotNull Texture blendUpMirrored,
-		@NotNull Texture arch
+		Texture connect,
+		Texture blendUp,
+		Texture blendUpMirrored,
+		Texture arch
 ) implements Closeable {
 	public Identifier resolveConnect() {
 		return resolveTexture(this.connect);
@@ -54,7 +54,7 @@ public record LBGGrassLayerTextures(
 		return resolveTexture(this.arch);
 	}
 
-	private static Identifier resolveTexture(@NotNull Texture texture) {
+	private static Identifier resolveTexture(Texture texture) {
 		final var id = texture.resolveId();
 
 		if (texture instanceof DirectTexture directTexture) {
@@ -102,7 +102,7 @@ public record LBGGrassLayerTextures(
 
 		String name;
 		{
-			String[] path = metadataId.path().split("/");
+			String[] path = metadataId.getPath().split("/");
 			if (path.length == 0)
 				name = "undefined";
 			else
@@ -156,12 +156,12 @@ public record LBGGrassLayerTextures(
 		private final ResourceManager resourceManager;
 		private final LBGLoadingGrassLayer.Textures textureIds;
 		private final LBGGrassMasks masks;
-		private NativeImage topTexture;
-		private NativeImage sideTexture;
-		private NativeImage connectMaskTexture;
-		private NativeImage blendUpMaskTexture;
-		private NativeImage blendUpMirroredMaskTexture;
-		private NativeImage archMaskTexture;
+		private @Nullable NativeImage topTexture;
+		private @Nullable NativeImage sideTexture;
+		private @Nullable NativeImage connectMaskTexture;
+		private @Nullable NativeImage blendUpMaskTexture;
+		private @Nullable NativeImage blendUpMirroredMaskTexture;
+		private @Nullable NativeImage archMaskTexture;
 
 		private ResolutionContext(
 				ResourceManager resourceManager, LBGLoadingGrassLayer.Textures textureIds, LBGGrassMasks masks
@@ -258,7 +258,7 @@ public record LBGGrassLayerTextures(
 	public static final class FromDiskTexture implements Texture {
 		private final ResourceManager resourceManager;
 		private final Identifier id;
-		private NativeImage cached;
+		private @Nullable NativeImage cached;
 
 		public FromDiskTexture(ResourceManager resourceManager, Identifier id) {
 			this.resourceManager = resourceManager;
@@ -281,7 +281,7 @@ public record LBGGrassLayerTextures(
 
 		@Override
 		public void close() {
-			this.cached.close();
+			if (this.cached != null) this.cached.close();
 			this.cached = null;
 		}
 	}

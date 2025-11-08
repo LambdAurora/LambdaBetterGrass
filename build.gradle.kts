@@ -59,7 +59,7 @@ dependencies {
 	@Suppress("UnstableApiUsage")
 	mappings(loom.layered {
 		officialMojangMappings()
-		mappings("dev.lambdaurora:yalmm:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
+		mappings("dev.lambdaurora:yalmm-mojbackward:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)

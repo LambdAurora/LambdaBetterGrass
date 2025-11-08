@@ -11,7 +11,8 @@ package dev.lambdaurora.lambdabettergrass.util;
 
 import com.google.common.collect.ImmutableList;
 import dev.lambdaurora.lambdabettergrass.LBGCompat;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -24,9 +25,9 @@ import java.lang.invoke.MethodHandles;
  * @since 2.0.0
  */
 public final class SodiumOptionPage {
-	private static final MethodHandle CREATE_OPTION_PAGE;
+	private static final @Nullable MethodHandle CREATE_OPTION_PAGE;
 
-	public static Object makeSodiumOptionPage(Text text) {
+	public static Object makeSodiumOptionPage(Component text) {
 		try {
 			return CREATE_OPTION_PAGE.invoke(text, ImmutableList.of());
 		} catch (Throwable e) {
@@ -38,7 +39,7 @@ public final class SodiumOptionPage {
 		try {
 			if (LBGCompat.isSodiumInstalled()) {
 				Class<?> optionPage = Class.forName("net.caffeinemc.mods.sodium.client.gui.options.OptionPage");
-				CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Text.class, ImmutableList.class));
+				CREATE_OPTION_PAGE = MethodHandles.lookup().unreflectConstructor(optionPage.getConstructor(Component.class, ImmutableList.class));
 			} else {
 				CREATE_OPTION_PAGE = null;
 			}
