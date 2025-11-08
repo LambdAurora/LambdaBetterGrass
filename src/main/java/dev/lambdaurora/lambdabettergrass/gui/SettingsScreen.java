@@ -107,7 +107,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.resetOption = SpruceSimpleActionOption.reset(btn -> {
 			this.config.reset();
 			var client = Minecraft.getInstance();
-			this.init(client, client.getWindow().getGuiScaledWidth(), client.getWindow().getGuiScaledHeight());
+			this.init(client.getWindow().getGuiScaledWidth(), client.getWindow().getGuiScaledHeight());
 		});
 	}
 

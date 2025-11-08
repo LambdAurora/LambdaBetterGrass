@@ -233,6 +233,12 @@ The first release of LambdaBetterGrass!
   - The LambdaBetterGrass context is now properly contained, avoiding resource leaks and bad interactions with other mods.
 - Fixed crash with Remove Reloading Screen [#117](https://github.com/LambdAurora/LambdaBetterGrass/issues/117).
 
+## 2.6.0-alpha.1
+
+- Updated to Minecraft 25w45a
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

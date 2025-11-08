@@ -26,6 +26,8 @@ version = "$VERSION+$mcVersion"
 // This field defines the Java version your mod target.
 val targetJavaVersion = Integer.parseInt(project.property("java_version").toString())
 
+lambdamcdev.setupActionsRefCheck()
+
 repositories {
 	mavenCentral()
 	maven {
@@ -56,11 +58,7 @@ fabricApi {
 
 dependencies {
 	minecraft(libs.minecraft)
-	@Suppress("UnstableApiUsage")
-	mappings(loom.layered {
-		officialMojangMappings()
-		mappings("dev.lambdaurora:yalmm-mojbackward:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
-	})
+	mappings(loom.officialMojangMappings())
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 

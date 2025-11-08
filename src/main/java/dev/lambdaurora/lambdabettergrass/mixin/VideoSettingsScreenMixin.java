@@ -9,6 +9,8 @@
 
 package dev.lambdaurora.lambdabettergrass.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.lambdaurora.lambdabettergrass.gui.LBGOption;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -21,7 +23,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VideoSettingsScreen.class)
@@ -38,18 +39,18 @@ public abstract class VideoSettingsScreenMixin extends OptionsSubScreen {
 		this.lbg$option = LBGOption.getOption(this);
 	}
 
-	@ModifyArg(
+	@WrapOperation(
 			method = "addOptions",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/components/OptionsList;addSmall([Lnet/minecraft/client/OptionInstance;)V"
-			),
-			index = 0
+					target = "Lnet/minecraft/client/gui/screens/options/VideoSettingsScreen;qualityOptions(Lnet/minecraft/client/Options;)[Lnet/minecraft/client/OptionInstance;"
+			)
 	)
-	private OptionInstance<?>[] addOptionButton(OptionInstance<?>[] old) {
-		var options = new OptionInstance<?>[old.length + 1];
-		System.arraycopy(old, 0, options, 0, old.length);
-		options[options.length - 1] = this.lbg$option;
-		return options;
+	private OptionInstance<?>[] addOptionButton(Options options, Operation<OptionInstance<?>[]> original) {
+		var old = original.call(options);
+		var replaced = new OptionInstance<?>[old.length + 1];
+		System.arraycopy(old, 0, replaced, 0, old.length);
+		replaced[replaced.length - 1] = this.lbg$option;
+		return replaced;
 	}
 }
