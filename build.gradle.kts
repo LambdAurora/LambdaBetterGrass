@@ -44,6 +44,17 @@ repositories {
 			includeGroup("com.terraformersmc")
 		}
 	}
+	exclusiveContent {
+		filter {
+			includeGroupAndSubgroups("net.caffeinemc")
+		}
+
+		forRepository {
+			maven {
+				url = uri("https://maven.caffeinemc.net/releases/")
+			}
+		}
+	}
 }
 
 loom {
@@ -69,6 +80,7 @@ dependencies {
 	modCompileOnly(libs.modmenu) {
 		this.isTransitive = false
 	}
+	modCompileOnly(libs.sodium.api)
 	/*modLocalRuntime(libs.modmenu) {
 		this.isTransitive = false
 	}*/

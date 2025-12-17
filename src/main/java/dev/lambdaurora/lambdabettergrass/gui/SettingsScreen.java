@@ -36,12 +36,18 @@ import org.jspecify.annotations.Nullable;
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 2.3.0
+ * @version 2.6.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
 	public static final Component MOD_NAME = Component.translatable(LambdaBetterGrass.NAMESPACE);
+	public static final Component MODE_TOOLTIP = Component.translatable("lambdabettergrass.tooltip.mode",
+			LBGMode.OFF.getTranslatedText(),
+			LBGMode.FASTEST.getTranslatedText(),
+			LBGMode.FAST.getTranslatedText(),
+			LBGMode.FANCY.getTranslatedText()
+	);
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
 	private static final Component VERSION;
 
@@ -85,12 +91,7 @@ public class SettingsScreen extends SpruceScreen {
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
 				TooltipData.builder()
-						.text(Component.translatable("lambdabettergrass.tooltip.mode",
-								LBGMode.OFF.getTranslatedText(),
-								LBGMode.FASTEST.getTranslatedText(),
-								LBGMode.FAST.getTranslatedText(),
-								LBGMode.FANCY.getTranslatedText()
-						))
+						.text(MODE_TOOLTIP)
 						.build()
 		);
 

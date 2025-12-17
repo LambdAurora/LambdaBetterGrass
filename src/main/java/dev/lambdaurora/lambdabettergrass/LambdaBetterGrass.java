@@ -20,9 +20,8 @@ import dev.yumi.mc.core.api.YumiMods;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.fabric.api.resource.v1.reloader.ResourceReloaderKeys;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.Component;
@@ -35,7 +34,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.6.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -105,12 +104,12 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	private void registerBuiltinResourcePacks(dev.yumi.mc.core.api.ModContainer mod) {
 		var fabricMod = FabricLoader.getInstance().getModContainer(mod.id()).orElseThrow();
 
-		ResourceManagerHelper.registerBuiltinResourcePack(
+		ResourceLoader.registerBuiltinPack(
 				id("default"), fabricMod,
 				Component.translatable("lambdabettergrass.resourcepack.default", Component.translatable(NAMESPACE)),
-				ResourcePackActivationType.DEFAULT_ENABLED
+				PackActivationType.DEFAULT_ENABLED
 		);
-		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), fabricMod, ResourcePackActivationType.NORMAL);
+		ResourceLoader.registerBuiltinPack(id("x32"), fabricMod, PackActivationType.NORMAL);
 	}
 
 	/**

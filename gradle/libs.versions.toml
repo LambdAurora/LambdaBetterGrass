@@ -1,19 +1,20 @@
 [versions]
-minecraft = "25w45a"
-fabric-loader = "0.17.3"
-fabric-api = "0.138.2+1.21.11"
+minecraft = "1.21.11"
+fabric-loader = "0.18.1"
+fabric-api = "0.140.0+1.21.11"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-beta.1+1.21.10"
-spruceui = "9.1.0-alpha.1+25w45a"
+yumi-mc-foundation = "1.0.0-beta.1+1.21.11"
+spruceui = "9.1.0+1.21.11"
 modmenu = "15.0.0-beta.3"
+sodium = "0.8.0+mc1.21.11"
 
 # Configuration
 nightconfig = "3.8.1"
 
 # Gradle
 gradle-licenser = "2.2.+"
-gradle-loom = "1.13.+"
+gradle-loom = "1.14.+"
 gradle-lambdamcdev = "1.8.+"
 
 [libraries]
@@ -25,6 +26,7 @@ fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 yumi-mc-foundation = { module = "dev.yumi.mc.core:yumi-mc-foundation", version.ref = "yumi-mc-foundation" }
 spruceui = { module = "dev.lambdaurora:spruceui", version.ref = "spruceui" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+sodium-api = { module = "net.caffeinemc:sodium-fabric-api", version.ref = "sodium" }
 
 # Configuration
 nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }

@@ -27,14 +27,14 @@ import java.util.Objects;
  * Represents the mod configuration.
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.6.0
  * @since 1.0.0
  */
 public class LBGConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger("LambdaBetterGrass|Config");
 
-	private static final LBGMode DEFAULT_MODE = LBGMode.FANCY;
-	private static final boolean DEFAULT_BETTER_LAYER = true;
+	static final LBGMode DEFAULT_MODE = LBGMode.FANCY;
+	static final boolean DEFAULT_BETTER_LAYER = true;
 	private static final boolean DEFAULT_DEBUG = false;
 
 	public static final Path CONFIG_FILE_PATH = YumiMods.get().getConfigDirectory()
