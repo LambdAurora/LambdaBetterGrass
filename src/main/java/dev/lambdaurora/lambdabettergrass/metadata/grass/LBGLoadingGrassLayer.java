@@ -11,7 +11,7 @@ package dev.lambdaurora.lambdabettergrass.metadata.grass;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.resources.model.sprite.Material;
 
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @param masks the masks used for this grass layer
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.7.0
  * @since 2.0.0
  */
 public record LBGLoadingGrassLayer(int colorIndex, Textures textures, LBGGrassMasks masks) {
@@ -34,13 +34,13 @@ public record LBGLoadingGrassLayer(int colorIndex, Textures textures, LBGGrassMa
 	).apply(instance, LBGLoadingGrassLayer::new));
 
 	public record Textures(
-			Identifier top,
-			Identifier side,
+			Material top,
+			Material side,
 			Overrides overrides
 	) {
 		public static final Codec<Textures> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Identifier.CODEC.fieldOf("top").forGetter(Textures::top),
-				Identifier.CODEC.fieldOf("side").forGetter(Textures::side),
+				Material.CODEC.fieldOf("top").forGetter(Textures::top),
+				Material.CODEC.fieldOf("side").forGetter(Textures::side),
 				Overrides.CODEC.optionalFieldOf("overrides")
 						.xmap(
 								overrides -> overrides.orElse(Overrides.EMPTY),
@@ -50,16 +50,16 @@ public record LBGLoadingGrassLayer(int colorIndex, Textures textures, LBGGrassMa
 		).apply(instance, Textures::new));
 
 		public record Overrides(
-				Optional<Identifier> connect,
-				Optional<Identifier> blendUp,
-				Optional<Identifier> blendUpMirrored,
-				Optional<Identifier> arch
+				Optional<Material> connect,
+				Optional<Material> blendUp,
+				Optional<Material> blendUpMirrored,
+				Optional<Material> arch
 		) {
 			public static final Codec<Overrides> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-					Identifier.CODEC.optionalFieldOf("connect").forGetter(Overrides::connect),
-					Identifier.CODEC.optionalFieldOf("blend_up").forGetter(Overrides::blendUp),
-					Identifier.CODEC.optionalFieldOf("blend_up_m").forGetter(Overrides::blendUpMirrored),
-					Identifier.CODEC.optionalFieldOf("arch").forGetter(Overrides::arch)
+					Material.CODEC.optionalFieldOf("connect").forGetter(Overrides::connect),
+					Material.CODEC.optionalFieldOf("blend_up").forGetter(Overrides::blendUp),
+					Material.CODEC.optionalFieldOf("blend_up_m").forGetter(Overrides::blendUpMirrored),
+					Material.CODEC.optionalFieldOf("arch").forGetter(Overrides::arch)
 			).apply(instance, Overrides::new));
 			public static final Overrides EMPTY = new Overrides(
 					Optional.empty(),

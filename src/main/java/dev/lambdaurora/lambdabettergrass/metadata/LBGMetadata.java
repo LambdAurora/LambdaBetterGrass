@@ -16,9 +16,9 @@ import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGLoadingGrassLayer;
 import dev.lambdaurora.lambdabettergrass.model.LBGBakedModel;
 import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.SpriteGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.Nullable;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  * Represents a metadata.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGMetadata {
@@ -84,13 +84,13 @@ public class LBGMetadata {
 	}
 
 	/**
-	 * Bakes the textures.
+	 * Bakes the materials.
 	 *
-	 * @param textureGetter the texture getter
+	 * @param materialBaker the material baker
 	 */
-	public void bakeTextures(SpriteGetter textureGetter) {
+	public void bakeMaterials(MaterialBaker materialBaker) {
 		for (var layer : this.layers) {
-			layer.bakeTextures(textureGetter);
+			layer.bakeMaterials(materialBaker);
 		}
 	}
 

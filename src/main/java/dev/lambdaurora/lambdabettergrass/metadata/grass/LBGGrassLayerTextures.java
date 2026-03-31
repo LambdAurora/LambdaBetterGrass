@@ -12,6 +12,7 @@ package dev.lambdaurora.lambdabettergrass.metadata.grass;
 import com.mojang.blaze3d.platform.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.util.LBGTextureGenerator;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.Nullable;
@@ -29,7 +30,7 @@ import java.util.function.Function;
  * @param arch the arching texture
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.7.0
  * @since 2.0.0
  */
 public record LBGGrassLayerTextures(
@@ -136,7 +137,7 @@ public record LBGGrassLayerTextures(
 
 	private static Texture resolve(
 			ResourceManager resourceManager, ResolutionContext context,
-			String name, Function<ResolutionContext, NativeImage> maskGetter, Optional<Identifier> override
+			String name, Function<ResolutionContext, NativeImage> maskGetter, Optional<Material> override
 	) {
 		if (override.isPresent()) {
 			return new FromDiskTexture(resourceManager, override.get());
@@ -148,8 +149,8 @@ public record LBGGrassLayerTextures(
 		}
 	}
 
-	private static Identifier getTexturePath(Identifier id) {
-		return id.withPath(path -> "textures/" + path + ".png");
+	private static Identifier getTexturePath(Material material) {
+		return material.sprite().withPath(path -> "textures/" + path + ".png");
 	}
 
 	private static final class ResolutionContext implements AutoCloseable {
@@ -257,23 +258,23 @@ public record LBGGrassLayerTextures(
 
 	public static final class FromDiskTexture implements Texture {
 		private final ResourceManager resourceManager;
-		private final Identifier id;
+		private final Material material;
 		private @Nullable NativeImage cached;
 
-		public FromDiskTexture(ResourceManager resourceManager, Identifier id) {
+		public FromDiskTexture(ResourceManager resourceManager, Material material) {
 			this.resourceManager = resourceManager;
-			this.id = id;
+			this.material = material;
 		}
 
 		@Override
 		public Identifier resolveId() {
-			return this.id;
+			return this.material.sprite();
 		}
 
 		@Override
 		public NativeImage getImage() {
 			if (this.cached == null) {
-				this.cached = LBGTextureGenerator.getNativeImage(this.resourceManager, getTexturePath(this.id));
+				this.cached = LBGTextureGenerator.getNativeImage(this.resourceManager, getTexturePath(this.material));
 			}
 
 			return this.cached;

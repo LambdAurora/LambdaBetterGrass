@@ -9,15 +9,11 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata.grass;
 
-import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGMetadata;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelDebugName;
-import net.minecraft.client.resources.model.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -30,7 +26,7 @@ import java.util.Map;
  * Represents a grass layer.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGGrassLayer implements ModelDebugName {
@@ -48,9 +44,8 @@ public class LBGGrassLayer implements ModelDebugName {
 	private final Material blendUpMirroredTexture;
 	private final Material archTexture;
 
-	private final Map<String, TextureAtlasSprite> bakedSprites = new Object2ObjectOpenHashMap<>();
+	private final Map<String, Material.Baked> bakedSprites = new Object2ObjectOpenHashMap<>();
 
-	@SuppressWarnings("deprecation")
 	public LBGGrassLayer(ResourceManager resourceManager, LBGMetadata metadata, List<LBGLoadingGrassLayer> layers) {
 		this.parentMetadata = metadata;
 		var first = layers.getFirst();
@@ -71,10 +66,10 @@ public class LBGGrassLayer implements ModelDebugName {
 			texture.close();
 		}
 
-		this.connectTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveConnect());
-		this.blendUpTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveBlendUp());
-		this.blendUpMirroredTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveBlendUpMirrored());
-		this.archTexture = new Material(TextureAtlas.LOCATION_BLOCKS, parentTextures.resolveArch());
+		this.connectTexture = new Material(parentTextures.resolveConnect());
+		this.blendUpTexture = new Material(parentTextures.resolveBlendUp());
+		this.blendUpMirroredTexture = new Material(parentTextures.resolveBlendUpMirrored());
+		this.archTexture = new Material(parentTextures.resolveArch());
 
 		this.parentMetadata.getTextures().add(this.connectTexture);
 		this.parentMetadata.getTextures().add(this.blendUpTexture);
@@ -83,45 +78,40 @@ public class LBGGrassLayer implements ModelDebugName {
 	}
 
 	/**
-	 * Gets the baked texture by its name.
+	 * Gets the baked material by its name.
 	 *
-	 * @param name the name of the baked texture
-	 * @return the baked texture if found, or {@code null} otherwise
+	 * @param name the name of the baked material
+	 * @return the baked material if found, or {@code null} otherwise
 	 */
-	public @Nullable TextureAtlasSprite getBakedTexture(String name) {
+	public Material.@Nullable Baked getBakedMaterial(String name) {
 		return this.bakedSprites.get(name);
 	}
 
 	/**
 	 * Bakes the textures of this layer.
 	 *
-	 * @param textureGetter the texture getter
+	 * @param materialBaker the texture baker
 	 */
-	public void bakeTextures(SpriteGetter textureGetter) {
-		this.tryBakeSprite("connect", this.connectTexture, textureGetter);
-		this.tryBakeSprite("blend_up", this.blendUpTexture, textureGetter);
-		this.tryBakeSprite("blend_up_m", this.blendUpMirroredTexture, textureGetter);
-		this.tryBakeSprite("arch", this.archTexture, textureGetter);
+	public void bakeMaterials(MaterialBaker materialBaker) {
+		this.bakeMaterial("connect", this.connectTexture, materialBaker);
+		this.bakeMaterial("blend_up", this.blendUpTexture, materialBaker);
+		this.bakeMaterial("blend_up_m", this.blendUpMirroredTexture, materialBaker);
+		this.bakeMaterial("arch", this.archTexture, materialBaker);
 	}
 
-	@SuppressWarnings("deprecation")
-	private void tryBakeSprite(String name, @Nullable Material id, SpriteGetter textureGetter) {
-		if (id == null)
-			id = new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation());
-
-		try {
-			this.bakedSprites.put(name, textureGetter.get(id, this));
-		} catch (NullPointerException e) {
-			LambdaBetterGrass.warn(LOGGER, "Could not bake sprite `{}` with id `{}`!", name, id);
-
-			this.bakedSprites.put(
-					name,
-					textureGetter.get(
-							new Material(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation()),
-							this
-					)
-			);
+	private void bakeMaterial(String name, @Nullable Material material, MaterialBaker materialBaker) {
+		if (material != null) {
+			this.bakedSprites.put(name, materialBaker.get(material, this));
+		} else {
+			this.doMissingBake(name, materialBaker);
 		}
+	}
+
+	private void doMissingBake(String name, MaterialBaker materialBaker) {
+		this.bakedSprites.put(
+				name,
+				materialBaker.reportMissingReference(name, this)
+		);
 	}
 
 	@Override

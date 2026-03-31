@@ -33,7 +33,7 @@ import java.util.function.Predicate;
  * @param state the block state associated with this layer type
  *
  * @author LambdAurora
- * @version 2.0.0
+ * @version 2.7.0
  * @since 2.0.0
  */
 public record LBGLayerTypeData(BlockState state, @Unmodifiable List<Matcher> matchers) {
@@ -76,7 +76,7 @@ public record LBGLayerTypeData(BlockState state, @Unmodifiable List<Matcher> mat
 		public static final Codec<BlockStateMatch> CODEC = BuiltInRegistries.BLOCK.byNameCodec().dispatch(
 				"block",
 				BlockStateMatch::block,
-				block -> block.defaultBlockState().getValues().isEmpty()
+				block -> block.defaultBlockState().getValues().findAny().isPresent()
 						? MapCodec.unit(new BlockStateMatch(block, List.of()))
 						: CodecUtils.propertiesCodec(block.defaultBlockState()).lenientOptionalFieldOf("properties", List.of())
 						.xmap(values -> new BlockStateMatch(block, values), BlockStateMatch::properties)

@@ -239,6 +239,13 @@ The first release of LambdaBetterGrass!
 - Updated [SpruceUI].
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+## 2.7.0
+
+- Updated to Minecraft 26.1.
+  - Added Golden Dandelion to the better snow system.
+- Updated [SpruceUI].
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

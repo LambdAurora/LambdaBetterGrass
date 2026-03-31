@@ -14,7 +14,7 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * Represents LambdaBetterGrass model states.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public abstract class LBGState {

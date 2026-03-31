@@ -17,7 +17,7 @@ import dev.lambdaurora.lambdabettergrass.model.LBGLayerUnbakedModel;
 import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -108,7 +108,7 @@ public class LBGLayerState extends LBGState {
 			String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
 			StateDefinition<Block, BlockState> stateDefinition
 	) {
-		var metadata = new LBGLayerMetadata(metadataId, type, metadataJson, stateDefinition);
+		var metadata = new LBGLayerMetadata(metadataId, type, metadataJson);
 
 		if (variant.equals("*")) {
 			for (var state : stateDefinition.getPossibleStates()) {

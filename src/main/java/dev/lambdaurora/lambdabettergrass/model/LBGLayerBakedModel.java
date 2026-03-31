@@ -12,12 +12,12 @@ package dev.lambdaurora.lambdabettergrass.model;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
 import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * Represents the LambdaBetterGrass baked model for layer method.
  *
  * @author LambdAurora
- * @version 2.2.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGLayerBakedModel extends WrapperBlockStateModel {

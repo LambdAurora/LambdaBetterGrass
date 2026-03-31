@@ -16,19 +16,21 @@ import dev.lambdaurora.lambdabettergrass.metadata.grass.LBGGrassLayer;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
 import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadView;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.MutableQuadView;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadView;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.CarpetBlock;
+import net.minecraft.world.level.block.MossyCarpetBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -36,7 +38,7 @@ import java.util.function.Predicate;
  * Represents the LambdaBetterGrass baked model.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGBakedModel extends WrapperBlockStateModel {
@@ -161,15 +163,14 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 		var upPos = adjacentPos.above();
 		var up = world.getBlockState(upPos);
 
-		if (LambdaBetterGrass.get().hasBetterLayer() &&
-				self.getBlock() instanceof SnowyDirtBlock) {
+		if (LambdaBetterGrass.get().hasBetterLayer() && self.getBlock() instanceof SnowyBlock) {
 			boolean selfSnowy = self.getValue(BlockStateProperties.SNOWY);
 
 			if (selfSnowy) {
 				if (!up.isAir()) {
 					if (up.is(Blocks.SNOW))
 						return true;
-					else if (adjacent.getBlock() instanceof SnowyDirtBlock) {
+					else if (adjacent.getBlock() instanceof SnowyBlock) {
 						if (LayeredBlockUtils.shouldGrassBeSnowy(world, upPos, up, true, this.metadata.context()))
 							return true;
 					}
@@ -177,7 +178,9 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 			}
 		}
 
-		return canConnect(self, adjacent) && (up.isAir() || !up.isFaceSturdy(world, upPos, Direction.DOWN));
+		return canConnect(self, adjacent)
+				&& (up.isAir() || !up.isFaceSturdy(world, upPos, Direction.DOWN)
+				|| up.getBlock() instanceof CarpetBlock || up.getBlock() instanceof MossyCarpetBlock);
 	}
 
 	private static boolean canConnect(BlockState self, BlockState adjacent) {
@@ -185,9 +188,9 @@ public class LBGBakedModel extends WrapperBlockStateModel {
 	}
 
 	private static boolean spriteBake(MutableQuadView quad, LBGGrassLayer layer, String texture) {
-		var sprite = layer.getBakedTexture(texture);
+		var sprite = layer.getBakedMaterial(texture);
 		if (sprite != null)
-			quad.spriteBake(sprite, MutableQuadView.BAKE_LOCK_UV);
+			quad.materialBake(sprite, MutableQuadView.BAKE_LOCK_UV);
 		return sprite != null;
 	}
 }

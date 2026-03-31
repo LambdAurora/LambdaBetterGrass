@@ -10,8 +10,8 @@
 package dev.lambdaurora.lambdabettergrass.model;
 
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGCompiledLayerMetadata;
-import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperUnbakedGroupedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperUnbakedRootBlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * @version 2.2.0
  * @since 1.0.0
  */
-public class LBGLayerUnbakedModel extends WrapperUnbakedGroupedBlockStateModel {
+public class LBGLayerUnbakedModel extends WrapperUnbakedRootBlockStateModel {
 	private final List<LBGCompiledLayerMetadata> metadatas;
 
 	public LBGLayerUnbakedModel(BlockStateModel.UnbakedRoot wrapped, List<LBGCompiledLayerMetadata> metadatas) {

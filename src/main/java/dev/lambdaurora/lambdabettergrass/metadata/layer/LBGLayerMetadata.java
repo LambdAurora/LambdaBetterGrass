@@ -12,16 +12,11 @@ package dev.lambdaurora.lambdabettergrass.metadata.layer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * Represents a metadata for blocks which have snowy variants or equivalent.
@@ -35,11 +30,10 @@ public class LBGLayerMetadata {
 	private final LBGLayerType layerType;
 	private final boolean layerModel;
 	private final @Nullable Vector3f offset;
-	private final @Nullable Map<BlockState, BlockStateModel.UnbakedRoot> variantModels;
+	private final  BlockStateModel.@Nullable UnbakedRoot variantModels;
 
 	public LBGLayerMetadata(
-			Identifier id, LBGLayerType layerType, JsonObject json,
-			StateDefinition<Block, BlockState> stateDefinition
+			Identifier id, LBGLayerType layerType, JsonObject json
 	) {
 		this.id = id;
 		this.layerType = layerType;
@@ -61,9 +55,9 @@ public class LBGLayerMetadata {
 		} else this.offset = null;
 
 		if (json.has("block_state")) {
-			var blockModelDefinition = BlockModelDefinition.CODEC.parse(JsonOps.INSTANCE, json.get("block_state"))
+			var blockModelDefinition = BlockStateModel.Unbaked.CODEC.parse(JsonOps.INSTANCE, json.get("block_state"))
 					.getOrThrow(JsonParseException::new);
-			this.variantModels = blockModelDefinition.instantiate(stateDefinition, id::toString);
+			this.variantModels = blockModelDefinition.asRoot();
 		} else {
 			this.variantModels = null;
 		}
@@ -85,10 +79,7 @@ public class LBGLayerMetadata {
 	}
 
 	public LayerUnbakedModels getCustomUnbakedModel(BlockState state) {
-		if (this.variantModels == null)
-			return new LayerUnbakedModels(null);
-
-		return new LayerUnbakedModels(this.variantModels.get(state));
+		return new LayerUnbakedModels(this.variantModels);
 	}
 
 	@Override

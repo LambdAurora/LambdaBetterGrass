@@ -34,21 +34,20 @@
 		"lambdabettergrass.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.1",
-		"minecraft": "~1.21.11- <26.1.0",
-		"spruceui": ">=9.0.0",
-		"java": ">=21",
-		"yumi_mc_core": ">=1.0.0-beta.1",
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~26.1",
+		"spruceui": ">=10.0.0",
+		"java": ">=25",
+		"yumi_mc_core": ">=1.0.0-beta.2",
 		"fabric-model-loading-api-v1": "*",
 		"fabric-renderer-api-v1": "*",
 		"fabric-resource-loader-v1": "*"
 	},
 	"recommends": {
-		"modmenu": ">=13.0.2"
+		"modmenu": ">=17.0.2"
 	},
 	"breaks": {
-		"optifabric": "*",
-		"sodium": "0.8.0"
+		"optifabric": "*"
 	},
 	"custom": {
 		"modmenu": {

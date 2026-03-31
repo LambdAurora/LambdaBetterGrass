@@ -9,15 +9,15 @@
 
 package dev.lambdaurora.lambdabettergrass.metadata.layer;
 
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +32,7 @@ import java.util.function.Predicate;
  * This holds the custom models to use when the layer variation should be used.
  *
  * @author LambdAurora
- * @version 2.3.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGCompiledLayerMetadata {
@@ -116,8 +116,6 @@ public class LBGCompiledLayerMetadata {
 
 				var offsetPos = new BlockPos.MutableBlockPos();
 				quadEmitter.pushTransform(quad -> {
-					quad.renderLayer(this.layerType.renderLayer);
-
 					var cullFace = quad.cullFace();
 					if (cullFace != null && cullFace.getAxis() != Direction.Axis.Y) {
 						offsetPos.setWithOffset(pos, cullFace);

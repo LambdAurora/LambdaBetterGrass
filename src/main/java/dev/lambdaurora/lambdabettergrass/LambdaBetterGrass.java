@@ -34,7 +34,7 @@ import org.slf4j.Logger;
  * Represents the LambdaBetterGrass mod.
  *
  * @author LambdAurora
- * @version 2.6.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LambdaBetterGrass implements ClientModInitializer {
@@ -66,9 +66,9 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		LBGState.registerType("layer", LBGLayerState::new);
 
 		var resourceLoader = ResourceLoader.get(PackType.CLIENT_RESOURCES);
-		resourceLoader.registerReloader(LBGResourceReloader.ID, this.resourceReloader);
-		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.MODELS);
-		resourceLoader.addReloaderOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.ATLAS);
+		resourceLoader.registerReloadListener(LBGResourceReloader.ID, this.resourceReloader);
+		resourceLoader.addListenerOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.MODELS);
+		resourceLoader.addListenerOrdering(LBGResourceReloader.ID, ResourceReloaderKeys.Client.ATLAS);
 
 		PreparableModelLoadingPlugin.register(
 				(sharedState, applyExecutor) -> sharedState.get(LBGResourceReloader.SHARED_STATE_KEY).awaitContext(),

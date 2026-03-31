@@ -69,18 +69,17 @@ fabricApi {
 
 dependencies {
 	minecraft(libs.minecraft)
-	mappings(loom.officialMojangMappings())
-	modImplementation(libs.fabric.loader)
-	modImplementation(libs.fabric.api)
+	implementation(libs.fabric.loader)
+	implementation(libs.fabric.api)
 
-	modImplementation(libs.yumi.mc.foundation)
-	modImplementation(libs.spruceui)
+	implementation(libs.yumi.mc.foundation)
+	implementation(libs.spruceui)
 
 	// Config
-	modCompileOnly(libs.modmenu) {
+	compileOnly(libs.modmenu) {
 		this.isTransitive = false
 	}
-	modCompileOnly(libs.sodium.api)
+	compileOnly(libs.sodium.api)
 	/*modLocalRuntime(libs.modmenu) {
 		this.isTransitive = false
 	}*/
@@ -148,10 +147,6 @@ tasks.shadowJar {
 	}
 }
 
-tasks.remapJar {
-	dependsOn(tasks.shadowJar)
-}
-
 val README = ModUtils.parseReadme(
 	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.21/\$2"
 )
@@ -170,14 +165,14 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	)
 	this.changelog.set(CHANGELOG_CONTENT)
 	this.readme.set(README)
-	this.files.setFrom(tasks.remapJar.get())
+	this.files.setFrom(tasks.shadowJar.get())
 }
 
 modrinth {
 	projectId.set(project.property("modrinth_id") as String)
 	versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	versionType.set(ModUtils.fetchVersionType(VERSION, mcVersion))
-	uploadFile.set(tasks.remapJar)
+	uploadFile.set(tasks.shadowJar)
 	loaders.set(listOf("fabric", "quilt"))
 	gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
 	dependencies.set(
@@ -225,7 +220,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		return@register
 	}
 
-	val mainFile = upload(project.property("curseforge_id"), tasks.remapJar.get())
+	val mainFile = upload(project.property("curseforge_id"), tasks.shadowJar.get())
 	mainFile.releaseType = ModUtils.fetchVersionType(VERSION, mcVersion)
 	mainFile.addGameVersion(McVersionLookup.getCurseForgeEquivalent(mcVersion))
 	compatibleMcVersions.stream()

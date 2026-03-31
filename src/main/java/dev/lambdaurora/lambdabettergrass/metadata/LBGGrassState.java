@@ -16,7 +16,7 @@ import dev.lambdaurora.lambdabettergrass.model.LBGUnbakedModel;
 import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import dev.lambdaurora.lambdabettergrass.util.VariantSelector;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +37,7 @@ import java.util.Objects;
  * Represents grass model states with its different {@link LBGMetadata}.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public class LBGGrassState extends LBGState {

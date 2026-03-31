@@ -1,21 +1,21 @@
 [versions]
-minecraft = "1.21.11"
-fabric-loader = "0.18.1"
-fabric-api = "0.140.0+1.21.11"
+minecraft = "26.1"
+fabric-loader = "0.18.4"
+fabric-api = "0.145.0+26.1"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-beta.1+1.21.11"
-spruceui = "9.1.0+1.21.11"
-modmenu = "15.0.0-beta.3"
-sodium = "0.8.0+mc1.21.11"
+yumi-mc-foundation = "1.0.0-beta.2+26.1"
+spruceui = "10.0.0+26.1"
+modmenu = "18.0.0-alpha.8"
+sodium = "0.8.7+mc26.1"
 
 # Configuration
 nightconfig = "3.8.1"
 
 # Gradle
 gradle-licenser = "2.2.+"
-gradle-loom = "1.14.+"
-gradle-lambdamcdev = "1.8.+"
+gradle-loom = "1.15.+"
+gradle-lambdamcdev = "2.0.+"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -34,5 +34,5 @@ nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref 
 
 [plugins]
 licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }
-loom = { id = "fabric-loom", version.ref = "gradle-loom" }
+loom = { id = "net.fabricmc.fabric-loom", version.ref = "gradle-loom" }
 lambdamcdev = { id = "dev.lambdaurora.mcdev", version.ref = "gradle-lambdamcdev" }

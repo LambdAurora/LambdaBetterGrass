@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -72,7 +72,7 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 		private final PackOutput.PathProvider pathProvider;
 		private final CompletableFuture<HolderLookup.Provider> registryProvider;
 
-		public LayerDataProvider(FabricDataOutput packOutput, CompletableFuture<HolderLookup.Provider> registryProvider) {
+		public LayerDataProvider(FabricPackOutput packOutput, CompletableFuture<HolderLookup.Provider> registryProvider) {
 			this.pathProvider = packOutput.createPathProvider(PackOutput.Target.RESOURCE_PACK, "bettergrass");
 			this.registryProvider = registryProvider;
 		}
@@ -124,7 +124,7 @@ public class LBGDataGen implements DataGeneratorEntrypoint {
 								context.addSimpleLayerState(id, TORCH_DATA);
 							} else if (block instanceof DoorBlock
 									|| block instanceof FenceGateBlock
-									|| block instanceof FungusBlock
+									|| block instanceof NetherFungusBlock
 									|| block instanceof MushroomBlock
 									|| block instanceof SaplingBlock
 									|| block instanceof TallGrassBlock) {

@@ -12,19 +12,17 @@ package dev.lambdaurora.lambdabettergrass.metadata.layer;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
 import dev.lambdaurora.lambdabettergrass.util.LayeredBlockUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 
 /**
  * Represents a layer type.
  *
  * @author LambdAurora
- * @version 2.3.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public final class LBGLayerType {
@@ -33,15 +31,13 @@ public final class LBGLayerType {
 
 	public final Identifier id;
 	public final LBGLayerTypeData data;
-	public final ChunkSectionLayer renderLayer;
 
 	public LBGLayerType(Identifier id, LBGLayerTypeData data) {
 		this.id = id;
 		this.data = data;
-		this.renderLayer = ItemBlockRenderTypes.getChunkRenderType(data.state());
 	}
 
-	public int getNearbyLayeredBlocks(BlockAndTintGetter world, BlockPos pos, Block type, boolean onlySourceBlock) {
+	public int getNearbyLayeredBlocks(BlockGetter world, BlockPos pos, Block type, boolean onlySourceBlock) {
 		int nearbyLayer = 0;
 		for (var direction : LayeredBlockUtils.HORIZONTAL_DIRECTIONS) {
 			var offsetPos = pos.relative(direction);
@@ -56,7 +52,7 @@ public final class LBGLayerType {
 		return nearbyLayer;
 	}
 
-	public int getNearbyBlockLayers(BlockAndTintGetter world, BlockPos pos) {
+	public int getNearbyBlockLayers(BlockGetter world, BlockPos pos) {
 		int nearbyLayer = 0;
 		for (var direction : LayeredBlockUtils.HORIZONTAL_DIRECTIONS) {
 			if (this.data.match(world.getBlockState(pos.relative(direction))))
@@ -69,7 +65,7 @@ public final class LBGLayerType {
 	 * {@return the baked layer model}
 	 */
 	public BlockStateModel getLayerModel() {
-		return Minecraft.getInstance().getBlockRenderer().getBlockModel(this.data.state());
+		return Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(this.data.state());
 	}
 
 	@Override

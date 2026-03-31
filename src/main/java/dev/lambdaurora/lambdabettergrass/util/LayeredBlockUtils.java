@@ -15,7 +15,7 @@ import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerType;
 import dev.lambdaurora.lambdabettergrass.resource.LBGContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -26,7 +26,7 @@ import java.util.List;
  * Represents utilities about snow.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.0
  * @since 1.0.0
  */
 public final class LayeredBlockUtils {
@@ -38,7 +38,7 @@ public final class LayeredBlockUtils {
 	}
 
 	public static boolean shouldGrassBeSnowy(
-			BlockAndTintGetter world, BlockPos pos, BlockState upState,
+			BlockGetter world, BlockPos pos, BlockState upState,
 			boolean onlyPureSnow, LBGContext context
 	) {
 		// Ignore blocks that are not rendered through the normal system.
