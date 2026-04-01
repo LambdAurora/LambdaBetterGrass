@@ -122,6 +122,7 @@ tasks.processResources {
 
 tasks.jar {
 	inputs.property("archivesName", base.archivesName)
+	archiveClassifier = "dev"
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties["archivesName"]}" }
@@ -137,8 +138,8 @@ tasks.shadowJar {
 	inputs.property("archivesName", base.archivesName)
 
 	configurations = listOf(project.configurations["shadow"])
-	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/devlibs"))
-	archiveClassifier.set("dev")
+	destinationDirectory.set(file("${project.layout.buildDirectory.get()}/libs"))
+	archiveClassifier = ""
 
 	relocate("com.electronwill.nightconfig", "dev.lambdaurora.lambdabettergrass.shadow.nightconfig")
 
@@ -147,8 +148,17 @@ tasks.shadowJar {
 	}
 }
 
+loom.nestJars(
+	tasks.shadowJar,
+	fileTree(tasks.processIncludeJars.get().outputDirectory)
+)
+
+tasks.assemble.configure {
+	dependsOn(tasks.shadowJar)
+}
+
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.21/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/26.1/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 
