@@ -38,7 +38,7 @@
 		"minecraft": "~26.1",
 		"spruceui": ">=10.0.0",
 		"java": ">=25",
-		"yumi_mc_core": ">=1.0.0-beta.2",
+		"yumi_mc_core": ">=1.0.0",
 		"fabric-model-loading-api-v1": "*",
 		"fabric-renderer-api-v1": "*",
 		"fabric-resource-loader-v1": "*"

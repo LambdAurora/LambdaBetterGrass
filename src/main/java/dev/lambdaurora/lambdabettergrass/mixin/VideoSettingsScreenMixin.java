@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VideoSettingsScreen.class)
-public abstract class VideoSettingsScreenMixin extends OptionsSubScreen {
+abstract class VideoSettingsScreenMixin extends OptionsSubScreen {
 	@Unique
 	private OptionInstance<?> lbg$option;
 

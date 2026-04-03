@@ -19,7 +19,7 @@ plugins {
 base.archivesName.set(project.property("archives_base_name") as String)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf()
+val compatibleMcVersions: Set<String> = setOf("26.1")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 

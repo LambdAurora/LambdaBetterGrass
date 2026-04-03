@@ -251,6 +251,10 @@ The first release of LambdaBetterGrass!
 - Fixed default resource pack not loading by default anymore ([#124](https://github.com/LambdAurora/LambdaBetterGrass/issues/124)).
 - Fixed missing Jar-in-Jar dependencies ([#125](https://github.com/LambdAurora/LambdaBetterGrass/issues/125)).
 
+### 2.7.2
+
+- Fixed custom block state model data not loading properly for layer mode ([#126](https://github.com/LambdAurora/LambdaBetterGrass/issues/126)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"

@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * Represents model states, which have layered connection with blocks like snow, with its different {@link LBGLayerMetadata}.
  *
  * @author LambdAurora
- * @version 2.5.0
+ * @version 2.7.2
  * @since 1.0.0
  */
 public class LBGLayerState extends LBGState {
@@ -108,7 +108,7 @@ public class LBGLayerState extends LBGState {
 			String variant, Identifier metadataId, LBGLayerType type, JsonObject metadataJson,
 			StateDefinition<Block, BlockState> stateDefinition
 	) {
-		var metadata = new LBGLayerMetadata(metadataId, type, metadataJson);
+		var metadata = new LBGLayerMetadata(metadataId, type, metadataJson, stateDefinition);
 
 		if (variant.equals("*")) {
 			for (var state : stateDefinition.getPossibleStates()) {

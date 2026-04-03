@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SpriteLoader.class)
-public class SpriteLoaderMixin {
+class SpriteLoaderMixin {
 	@WrapOperation(
 			method = "loadAndStitch(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/Identifier;ILjava/util/concurrent/Executor;Ljava/util/Set;)Ljava/util/concurrent/CompletableFuture;",
 			at = @At(
