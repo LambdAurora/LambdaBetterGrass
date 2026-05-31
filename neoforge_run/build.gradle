@@ -1,0 +1,69 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.141'
+    id 'idea'
+}
+
+def lambdaBetterGrassDir = file('..').canonicalFile
+def rootProperties = new Properties()
+new File(lambdaBetterGrassDir, 'gradle.properties').withInputStream { rootProperties.load(it) }
+
+def modId = rootProperties.getProperty('archives_base_name', 'lambdabettergrass')
+def neoVersion = rootProperties.getProperty('neoforge_version', '21.1.233')
+def gameDir = new File(lambdaBetterGrassDir, 'run/neoforge')
+def modsDir = new File(gameDir, 'mods')
+def runtimeJars = fileTree(new File(lambdaBetterGrassDir, 'build/libs')) {
+    include "${modId}-*.jar"
+    exclude '*-sources.jar'
+    exclude '*-dev.jar'
+    exclude '*-intermediary.jar'
+    exclude '*-mojmap.jar'
+}
+
+group = rootProperties.getProperty('group', 'dev.lambdaurora.lambdabettergrass')
+version = rootProperties.getProperty('base_version', '0.0.0')
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'NeoForge'
+        url = uri('https://maven.neoforged.net/releases/')
+    }
+}
+
+neoForge {
+    version = neoVersion
+
+    runs {
+        client {
+            client()
+            gameDirectory = gameDir
+            systemProperty 'neoforge.enabledGameTestNamespaces', modId
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+}
+
+def buildDualLoaderJar = gradle.includedBuild('lambdabettergrass').task(':finalJar')
+
+tasks.register('syncRuntimeMod', Copy) {
+    dependsOn buildDualLoaderJar
+    from runtimeJars
+    into modsDir
+
+    doFirst {
+        delete fileTree(modsDir) {
+            include "${modId}-*.jar"
+        }
+    }
+}
+
+tasks.named('runClient') {
+    dependsOn tasks.named('syncRuntimeMod')
+}

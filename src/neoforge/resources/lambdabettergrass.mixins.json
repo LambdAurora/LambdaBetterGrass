@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "dev.lambdaurora.lambdabettergrass.mixin",
+	"plugin": "dev.lambdaurora.lambdabettergrass.LBGMixinPlugin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"ModelBakeryMixin",
+		"ReloadableResourceManagerMixin",
+		"SpriteLoaderMixin",
+		"VideoSettingsScreenMixin",
+		"sodium.SodiumOptionsGuiMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

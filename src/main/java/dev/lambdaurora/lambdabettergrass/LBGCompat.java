@@ -10,7 +10,6 @@
 package dev.lambdaurora.lambdabettergrass;
 
 import dev.yumi.mc.core.api.YumiMods;
-import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * Represents a utility class for compatibility.

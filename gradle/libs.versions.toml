@@ -2,10 +2,11 @@
 minecraft = "1.21.1"
 fabric-loader = "0.16.14"
 fabric-api = "0.105.0+1.21.1"
+neoforge-loader = "7.0.11"
 mappings-yalmm = "7"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-alpha.16+1.21.1"
+yumi-mc-foundation = "1.0.0-beta.1+1.21.1"
 spruceui = "6.2.5+1.21.1"
 modmenu = "11.0.3"
 
@@ -14,13 +15,15 @@ nightconfig = "3.8.1"
 
 # Gradle
 gradle-licenser = "2.1.+"
-gradle-loom = "1.11.+"
-gradle-lambdamcdev = "1.6.+"
+gradle-loom = "1.13.3"
+gradle-lambdamcdev = "1.8.+"
+gson = "2.11.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+neoforge-loader = { module = "net.neoforged.fancymodloader:loader", version.ref = "neoforge-loader" }
 
 # Dependencies
 yumi-mc-foundation = { module = "dev.yumi.mc.core:yumi-mc-foundation", version.ref = "yumi-mc-foundation" }
@@ -30,6 +33,12 @@ modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 # Configuration
 nightconfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightconfig" }
 nightconfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightconfig" }
+
+# Gradle
+gradle-licenser = { module = "dev.yumi:yumi-gradle-licenser", version.ref = "gradle-licenser" }
+gradle-loom = { module = "net.fabricmc:fabric-loom", version.ref = "gradle-loom" }
+gradle-lambdamcdev = { module = "dev.lambdaurora.mcdev:dev.lambdaurora.mcdev.gradle.plugin", version.ref = "gradle-lambdamcdev" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 [plugins]
 licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }

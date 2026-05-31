@@ -13,18 +13,13 @@ import com.mojang.logging.LogUtils;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGGrassState;
 import dev.lambdaurora.lambdabettergrass.metadata.LBGState;
 import dev.lambdaurora.lambdabettergrass.metadata.layer.LBGLayerState;
+import dev.lambdaurora.lambdabettergrass.platform.Platform;
 import dev.lambdaurora.lambdabettergrass.resource.LBGDynamicTextureManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGLayerTypeManager;
 import dev.lambdaurora.lambdabettergrass.resource.LBGResourceReloader;
 import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.YumiMods;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -62,8 +57,6 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		log(LOGGER, "Initializing LambdaBetterGrass...");
 		this.config.load();
 
-		this.registerBuiltinResourcePacks(mod);
-
 		LBGState.registerType(
 				"grass",
 				(id, block, resourceManager, json, deserializationContext) ->
@@ -71,28 +64,12 @@ public class LambdaBetterGrass implements ClientModInitializer {
 		);
 		LBGState.registerType("layer", LBGLayerState::new);
 
-		ModelLoadingPlugin.register(pluginCtx -> {
-			pluginCtx.modifyModelOnLoad().register(ModelModifier.WRAP_PHASE, (model, context) -> {
-				final var modelId = context.topLevelId();
-				if (modelId != null && !modelId.variant().equals("inventory")) {
-					var stateId = modelId.id();
-
-					// Get cached states metadata.
-					var state = LBGState.getMetadataState(stateId);
-
-					// If states metadata found, search for corresponding metadata and if exists replace the model.
-					if (state != null) {
-						var newModel = state.getCustomUnbakedModel(modelId, model, context::getOrLoadModel);
-
-						if (newModel != null) {
-							return newModel;
-						}
-					}
-				}
-
-				return model;
-			});
-		});
+		var platform = YumiMods.get()
+				.getEntrypoints(NAMESPACE + ":platform", Platform.class)
+				.getFirst()
+				.value();
+		platform.registerBuiltinResourcePacks(mod);
+		platform.registerModelLoadingPlugin();
 	}
 
 	/**
@@ -102,17 +79,6 @@ public class LambdaBetterGrass implements ClientModInitializer {
 	 */
 	public String getVersion() {
 		return this.version;
-	}
-
-	private void registerBuiltinResourcePacks(dev.yumi.mc.core.api.ModContainer mod) {
-		var fabricMod = FabricLoader.getInstance().getModContainer(mod.id()).orElseThrow();
-
-		ResourceManagerHelper.registerBuiltinResourcePack(
-				id("default"), fabricMod,
-				Text.translatable("lambdabettergrass.resourcepack.default", Text.translatable(NAMESPACE)),
-				ResourcePackActivationType.DEFAULT_ENABLED
-		);
-		ResourceManagerHelper.registerBuiltinResourcePack(id("x32"), fabricMod, ResourcePackActivationType.NORMAL);
 	}
 
 	/**
