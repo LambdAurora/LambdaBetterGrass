@@ -87,7 +87,7 @@ public class SettingsScreen extends SpruceScreen {
 				amount -> {
 					this.config.setMode(this.config.getMode().next());
 					if (this.minecraft != null)
-						this.minecraft.levelRenderer.allChanged();
+						this.minecraft.levelExtractor.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
 				TooltipData.builder()
@@ -100,7 +100,7 @@ public class SettingsScreen extends SpruceScreen {
 				betterSnow -> {
 					this.config.setBetterLayer(betterSnow);
 					if (this.minecraft != null)
-						this.minecraft.levelRenderer.allChanged();
+						this.minecraft.levelExtractor.allChanged();
 				},
 				TooltipData.builder().text(Component.translatable("lambdabettergrass.tooltip.better_snow")).build(),
 				true);
@@ -120,7 +120,7 @@ public class SettingsScreen extends SpruceScreen {
 
 	@Override
 	public void onClose() {
-		this.minecraft.setScreen(this.parent);
+		this.minecraft.setScreenAndShow(this.parent);
 	}
 
 	@Override

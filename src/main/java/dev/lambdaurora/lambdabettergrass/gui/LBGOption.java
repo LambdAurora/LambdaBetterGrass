@@ -21,7 +21,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -49,10 +48,10 @@ public final class LBGOption {
 		@Override
 		public Function<OptionInstance<Unit>, AbstractWidget> createButton(
 				OptionInstance.TooltipSupplier<Unit> tooltipSupplier, Options options,
-				int x, int y, int width, Consumer<Unit> consumer
+				int x, int y, int width, OptionInstance.ValueUpdateListener<? super Unit> onValueChanged
 		) {
 			return option -> Button.builder(
-							Component.translatable(KEY), btn -> Minecraft.getInstance().setScreen(new SettingsScreen(this.parent))
+							Component.translatable(KEY), btn -> Minecraft.getInstance().setScreenAndShow(new SettingsScreen(this.parent))
 					)
 					.pos(x, y)
 					.size(width, 20)

@@ -1,4 +1,4 @@
-rootProject.name = "lambdabettergrass"
+rootProject.name = "LambdaBetterGrass"
 
 pluginManagement {
 	repositories {

@@ -16,17 +16,65 @@ plugins {
 	id("net.darkhax.curseforgegradle").version("1.1.+")
 }
 
-base.archivesName.set(project.property("archives_base_name") as String)
+lambdamcdev.namespace.set(project.property("mod_namespace") as String)
+base.archivesName.set(lambdamcdev.namespace)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf("26.1")
+val compatibleMcVersions: Set<String> = setOf()
 val VERSION = project.property("mod_version") as String
-version = "$VERSION+$mcVersion"
+version = "$VERSION+${McVersionLookup.getVersionTag(mcVersion)}"
 
 // This field defines the Java version your mod target.
 val targetJavaVersion = Integer.parseInt(project.property("java_version").toString())
 
-lambdamcdev.setupActionsRefCheck()
+val fabricApiModules = listOf(
+	fabricApi.module("fabric-model-loading-api-v1", libs.versions.fabric.api.get()),
+	fabricApi.module("fabric-renderer-api-v1", libs.versions.fabric.api.get()),
+	fabricApi.module("fabric-resource-loader-v1", libs.versions.fabric.api.get()),
+)
+
+lambdamcdev {
+	manifests {
+		fmj {
+			val sourcesLink = "https://github.com/LambdAurora/LambdaBetterGrass"
+
+			withDescription(project.property("mod_description") as String)
+			withAuthors("LambdAurora")
+			withContact {
+				it.withHomepage("https://lambdaurora.dev/projects/lambdabettergrass")
+					.withSources("$sourcesLink.git")
+					.withIssues("$sourcesLink/issues")
+			}
+			withLicense("Lambda License")
+			withIcon("assets/${namespace.get()}/icon.png")
+			withEnvironment("client")
+			withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass::INSTANCE")
+			withEntrypoints("modmenu", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu")
+			withEntrypoints("sodium:config_api_user", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassSodiumConfig")
+			withEntrypoints("fabric-datagen", "dev.lambdaurora.lambdabettergrass.resource.LBGDataGen")
+			withAccessWidener("${namespace.get()}.accesswidener")
+			withMixins("${namespace.get()}.mixins.json")
+			withDepend("fabricloader", ">=${libs.versions.fabric.loader.get()}")
+			withDepend("minecraft", project.property("fabric_mc_constraints").toString())
+			withDepend("java", ">=$targetJavaVersion")
+			withDepend("spruceui", ">=${libs.versions.spruceui.get()}")
+			withDepend("yumi_mc_core", ">=${libs.versions.yumi.mc.foundation.get()}")
+			fabricApiModules.forEach { module -> withDepend(module.name, ">=${module.version}") }
+			withRecommend("modmenu", ">=${libs.versions.modmenu.get()}")
+			withBreak("optifabric", "*")
+			withModMenu {
+				it.withCurseForge("https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass")
+					.withDiscord("https://discord.lambdaurora.dev/")
+					.withGitHubReleases("$sourcesLink/releases")
+					.withModrinth("https://modrinth.com/mod/lambdabettergrass")
+					.withLink("modmenu.bluesky", "https://bsky.app/profile/lambdaurora.dev")
+					.withLink("modmenu.donate", "https://donate.lambdaurora.dev/")
+			}
+		}
+	}
+
+	setupActionsRefCheck()
+}
 
 repositories {
 	mavenCentral()
@@ -70,7 +118,9 @@ fabricApi {
 dependencies {
 	minecraft(libs.minecraft)
 	implementation(libs.fabric.loader)
-	implementation(libs.fabric.api)
+	fabricApiModules.forEach { implementation(it) }
+	implementation(fabricApi.module("fabric-data-generation-api-v1", libs.versions.fabric.api.get()))
+	implementation(fabricApi.module("fabric-renderer-indigo", libs.versions.fabric.api.get()))
 
 	implementation(libs.yumi.mc.foundation)
 	implementation(libs.spruceui)
@@ -108,15 +158,6 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.processResources {
-	inputs.property("version", project.version)
-
-	filesMatching("fabric.mod.json") {
-		expand("version" to (inputs.properties["version"] as String))
-	}
-	filesMatching("quilt.mod.json") {
-		expand("version" to (inputs.properties["version"] as String))
-	}
-
 	exclude(".cache/**")
 }
 
@@ -167,7 +208,7 @@ val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.group = "publishing"
 	this.versionType.set(ModUtils.getVersionType(VERSION, mcVersion))
-	this.versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
+	this.versionName.set("${project.name} $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	this.gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
 	this.loaders.set(listOf("fabric", "quilt"))
 	this.dependencies.set(
@@ -182,7 +223,7 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 
 modrinth {
 	projectId.set(project.property("modrinth_id") as String)
-	versionName.set("LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
+	versionName.set("${project.name} $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	versionType.set(ModUtils.fetchVersionType(VERSION, mcVersion))
 	uploadFile.set(tasks.shadowJar)
 	loaders.set(listOf("fabric", "quilt"))
@@ -241,7 +282,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 	mainFile.addModLoader("Fabric", "Quilt")
 	mainFile.addJavaVersion("Java 21", "Java 22")
 
-	mainFile.displayName = "LambdaBetterGrass $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
+	mainFile.displayName = "${project.name} $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
 	mainFile.addRequirement("fabric-api")
 	mainFile.addOptional("modmenu")
 	mainFile.addIncompatibility("optifabric")
@@ -257,8 +298,8 @@ publishing {
 			from(components["java"])
 
 			pom {
-				name.set("LambdaBetterGrass")
-				description.set("Adds actual better grass to the game.")
+				name.set(project.name)
+				description.set(project.property("mod_description") as String)
 			}
 		}
 	}
