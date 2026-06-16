@@ -158,6 +158,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.processResources {
+	dependsOn(tasks["generateFmj"])
 	exclude(".cache/**")
 }
 
@@ -170,10 +171,23 @@ tasks.jar {
 	}
 }
 
+tasks.named<Jar>("sourcesJar") {
+	dependsOn(tasks["generateFmj"])
+	inputs.property("archivesName", base.archivesName)
+
+	from("LICENSE") {
+		rename { "${it}_${inputs.properties["archivesName"]}" }
+	}
+}
+
 license {
 	rule(file("metadata/HEADER"))
 
 	include("**/*.java")
+}
+
+tasks.named("checkLicenseMain") {
+	dependsOn(tasks["generateFmj"])
 }
 
 tasks.shadowJar {
@@ -191,14 +205,9 @@ tasks.shadowJar {
 	}
 }
 
-loom.nestJars(
-	tasks.shadowJar,
-	fileTree(tasks.processIncludeJars.get().outputDirectory)
-)
-
-tasks.assemble.configure {
-	dependsOn(tasks.shadowJar)
-}
+val mainSourceSet = sourceSets.main.get()
+lambdamcdev.replaceArtifactInConfiguration(mainSourceSet.apiConfigurationName, tasks.shadowJar)
+lambdamcdev.replaceArtifactInConfiguration(mainSourceSet.runtimeElementsConfigurationName, tasks.shadowJar)
 
 val README = ModUtils.parseReadme(
 	project, "https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/26.1/\$2"
