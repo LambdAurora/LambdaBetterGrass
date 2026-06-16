@@ -131,6 +131,8 @@ tasks.jar {
 
 license {
 	rule(file("metadata/HEADER"))
+
+	include("**/*.java")
 }
 
 tasks.shadowJar {
