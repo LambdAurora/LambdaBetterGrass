@@ -2,14 +2,15 @@ import com.modrinth.minotaur.dependencies.ModDependency
 import dev.lambdaurora.mcdev.api.McVersionLookup
 import dev.lambdaurora.mcdev.api.ModUtils
 import dev.lambdaurora.mcdev.api.ModVersionDependency
+import dev.lambdaurora.mcdev.task.GenerateFmjTask
 import dev.lambdaurora.mcdev.task.packaging.PackageModrinthTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
+	`java-library`
 	alias(libs.plugins.loom)
 	alias(libs.plugins.lambdamcdev)
 	alias(libs.plugins.licenser)
-	`java-library`
 	`maven-publish`
 	id("com.gradleup.shadow").version("9.1.0")
 	id("com.modrinth.minotaur").version("2.+")
@@ -32,49 +33,6 @@ val fabricApiModules = listOf(
 	fabricApi.module("fabric-renderer-api-v1", libs.versions.fabric.api.get()),
 	fabricApi.module("fabric-resource-loader-v1", libs.versions.fabric.api.get()),
 )
-
-lambdamcdev {
-	manifests {
-		fmj {
-			val sourcesLink = "https://github.com/LambdAurora/LambdaBetterGrass"
-
-			withDescription(project.property("mod_description") as String)
-			withAuthors("LambdAurora")
-			withContact {
-				it.withHomepage("https://lambdaurora.dev/projects/lambdabettergrass")
-					.withSources("$sourcesLink.git")
-					.withIssues("$sourcesLink/issues")
-			}
-			withLicense("Lambda License")
-			withIcon("assets/${namespace.get()}/icon.png")
-			withEnvironment("client")
-			withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass::INSTANCE")
-			withEntrypoints("modmenu", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu")
-			withEntrypoints("sodium:config_api_user", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassSodiumConfig")
-			withEntrypoints("fabric-datagen", "dev.lambdaurora.lambdabettergrass.resource.LBGDataGen")
-			withAccessWidener("${namespace.get()}.accesswidener")
-			withMixins("${namespace.get()}.mixins.json")
-			withDepend("fabricloader", ">=${libs.versions.fabric.loader.get()}")
-			withDepend("minecraft", project.property("fabric_mc_constraints").toString())
-			withDepend("java", ">=$targetJavaVersion")
-			withDepend("spruceui", ">=${libs.versions.spruceui.get()}")
-			withDepend("yumi_mc_core", ">=${libs.versions.yumi.mc.foundation.get()}")
-			fabricApiModules.forEach { module -> withDepend(module.name, ">=${module.version}") }
-			withRecommend("modmenu", ">=${libs.versions.modmenu.get()}")
-			withBreak("optifabric", "*")
-			withModMenu {
-				it.withCurseForge("https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass")
-					.withDiscord("https://discord.lambdaurora.dev/")
-					.withGitHubReleases("$sourcesLink/releases")
-					.withModrinth("https://modrinth.com/mod/lambdabettergrass")
-					.withLink("modmenu.bluesky", "https://bsky.app/profile/lambdaurora.dev")
-					.withLink("modmenu.donate", "https://donate.lambdaurora.dev/")
-			}
-		}
-	}
-
-	setupActionsRefCheck()
-}
 
 repositories {
 	mavenCentral()
@@ -150,6 +108,49 @@ java {
 	withSourcesJar()
 }
 
+lambdamcdev {
+	manifests {
+		fmj {
+			val sourcesLink = "https://github.com/LambdAurora/LambdaBetterGrass"
+
+			withDescription(project.property("mod_description") as String)
+			withAuthors("LambdAurora")
+			withContact {
+				it.withHomepage("https://lambdaurora.dev/projects/lambdabettergrass")
+					.withSources("$sourcesLink.git")
+					.withIssues("$sourcesLink/issues")
+			}
+			withLicense("Lambda License")
+			withIcon("assets/${namespace.get()}/icon.png")
+			withEnvironment("client")
+			withEntrypoints("yumi:client_init", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass::INSTANCE")
+			withEntrypoints("modmenu", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu")
+			withEntrypoints("sodium:config_api_user", "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassSodiumConfig")
+			withEntrypoints("fabric-datagen", "dev.lambdaurora.lambdabettergrass.resource.LBGDataGen")
+			withAccessWidener("${namespace.get()}.accesswidener")
+			withMixins("${namespace.get()}.mixins.json")
+			withDepend("fabricloader", ">=${libs.versions.fabric.loader.get()}")
+			withDepend("minecraft", project.property("fabric_mc_constraints").toString())
+			withDepend("java", ">=$targetJavaVersion")
+			withDepend("spruceui", ">=${libs.versions.spruceui.get()}")
+			withDepend("yumi_mc_core", ">=${libs.versions.yumi.mc.foundation.get()}")
+			fabricApiModules.forEach { module -> withDepend(module.name, ">=${module.version}") }
+			withRecommend("modmenu", ">=${libs.versions.modmenu.get()}")
+			withBreak("optifabric", "*")
+			withModMenu {
+				it.withCurseForge("https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass")
+					.withDiscord("https://discord.lambdaurora.dev/")
+					.withGitHubReleases("$sourcesLink/releases")
+					.withModrinth("https://modrinth.com/mod/lambdabettergrass")
+					.withLink("modmenu.bluesky", "https://bsky.app/profile/lambdaurora.dev")
+					.withLink("modmenu.donate", "https://donate.lambdaurora.dev/")
+			}
+		}
+	}
+
+	setupActionsRefCheck()
+}
+
 tasks.withType<JavaCompile>().configureEach {
 	options.encoding = "UTF-8"
 	options.isDeprecation = true
@@ -158,7 +159,6 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.processResources {
-	dependsOn(tasks["generateFmj"])
 	exclude(".cache/**")
 }
 
@@ -172,7 +172,6 @@ tasks.jar {
 }
 
 tasks.named<Jar>("sourcesJar") {
-	dependsOn(tasks["generateFmj"])
 	inputs.property("archivesName", base.archivesName)
 
 	from("LICENSE") {
@@ -184,10 +183,6 @@ license {
 	rule(file("metadata/HEADER"))
 
 	include("**/*.java")
-}
-
-tasks.named("checkLicenseMain") {
-	dependsOn(tasks["generateFmj"])
 }
 
 tasks.shadowJar {
@@ -204,6 +199,11 @@ tasks.shadowJar {
 		rename { "${it}_${inputs.properties["archivesName"]}" }
 	}
 }
+
+loom.nestJars(
+	tasks.shadowJar,
+	fileTree(tasks.processIncludeJars.get().outputDirectory).matching { include("*.jar") }
+)
 
 val mainSourceSet = sourceSets.main.get()
 lambdamcdev.replaceArtifactInConfiguration(mainSourceSet.apiConfigurationName, tasks.shadowJar)

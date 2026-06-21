@@ -261,6 +261,10 @@ The first release of LambdaBetterGrass!
 - Updated [SpruceUI].
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 2.8.1
+
+- Fixed missing included JARs ([#130](https://github.com/LambdAurora/LambdaBetterGrass/issues/130)).
+
 [SpruceUI]: https://github.com/LambdAurora/SpruceUI
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Connected Block Textures]: https://www.curseforge.com/minecraft/mc-mods/connected-block-textures "Connected Block Textures CurseForge page"
