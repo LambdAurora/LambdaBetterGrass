@@ -1,12 +1,12 @@
 [versions]
-minecraft = "26.2"
-fabric-loader = "0.19.3"
-fabric-api = "0.152.1+26.2"
+minecraft = "26.3"
+fabric-loader = "0.19.5"
+fabric-api = "0.160.6+26.3"
 
 # Dependencies
-yumi-mc-foundation = "1.1.1+26.2"
-spruceui = "11.0.0+26.2"
-modmenu = "18.0.0-beta.1"
+yumi-mc-foundation = "1.1.3+26.3"
+spruceui = "12.0.0+26.3"
+modmenu = "21.0.0-beta.1"
 sodium = "0.8.7+mc26.1"
 
 # Configuration

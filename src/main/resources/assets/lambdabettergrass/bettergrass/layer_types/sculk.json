@@ -1,7 +1,7 @@
 {
 	"block": {
-		"Name": "minecraft:sculk_vein",
-		"Properties": {
+		"id": "minecraft:sculk_vein",
+		"properties": {
 			"down": "true"
 		}
 	},

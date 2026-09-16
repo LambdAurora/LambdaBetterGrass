@@ -1,7 +1,7 @@
 {
 	"block": {
-		"Name": "minecraft:leaf_litter",
-		"Properties": {
+		"id": "minecraft:leaf_litter",
+		"properties": {
 			"segment_amount": "4"
 		}
 	},

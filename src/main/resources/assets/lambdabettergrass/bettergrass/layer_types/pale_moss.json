@@ -1,6 +1,6 @@
 {
 	"block": {
-		"Name": "minecraft:pale_moss_carpet"
+		"id": "minecraft:pale_moss_carpet"
 	},
 	"match": [
 		{

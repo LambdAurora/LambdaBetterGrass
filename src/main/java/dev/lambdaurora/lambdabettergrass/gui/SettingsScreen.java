@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.lambdabettergrass.gui;
 
+import com.mojang.blaze3d.Blaze3D;
 import dev.lambdaurora.lambdabettergrass.LBGConfig;
 import dev.lambdaurora.lambdabettergrass.LBGMode;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
@@ -29,14 +30,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 import org.jspecify.annotations.Nullable;
+
+import java.net.URI;
 
 /**
  * Represents the LambdaBetterGrass settings screen.
  *
  * @author LambdAurora
- * @version 2.6.0
+ * @version 2.9.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
@@ -48,7 +50,7 @@ public class SettingsScreen extends SpruceScreen {
 			LBGMode.FAST.getTranslatedText(),
 			LBGMode.FANCY.getTranslatedText()
 	);
-	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
+	private static final URI API_URL = URI.create("https://lambdaurora.dev/projects/lambdabettergrass/documentation/");
 	private static final Component VERSION;
 
 	private final LBGConfig config;
@@ -86,8 +88,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.modeOption = new SpruceCyclingOption("lambdabettergrass.option.mode",
 				amount -> {
 					this.config.setMode(this.config.getMode().next());
-					if (this.minecraft != null)
-						this.minecraft.levelExtractor.allChanged();
+					this.minecraft.levelExtractor.allChanged();
 				},
 				option -> option.getDisplayText(this.config.getMode().getTranslatedText()),
 				TooltipData.builder()
@@ -99,8 +100,7 @@ public class SettingsScreen extends SpruceScreen {
 				this.config::hasBetterLayer,
 				betterSnow -> {
 					this.config.setBetterLayer(betterSnow);
-					if (this.minecraft != null)
-						this.minecraft.levelExtractor.allChanged();
+					this.minecraft.levelExtractor.allChanged();
 				},
 				TooltipData.builder().text(Component.translatable("lambdabettergrass.tooltip.better_snow")).build(),
 				true);
@@ -176,7 +176,7 @@ public class SettingsScreen extends SpruceScreen {
 				Component.translatable("lambdabettergrass.menu.info.read_more", "[lambdaurora.dev]")
 						.withStyle(ChatFormatting.GREEN),
 				this.width,
-				label -> Util.getPlatform().openUri(API_URL),
+				label -> Blaze3D.openUri(API_URL),
 				SpruceTextAlignment.CENTER
 		);
 		readMore.setTooltip(Component.translatable("chat.link.open"));

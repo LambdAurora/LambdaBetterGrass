@@ -44,7 +44,7 @@ import java.util.concurrent.CompletableFuture;
  * @version 2.4.0
  * @since 2.0.0
  */
-public class LBGDataGen implements DataGeneratorEntrypoint {
+public final class LBGDataGen implements DataGeneratorEntrypoint {
 	private static final Identifier BARS_DATA = Identifier.withDefaultNamespace("bettergrass/data/bars");
 	private static final Identifier BED_DATA = Identifier.withDefaultNamespace("bettergrass/data/bed");
 	private static final Identifier BUTTON_DATA = Identifier.withDefaultNamespace("bettergrass/data/button");
